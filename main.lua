@@ -137,7 +137,8 @@ function love.draw()
 
     love.graphics.setColor(1, 1, 1, 100)
     love.graphics.rectangle("fill", 10, 10, 400, 400 )
-    love.graphics.rectangle("fill", 420, 10, 400, 400 )
+   -- love.graphics.rectangle("fill", 420, 10, 400, 400 )
+    love.graphics.draw(love.graphics.newImage("assets/gui/interface_scene.png"), 420, 10 )
     love.graphics.rectangle("fill", 10, 420, 810, 250 )
     love.graphics.setColor(1, 0, 0, 100)
 
