@@ -90,7 +90,7 @@ function drawMap(map)
 
     local width = blocks["x"]:getDimensions()
 
-    ----- COLOCAR ISSO NUMA CLASSE? ---
+    -- Desenha Mapa
     for i = 1, table.getn(map) do
         for j = 1 , table.getn(map[1]) do
             local code = map[i][j]
@@ -98,19 +98,33 @@ function drawMap(map)
             love.graphics.draw(blocks[code], (width*j)-6, (width*i)-6)
         end
     end
-
-    for i = playerControl:getPx() - 1 , playerControl:getPx() + 1 do
-        for j = playerControl:getPy() - 1 , playerControl:getPy() + 1 do
-            if i <= 1 then i = 1 end
-            if j <= 1 then j = 1 end
-            fog[i][j] = "k"
+    
+    -- Fog 
+    for i = 1 , table.getn(fog) do
+        for j = 1 , table.getn(fog) do
+            if fog[i][j] == "k" then
+                fog[i][j] = "j"
+            end
         end
     end
+    
+        --Fog Nivel 1
+        for i = playerControl:getPx() - 1 , playerControl:getPx() + 1 do
+            for j = playerControl:getPy() - 1 , playerControl:getPy() + 1 do
+                if i <= 1 then i = 1 end
+                if j <= 1 then j = 1 end
+                fog[i][j] = "k"
+            end
+        end
 
+    -- BlackOut
     for i = 1, table.getn(fog) do
         for j = 1 , table.getn(fog[1]) do
             if fog[i][j] == 'w' then
                 love.graphics.setColor(0, 0, 0, 100)
+                love.graphics.rectangle("fill", (width*j)-6, (width*i)-6, width, width )
+            elseif fog[i][j] == 'j' then
+                love.graphics.setColor(0, 0, 0, 0.5)
                 love.graphics.rectangle("fill", (width*j)-6, (width*i)-6, width, width )
             end
         end
