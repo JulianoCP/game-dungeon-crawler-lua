@@ -15,16 +15,34 @@ function Player:new(Px, Py, currentSprite)
                 spriteLeft = love.graphics.newImage("assets/player/player_left.png")
             },
             currentSprite = currentSprite
-          }
+          },
+
+        status = {
+            damage = 10,
+            defese = 10,
+            dexterity = 10,
+            accuracy = 10,
+            critical = 10,
+            life = 100,
+            exp = 0,
+            level = 0
+        },
+
+        invetory = {
+            potion = 3
+        },
+
+        equip = {
+            sword = nil,
+            armor = nil,
+        }
       }
 
       setmetatable(player, Player)
 
-
-
     return player
-    
-  end
+
+end
 
 
 function Player:getPx()
