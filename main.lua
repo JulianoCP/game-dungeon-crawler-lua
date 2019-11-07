@@ -71,8 +71,10 @@ function love.load()
         x = love.graphics.newImage("assets/tiles/wall.png"),
         f = love.graphics.newImage("assets/tiles/floor_1.png"),
         f1 = love.graphics.newImage("assets/tiles/floor_2.png"),
-        c = love.graphics.newImage("assets/obj/chest.png"),
+        c = love.graphics.newImage("assets/obj/chest_1.png"),
     }
+
+    gui = love.graphics.newImage("assets/gui/gui_interface.png")
 
     
   
@@ -133,14 +135,12 @@ function drawMap(map)
 
 end
 
+
 function love.draw()
 
-    love.graphics.setColor(1, 1, 1, 100)
-    love.graphics.rectangle("fill", 10, 10, 400, 400 )
-   -- love.graphics.rectangle("fill", 420, 10, 400, 400 )
-    love.graphics.draw(love.graphics.newImage("assets/gui/interface_scene.png"), 420, 10 )
-    love.graphics.rectangle("fill", 10, 420, 810, 250 )
-    love.graphics.setColor(1, 0, 0, 100)
+    --love.graphics.rectangle("fill", 10, 10, 400, 400 )
+    love.graphics.draw(gui, 0, 0 )
+    --love.graphics.rectangle("fill", 10, 420, 810, 250 )
 
     drawMap(mapData)
     drawPlayer()
