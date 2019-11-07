@@ -1,6 +1,9 @@
 
 Map = require 'Map'
 Player = require 'Player'
+Itens = require 'Itens'
+state = "move"
+
 
 local mapControl = nil
 
@@ -8,7 +11,7 @@ function love.load()
 
     local m = {
         {"x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x"},
-        {"x","f","f1","f","f","f1","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","c","x"},
+        {"x","f","f1","c","c","c","c","c","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","c","x"},
         {"x","x","x","x","x","x","x","f","x","x","x","x","x","x","f","x","x","x","x","x","x","x","x","x","x"},
         {"x","f","x","c","f","x","f1","f","f","x","f","x","f","x","f","x","f","f","x","f","f","f","f","f","x"},
         {"x","f","x","f","f","x","f","f","f","x","f","x","f","f","f","x","f","f","x","f","x","f","f","f","x"},
@@ -74,8 +77,13 @@ function love.load()
         c = love.graphics.newImage("assets/obj/chest_1.png"),
     }
 
-    gui = love.graphics.newImage("assets/gui/gui_interface.png")
+    gui ={
+        interface = love.graphics.newImage("assets/gui/gui_interface.png"),
+        chest = love.graphics.newImage("assets/gui/dungeonChest.png"),
+        dungeon = love.graphics.newImage("assets/gui/dungeonWalking.png"),
+        frame = love.graphics.newImage("assets/gui/interface_scene.png")
 
+    }
     
   
 end
@@ -139,32 +147,50 @@ end
 function love.draw()
 
     --love.graphics.rectangle("fill", 10, 10, 400, 400 )
-    love.graphics.draw(gui, 0, 0 )
-    --love.graphics.rectangle("fill", 10, 420, 810, 250 )
+    love.graphics.draw(gui["interface"], 0, 0 )
+    love.graphics.draw(gui["dungeon"], 420, 10 )
+    love.graphics.draw(gui["frame"], 420, 10 )
+    love.graphics.rectangle("fill", 10, 420, 810, 250 )
 
     drawMap(mapData)
     drawPlayer()
+    sceneDraw()
     
+end
+
+function sceneDraw()
+
+    if state == "chest" then
+        love.graphics.draw(gui["chest"], 420,10 )
+        love.graphics.draw(gui["frame"], 420, 10 )
+    end
+
 end
 
 function love.keypressed(key, scancode)
 
-    local x = playerControl:getPy()
-    local y = playerControl:getPx()
+    if key == "m" then  state = "move" end
 
-    if key == "right" then x = x+1  playerControl:setSprite("spriteRight") end
-    if key == "left" then x = x-1 playerControl:setSprite("spriteLeft") end
-    if key == "up" then y = y - 1 playerControl:setSprite("spriteUp")  end
-    if key == "down" then  y = y + 1 playerControl:setSprite("spriteDown") end
+    if state == "move" then
+        local x = playerControl:getPy()
+        local y = playerControl:getPx()
 
-    if  not (mapControl:isCollider(x,y) == 'x')  then
-        playerControl:setPx(x)
-        playerControl:setPy(y)
-    end
+        if key == "right" then x = x+1  playerControl:setSprite("spriteRight") end
+        if key == "left" then x = x-1 playerControl:setSprite("spriteLeft") end
+        if key == "up" then y = y - 1 playerControl:setSprite("spriteUp")  end
+        if key == "down" then  y = y + 1 playerControl:setSprite("spriteDown") end
 
-    if mapControl:isCollider(x,y) == 'c' then
-        mapData[y][x] = 'f'
-        print("ACHOU O BAU CARAI")
+        if  not (mapControl:isCollider(x,y) == 'x')  then
+            playerControl:setPx(x)
+            playerControl:setPy(y)
+        end
+
+        if mapControl:isCollider(x,y) == 'c' then
+            a = Itens:new()
+            print(a:getRandomSword())
+            mapData[y][x] = 'f'
+            state = "chest"
+        end
     end
 
 end
