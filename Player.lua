@@ -48,7 +48,13 @@ function Player:setEquipSword(item)
     self.equip["sword"] = item
 end
 
-function Player:getEquipSword()
+function Player:getDamageSword()
+    if self.equip["sword"] == nil then return 0 end
+    return self.equip["sword"].damage
+end
+
+function Player:getEquipSwordName()
+    if self.equip["sword"] == nil then return "No Equiped" end
     return self.equip["sword"].name
 end
 

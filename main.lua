@@ -22,16 +22,16 @@ function love.load()
         {"x","f","x","f","f","f","x","f1","x","f","f1","f1","f","x","f","f","f","f","x","f","f","f","x","f","x"},
         {"x","f","x","x","x","x","x","f","x","x","x","x","x","x","f","x","f","x","x","f","f","f","x","f","x"},
         {"x","f","f","f","f","f","f1","f","f1","f","f1","f","f","f","f","x","f","f","f","f","x","x","x","f","x"},
-        {"x","x","f","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","f","f","f","x","f","x"},
-        {"x","f","f","x","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","x"},
-        {"x","f","f","x","f","f","f","f","x","f","x","x","x","x","x","x","x","x","x","x","x","x","x","f","x"},
-        {"x","f","f","x","f","f","f","f","x","f","x","c","f","f","f","f","f","f","f","f","f","f","x","f","x"},
-        {"x","f","f","x","c","f","f","f","x","f","x","f","f","f","f","x","x","x","x","x","f","f","x","f","x"},
-        {"x","f","f","x","x","x","x","x","x","f","x","f","f","f","f1","x","f","f","f","x","f","f","x","f","x"},
+        {"x","f","f","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","f","f","f","x","f","x"},
+        {"x","f","x","x","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","x"},
+        {"x","f","f","x","f","x","x","x","x","f","x","x","x","x","x","x","x","x","x","x","x","x","x","f","x"},
+        {"x","x","f","x","f","f1","f","f","x","f","x","c","f","f","f","f","f","f","f","f","f","f","x","f","x"},
+        {"x","f","f","x","c","f","f","f","x","f","x","f","f","x","x","x","x","x","x","x","f","f","x","f","x"},
+        {"x","f","x","x","x","x","x","x","x","f","x","f","f","x","f1","f","f","f","f1","x","f","f","x","f","x"},
         {"x","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","x"},
         {"x","f","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","f","x"},
-        {"x","f","f","f","f","f","f","f","f","f","x","f","f","f","f","f","f","f","f","f","f","f","x","f","x"},
-        {"x","f","x","f","f","f","f","f","f","c","x","f","f","f","f","f","f","f","f","f","f","c","x","f","x"},
+        {"x","f","f","f","f","f","f","f","f","f","f","f","x","f","f","f","f","f","f","f","f","f","f","f","x"},
+        {"x","f","x","f","f","f","f","f","f","c","x","f","f","f","x","f","f","f","f","f","f","c","x","f","x"},
         {"x","f","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","f","x"},
         {"x","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","x"},
         {"x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x"},
@@ -194,7 +194,7 @@ function drawMenu()
     drawText("↓      - Teste Linha[9]Coluna[1]" , 1, 9)
     
     drawText("STATUS:" , 2, 1,"center")
-    drawText("Força: "..playerControl:getDamage() , 2, 2)
+    drawText("Força: "..playerControl:getDamage() + playerControl:getDamageSword() , 2, 2)
     drawText("Defesa: "..playerControl:getDefese() , 2, 3)
     drawText("Acuracia: "..playerControl:getAccuracy(), 2, 4)
     drawText("Destreza: "..playerControl:getDexterity() , 2, 5)
@@ -204,6 +204,7 @@ function drawMenu()
     drawText("INVENTARIO:" , 3, 1, "center")
     drawText("Vida: "..playerControl:getLife().."     Level: "..playerControl:getLevel() , 3, 6)
     drawText("XP: "..playerControl:getExp() , 3, 7)
+    drawText("Sword: "..playerControl:getEquipSwordName() , 3, 8)
 end
 
 function love.draw()
@@ -250,7 +251,6 @@ function love.keypressed(key, scancode)
         if mapControl:isCollider(x,y) == 'c' then
             a = Itens:new()
             playerControl:setEquipSword( a:getRandomSword() )
-            print(playerControl:getEquipSword())
             mapData[y][x] = 'f'
             state = "chest"
         end

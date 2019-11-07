@@ -56,6 +56,12 @@ function Itens:getRandomSword()
     math.randomseed(os.time())
     local name = {'fireSword','poisonSword'}
     return self.sword[name[math.random(2)]]
-end 
+end
+
+function Itens:getRandomArmor()
+    math.randomseed(os.time())
+    local name = {'leatherArmor','dragonArmor'}
+    return self.armor[name[math.random(2)]]
+end
 
 return Itens
