@@ -2,21 +2,31 @@ Map = require 'Map'
 Player = require 'Player'
 Itens = require 'Itens'
 state = "move"
-Dungeon = require 'Dungeon'
+Dungeon = require("Dungeon")
 FogWar = require 'Fog'
+Fosso = require("Fosso")
+Siberia = require("Siberia")
 
 local mapControl = nil
 
+arrayMaps = {}
+
 function love.load()
 
-    love.graphics.setFont(love.graphics.newFont("assets/fonts/cc.otf", 14))
-
-    local m = Dungeon
+    local maps = nil
     fog = FogWar
+    love.graphics.setFont(love.graphics.newFont("assets/fonts/cc.otf", 14))
+    
+    mapControl = Map:new("Labirinto - Lamento Sombrio" , Dungeon , 1)
+    table.insert( arrayMaps, mapControl )
+    maps = Map:new("Labirinto - Fosso das Lamentações" , Fosso , 2)
+    table.insert( arrayMaps, maps )
+    maps = Map:new("Labirinto - Perdidos no Siberia" , Siberia , 3)
+    table.insert( arrayMaps, maps )
 
-    -- futuramente trocar M por um arquivo
-    mapControl = Map:new("Santuario", m, 1)
-    mapData = mapControl:getMap();
+    love.window.setTitle(mapControl:getNameMap())
+
+    print(arrayMaps[2]:getNameMap())
 
     playerControl = Player:new(2,2,"spriteRight")
 
@@ -164,7 +174,7 @@ function love.draw()
     
     --love.graphics.rectangle("fill", 10, 420, 810, 250 )
 
-    drawMap(mapData)
+    drawMap(mapControl:getMap())
     drawPlayer()
     drawScene()
     drawMenu()
@@ -201,15 +211,14 @@ function love.keypressed(key, scancode)
         if mapControl:isCollider(x,y) == 'c' then
             a = Itens:new()
             playerControl:setEquipSword( a:getRandomSword() )
-            mapData[y][x] = 'f'
+            mapControl:getMap()[y][x] = 'f'
             state = "chest"
-            --love.window.setTitle(playerControl:getEquipSwordName())
         end
 
         if mapControl:isCollider(x,y) == 's' then
-            -- Vai para um novo Nivel
-            -- state = "chest"
-            print("ACHOU UMA ESCADA")
+            mapControl = arrayMaps[3]
+            playerControl:setPx(2)
+            playerControl:setPy(2)
         end
 
     end

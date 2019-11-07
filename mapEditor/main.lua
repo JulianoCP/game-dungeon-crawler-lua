@@ -129,7 +129,7 @@ function saveMap()
 end
 
 function save(m)
-    local file = io.open("mapEditor/data/data.lua", "w+")
+    local file = io.open("DungeonCrawler/mapEditor/data/data.lua", "w+")
     io.output(file)
     io.write("    return {\n")
     for i = 1, table.getn(m) do

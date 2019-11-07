@@ -8,7 +8,7 @@ function Map:new(mapName, mapData, mapLevel)
         props = {
             mapName = mapName,
             mapData = mapData,
-            mapLevel = mapLevel
+            mapLevel = mapLevel,
           }
       }
     setmetatable(map, Map)
@@ -16,8 +16,16 @@ function Map:new(mapName, mapData, mapLevel)
     
   end
 
+function Map:loadNewMap(map)
+
+end
+
+function Map:getNameMap()
+  return self.props["mapName"]
+end
+
 function Map:getMap()
-    return self.props["mapData"]
+  return self.props["mapData"]
 end
 
 function Map:isCollider(x,y)
