@@ -44,7 +44,28 @@ function Player:new(Px, Py, currentSprite)
 
 end
 
--- Get's and Set's Position
+function Player:setEquipSword(item)
+    self.equip["sword"] = item
+end
+
+function Player:getDamageSword()
+    if self.equip["sword"] == nil then return 0 end
+    return self.equip["sword"].damage
+end
+
+function Player:getEquipSwordName()
+    if self.equip["sword"] == nil then return "No Equiped" end
+    return self.equip["sword"].name
+end
+
+function Player:setInventoryPotion(potion)
+    self.invetory["potion"] = self.invetory["potion"] + potion
+end
+
+function Player:getInventoryPotion()
+    return self.invetory["potion"]
+end
+
 function Player:getPx()
     return self.props["Px"]
 end

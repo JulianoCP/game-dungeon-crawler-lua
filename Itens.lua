@@ -43,9 +43,7 @@ function Itens:new()
                 }
             }
     }
-
-      setmetatable(itens, Itens)
-
+    setmetatable(itens, Itens)
     return itens
 
 end
@@ -55,9 +53,15 @@ function Itens:getSword(name)
 end
 
 function Itens:getRandomSword()
-
+    math.randomseed(os.time())
     local name = {'fireSword','poisonSword'}
-    return self.sword[name[math.random(2)]].name
-end 
+    return self.sword[name[math.random(2)]]
+end
+
+function Itens:getRandomArmor()
+    math.randomseed(os.time())
+    local name = {'leatherArmor','dragonArmor'}
+    return self.armor[name[math.random(2)]]
+end
 
 return Itens

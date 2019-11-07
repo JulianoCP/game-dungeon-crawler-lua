@@ -1,9 +1,7 @@
-
 Map = require 'Map'
 Player = require 'Player'
 Itens = require 'Itens'
 state = "move"
-
 
 local mapControl = nil
 
@@ -24,16 +22,16 @@ function love.load()
         {"x","f","x","f","f","f","x","f1","x","f","f1","f1","f","x","f","f","f","f","x","f","f","f","x","f","x"},
         {"x","f","x","x","x","x","x","f","x","x","x","x","x","x","f","x","f","x","x","f","f","f","x","f","x"},
         {"x","f","f","f","f","f","f1","f","f1","f","f1","f","f","f","f","x","f","f","f","f","x","x","x","f","x"},
-        {"x","x","f","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","f","f","f","x","f","x"},
-        {"x","f","f","x","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","x"},
-        {"x","f","f","x","f","f","f","f","x","f","x","x","x","x","x","x","x","x","x","x","x","x","x","f","x"},
-        {"x","f","f","x","f","f","f","f","x","f","x","c","f","f","f","f","f","f","f","f","f","f","x","f","x"},
-        {"x","f","f","x","c","f","f","f","x","f","x","f","f","f","f","x","x","x","x","x","f","f","x","f","x"},
-        {"x","f","f","x","x","x","x","x","x","f","x","f","f","f","f1","x","f","f","f","x","f","f","x","f","x"},
+        {"x","f","f","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","f","f","f","x","f","x"},
+        {"x","f","x","x","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","x"},
+        {"x","f","f","x","f","x","x","x","x","f","x","x","x","x","x","x","x","x","x","x","x","x","x","f","x"},
+        {"x","x","f","x","f","f1","f","f","x","f","x","c","f","f","f","f","f","f","f","f","f","f","x","f","x"},
+        {"x","f","f","x","c","f","f","f","x","f","x","f","f","x","x","x","x","x","x","x","f","f","x","f","x"},
+        {"x","f","x","x","x","x","x","x","x","f","x","f","f","x","f1","f","f","f","f1","x","f","f","x","f","x"},
         {"x","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","x"},
         {"x","f","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","f","x"},
-        {"x","f","f","f","f","f","f","f","f","f","x","f","f","f","f","f","f","f","f","f","f","f","x","f","x"},
-        {"x","f","x","f","f","f","f","f","f","c","x","f","f","f","f","f","f","f","f","f","f","c","x","f","x"},
+        {"x","f","f","f","f","f","f","f","f","f","f","f","x","f","f","f","f","f","f","f","f","f","f","f","x"},
+        {"x","f","x","f","f","f","f","f","f","c","x","f","f","f","x","f","f","f","f","f","f","c","x","f","x"},
         {"x","f","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","f","x"},
         {"x","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","x"},
         {"x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x"},
@@ -87,11 +85,10 @@ function love.load()
         dungeon = love.graphics.newImage("assets/gui/dungeonWalking.png"),
         frame = love.graphics.newImage("assets/gui/interface_scene.png")
     }
-    
-  
 end
 
 function drawPlayer()
+
     local width = playerControl:getSprite():getDimensions()
     
     love.graphics.setColor(1, 1, 1, 100) -- Cor Original
@@ -125,14 +122,14 @@ function drawMap(map)
         end
     end
     
-        --Fog Nivel 1
-        for i = playerControl:getPx() - 1 , playerControl:getPx() + 1 do
-            for j = playerControl:getPy() - 1 , playerControl:getPy() + 1 do
-                if i <= 1 then i = 1 end
-                if j <= 1 then j = 1 end
-                fog[i][j] = "k"
-            end
+    --Fog Nivel 1
+    for i = playerControl:getPx() - 1 , playerControl:getPx() + 1 do
+        for j = playerControl:getPy() - 1 , playerControl:getPy() + 1 do
+            if i <= 1 then i = 1 end
+            if j <= 1 then j = 1 end
+            fog[i][j] = "k"
         end
+    end
 
     -- BlackOut
     for i = 1, table.getn(fog) do
@@ -146,8 +143,6 @@ function drawMap(map)
             end
         end
     end
-
-
 end
 
 function drawText(text, x, y, align)
@@ -203,7 +198,7 @@ function drawMenu()
     drawText("↓      - Teste Linha[9]Coluna[1]" , 1, 9)
     
     drawText("STATUS:" , 2, 1,"center")
-    drawText("Força: "..playerControl:getDamage() , 2, 2)
+    drawText("Força: "..playerControl:getDamage() + playerControl:getDamageSword() , 2, 2)
     drawText("Defesa: "..playerControl:getDefese() , 2, 3)
     drawText("Acuracia: "..playerControl:getAccuracy(), 2, 4)
     drawText("Destreza: "..playerControl:getDexterity() , 2, 5)
@@ -213,6 +208,7 @@ function drawMenu()
     drawText("INVENTARIO:" , 3, 1, "center")
     drawText("Vida: "..playerControl:getLife().."     Level: "..playerControl:getLevel() , 3, 6)
     drawText("XP: "..playerControl:getExp() , 3, 7)
+    drawText("Sword: "..playerControl:getEquipSwordName() , 3, 8)
 end
 
 function love.draw()
@@ -258,7 +254,7 @@ function love.keypressed(key, scancode)
 
         if mapControl:isCollider(x,y) == 'c' then
             a = Itens:new()
-            print(a:getRandomSword())
+            playerControl:setEquipSword( a:getRandomSword() )
             mapData[y][x] = 'f'
             state = "chest"
         end
