@@ -213,8 +213,8 @@ end
 
 function love.draw()
     love.graphics.setColor(1, 1, 1)
-    love.graphics.draw(gui["interface"], 0, 0 )
     love.graphics.draw(gui["dungeon"], 420, 10 )
+    love.graphics.draw(gui["interface"], 0, 0 )
     
     --love.graphics.rectangle("fill", 10, 420, 810, 250 )
 
