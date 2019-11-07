@@ -44,7 +44,7 @@ function Player:new(Px, Py, currentSprite)
 
 end
 
-
+-- Get's and Set's Position
 function Player:getPx()
     return self.props["Px"]
 end
@@ -61,14 +61,78 @@ function Player:setPx(py)
     self.props["Py"] = py;
 end
 
+-- Get's and Set's Sprite
 function Player:getSprite()
     return self.props.Sprite[self.props.currentSprite]
 end
-
 
 function Player:setSprite(sprite)
     self.props["currentSprite"] = sprite
 end
 
+--- Get's and Set's Status
+function Player:getDamage()
+    return self.status["damage"]
+end
+
+function Player:setDamage(value)
+    self.status["damage"] = value
+end
+
+function Player:getDefese()
+    return self.status["defese"] 
+end
+
+function Player:setDefese(value)
+    self.status["defese"] = value
+end
+
+function Player:getDexterity()
+    return self.status["dexterity"] 
+end
+
+function Player:setDexterity(value)
+    self.status["dexterity"] = value
+end
+
+function Player:getAccuracy()
+    return self.status["accuracy"] 
+end
+
+function Player:setAccuracy(value)
+    self.status["accuracy"] = value
+end
+
+function Player:getCritical()
+    return self.status["critical"] 
+end
+
+function Player:setCritical(value)
+    self.status["critical"] = value
+end
+
+function Player:getLife()
+    return self.status["life"] 
+end
+
+function Player:setLife(value)
+    self.status["life"] = value
+end
+
+function Player:getExp()
+    return self.status["exp"] 
+end
+
+function Player:setExp(value)
+    self.status["exp"] = value
+end
+
+function Player:getLevel()
+    return self.status["level"] 
+end
+
+function Player:setLevel(value)
+    self.status["level"] = value
+end
 
 return Player

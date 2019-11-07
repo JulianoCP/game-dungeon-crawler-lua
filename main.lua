@@ -13,7 +13,7 @@ function love.load()
 
     local m = {
         {"x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x"},
-        {"x","f","f1","c","c","c","c","c","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","c","x"},
+        {"x","f","f1","c","c","c","c","c","f","f","f","s","f","f","f","f","f","f","f","f","f","f","f","c","x"},
         {"x","x","x","x","x","x","x","f","x","x","x","x","x","x","f","x","x","x","x","x","x","x","x","x","x"},
         {"x","f","x","c","f","x","f1","f","f","x","f","x","f","x","f","x","f","f","x","f","f","f","f","f","x"},
         {"x","f","x","f","f","x","f","f","f","x","f","x","f","f","f","x","f","f","x","f","x","f","f","f","x"},
@@ -73,10 +73,12 @@ function love.load()
     playerControl = Player:new(2,2,"spriteRight")
 
     blocks = {
-        x = love.graphics.newImage("assets/tiles/wall.png"),
-        f = love.graphics.newImage("assets/tiles/floor_1.png"),
-        f1 = love.graphics.newImage("assets/tiles/floor_2.png"),
-        c = love.graphics.newImage("assets/obj/chest_1.png"),
+        x = love.graphics.newImage("assets/tiles/wall.png"), -- Parede
+        f = love.graphics.newImage("assets/tiles/floor_1.png"), -- Chão Tipo 1
+        f1 = love.graphics.newImage("assets/tiles/floor_2.png"), -- Chão Tipo 2
+        c = love.graphics.newImage("assets/obj/chest_1.png"), -- Bau Tipo 1
+        c1 = love.graphics.newImage("assets/obj/chest.png"), -- Bau Tipo 2
+        s = love.graphics.newImage("assets/tiles/stair_1.png"), -- Escada
     }
 
     gui ={
@@ -144,9 +146,12 @@ function drawMap(map)
 
 end
 
-function drawText(text, x, y)
+function drawText(text, x, y, align)
     local myY = y
     local myX = x
+    local padding = 300
+
+    if align == nil then align = "left" end
 
     if myY == 1 then
         myY = 430
@@ -170,17 +175,20 @@ function drawText(text, x, y)
 
     if myX == 1 then
         myX = 20
-    end
-    if myX == 2 then
+    elseif myX == 2 then
         myX = 350
+    elseif myX == 3 then
+        myX = 670
+        padding = 150
     end
+
     love.graphics.setColor(0, 0, 0, 100)
-    love.graphics.print(text, myX, myY)
+    love.graphics.printf(text, myX, myY, padding, align)
 end
 
 function drawMenu()
 
-    drawText("COMANDO :", 1, 1)
+    drawText("COMANDO:", 1, 1, "center")
     drawText("→   - Mover para Direita" , 1, 2)
     drawText("←   - Mover para Esquerda" , 1, 3)
     drawText("↑      - Mover para Cima" , 1, 4)
@@ -189,16 +197,26 @@ function drawMenu()
     drawText("↓      - Teste Linha[7]Coluna[1]" , 1, 7)
     drawText("↓      - Teste Linha[8]Coluna[1]" , 1, 8)
     drawText("↓      - Teste Linha[9]Coluna[1]" , 1, 9)
-
-    drawText("↓      - Teste Linha[1]Coluna[1]" , 2, 1)
-
+    
+    drawText("STATUS:" , 2, 1,"center")
+    drawText("Força: "..playerControl:getDamage() , 2, 2)
+    drawText("Defesa: "..playerControl:getDefese() , 2, 3)
+    drawText("Acuracia: "..playerControl:getAccuracy(), 2, 4)
+    drawText("Destreza: "..playerControl:getDexterity() , 2, 5)
+    drawText("Critico: "..playerControl:getCritical() , 2, 6)
+    
+    
+    drawText("INVENTARIO:" , 3, 1, "center")
+    drawText("Vida: "..playerControl:getLife().."     Level: "..playerControl:getLevel() , 3, 6)
+    drawText("XP: "..playerControl:getExp() , 3, 7)
 end
 
 function love.draw()
     love.graphics.setColor(1, 1, 1)
     love.graphics.draw(gui["interface"], 0, 0 )
     love.graphics.draw(gui["dungeon"], 420, 10 )
-    love.graphics.rectangle("fill", 10, 420, 810, 250 )
+    
+    --love.graphics.rectangle("fill", 10, 420, 810, 250 )
 
     drawMap(mapData)
     drawPlayer()
@@ -240,6 +258,13 @@ function love.keypressed(key, scancode)
             mapData[y][x] = 'f'
             state = "chest"
         end
+
+        if mapControl:isCollider(x,y) == 's' then
+            -- Vai para um novo Nivel
+            -- state = "chest"
+            print("ACHOU UMA ESCADA")
+        end
+
     end
 
 end
