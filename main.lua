@@ -9,6 +9,8 @@ local mapControl = nil
 
 function love.load()
 
+    love.graphics.setFont(love.graphics.newFont("assets/fonts/cc.otf", 14))
+
     local m = {
         {"x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x"},
         {"x","f","f1","c","c","c","c","c","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","c","x"},
@@ -82,7 +84,6 @@ function love.load()
         chest = love.graphics.newImage("assets/gui/dungeonChest.png"),
         dungeon = love.graphics.newImage("assets/gui/dungeonWalking.png"),
         frame = love.graphics.newImage("assets/gui/interface_scene.png")
-
     }
     
   
@@ -143,26 +144,74 @@ function drawMap(map)
 
 end
 
+function drawText(text, x, y)
+    local myY = y
+    local myX = x
+
+    if myY == 1 then
+        myY = 430
+    elseif myY == 2 then
+        myY = 460
+    elseif myY == 3 then
+        myY = 485
+    elseif myY == 4 then
+        myY = 510
+    elseif myY == 5 then
+        myY = 535
+    elseif myY == 6 then
+        myY = 560
+    elseif myY == 7 then
+        myY = 585
+    elseif myY == 8 then
+        myY = 610
+    elseif myY == 9 then
+        myY = 635
+    end
+
+    if myX == 1 then
+        myX = 20
+    end
+    if myX == 2 then
+        myX = 350
+    end
+    love.graphics.setColor(0, 0, 0, 100)
+    love.graphics.print(text, myX, myY)
+end
+
+function drawMenu()
+
+    drawText("COMANDO :", 1, 1)
+    drawText("→   - Mover para Direita" , 1, 2)
+    drawText("←   - Mover para Esquerda" , 1, 3)
+    drawText("↑      - Mover para Cima" , 1, 4)
+    drawText("↓      - Mover para Cima" , 1, 5)
+    drawText("↓      - Teste Linha[6]Coluna[1]" , 1, 6)
+    drawText("↓      - Teste Linha[7]Coluna[1]" , 1, 7)
+    drawText("↓      - Teste Linha[8]Coluna[1]" , 1, 8)
+    drawText("↓      - Teste Linha[9]Coluna[1]" , 1, 9)
+
+    drawText("↓      - Teste Linha[1]Coluna[1]" , 2, 1)
+
+end
 
 function love.draw()
-
-    --love.graphics.rectangle("fill", 10, 10, 400, 400 )
+    love.graphics.setColor(1, 1, 1)
     love.graphics.draw(gui["interface"], 0, 0 )
     love.graphics.draw(gui["dungeon"], 420, 10 )
-    love.graphics.draw(gui["frame"], 420, 10 )
     love.graphics.rectangle("fill", 10, 420, 810, 250 )
 
     drawMap(mapData)
     drawPlayer()
-    sceneDraw()
+    drawScene()
+    drawMenu()
+
     
 end
 
-function sceneDraw()
+function drawScene()
 
     if state == "chest" then
         love.graphics.draw(gui["chest"], 420,10 )
-        love.graphics.draw(gui["frame"], 420, 10 )
     end
 
 end
