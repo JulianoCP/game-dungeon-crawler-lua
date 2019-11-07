@@ -7,16 +7,6 @@ FogWar = require 'Fog'
 
 local mapControl = nil
 
-function saveData()
-    local contents = ""
-
-    local f = assert(io.open("dungeon.lua", "r"))
-    local t = f:read("*all")
-    f.close()
-
-    print(f)
-end
-
 function love.load()
 
     love.graphics.setFont(love.graphics.newFont("assets/fonts/cc.otf", 14))
@@ -45,7 +35,7 @@ function love.load()
         dungeon = love.graphics.newImage("assets/gui/dungeonWalking.png"),
         frame = love.graphics.newImage("assets/gui/interface_scene.png")
     }
-    saveData()
+
 end
 
 function drawPlayer()
