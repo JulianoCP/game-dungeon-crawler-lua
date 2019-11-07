@@ -2,67 +2,27 @@ Map = require 'Map'
 Player = require 'Player'
 Itens = require 'Itens'
 state = "move"
+Dungeon = require 'Dungeon'
+FogWar = require 'Fog'
 
 local mapControl = nil
+
+function saveData()
+    local contents = ""
+
+    local f = assert(io.open("dungeon.lua", "r"))
+    local t = f:read("*all")
+    f.close()
+
+    print(f)
+end
 
 function love.load()
 
     love.graphics.setFont(love.graphics.newFont("assets/fonts/cc.otf", 14))
 
-    local m = {
-        {"x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x"},
-        {"x","f","f1","c","c","c","c","c","f","f","f","s","f","f","f","f","f","f","f","f","f","f","f","c","x"},
-        {"x","x","x","x","x","x","x","f","x","x","x","x","x","x","f","x","x","x","x","x","x","x","x","x","x"},
-        {"x","f","x","c","f","x","f1","f","f","x","f","x","f","x","f","x","f","f","x","f","f","f","f","f","x"},
-        {"x","f","x","f","f","x","f","f","f","x","f","x","f","f","f","x","f","f","x","f","x","f","f","f","x"},
-        {"x","f","x","x","f","x","x","f","x","x","f","x","f","x","f","f","f","f","x","f","x","f","f","c","x"},
-        {"x","f","f","f","f","f","x","f1","x","f","f","f","f","x","f","f","x","x","x","f","x","x","x","x","x"},
-        {"x","x","x","x","x","f","x","f","x","f","x","x","x","x","f","f","f","f","x","f","f","f","f","f","x"},
-        {"x","f","f","f","f","f","x","f","x","f","f","f","f","x","x","x","f","f","x","x","x","x","x","f","x"},
-        {"x","f","x","f","f","f","x","f1","x","f","f1","f1","f","x","f","f","f","f","x","f","f","f","x","f","x"},
-        {"x","f","x","x","x","x","x","f","x","x","x","x","x","x","f","x","f","x","x","f","f","f","x","f","x"},
-        {"x","f","f","f","f","f","f1","f","f1","f","f1","f","f","f","f","x","f","f","f","f","x","x","x","f","x"},
-        {"x","f","f","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","f","f","f","x","f","x"},
-        {"x","f","x","x","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","x"},
-        {"x","f","f","x","f","x","x","x","x","f","x","x","x","x","x","x","x","x","x","x","x","x","x","f","x"},
-        {"x","x","f","x","f","f1","f","f","x","f","x","c","f","f","f","f","f","f","f","f","f","f","x","f","x"},
-        {"x","f","f","x","c","f","f","f","x","f","x","f","f","x","x","x","x","x","x","x","f","f","x","f","x"},
-        {"x","f","x","x","x","x","x","x","x","f","x","f","f","x","f1","f","f","f","f1","x","f","f","x","f","x"},
-        {"x","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","x"},
-        {"x","f","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","f","x"},
-        {"x","f","f","f","f","f","f","f","f","f","f","f","x","f","f","f","f","f","f","f","f","f","f","f","x"},
-        {"x","f","x","f","f","f","f","f","f","c","x","f","f","f","x","f","f","f","f","f","f","c","x","f","x"},
-        {"x","f","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","f","x"},
-        {"x","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","x"},
-        {"x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x"},
-    }
-    fog = {
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-    }
+    local m = Dungeon
+    fog = FogWar
 
     -- futuramente trocar M por um arquivo
     mapControl = Map:new("Santuario", m, 1)
@@ -85,6 +45,7 @@ function love.load()
         dungeon = love.graphics.newImage("assets/gui/dungeonWalking.png"),
         frame = love.graphics.newImage("assets/gui/interface_scene.png")
     }
+    saveData()
 end
 
 function drawPlayer()
@@ -238,10 +199,10 @@ function love.keypressed(key, scancode)
         local x = playerControl:getPy()
         local y = playerControl:getPx()
 
-        if key == "right" then x = x+1  playerControl:setSprite("spriteRight") end
-        if key == "left" then x = x-1 playerControl:setSprite("spriteLeft") end
-        if key == "up" then y = y - 1 playerControl:setSprite("spriteUp")  end
-        if key == "down" then  y = y + 1 playerControl:setSprite("spriteDown") end
+        if key == "right" or key == "d" then x = x+1  playerControl:setSprite("spriteRight") end
+        if key == "left" or key == "a" then x = x-1 playerControl:setSprite("spriteLeft") end
+        if key == "up" or key == "w" then y = y - 1 playerControl:setSprite("spriteUp")  end
+        if key == "down" or key == "s" then  y = y + 1 playerControl:setSprite("spriteDown") end
 
         if  not (mapControl:isCollider(x,y) == 'x')  then
             playerControl:setPx(x)
@@ -253,6 +214,7 @@ function love.keypressed(key, scancode)
             playerControl:setEquipSword( a:getRandomSword() )
             mapData[y][x] = 'f'
             state = "chest"
+            --love.window.setTitle(playerControl:getEquipSwordName())
         end
 
         if mapControl:isCollider(x,y) == 's' then
