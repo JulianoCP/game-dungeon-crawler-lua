@@ -2,6 +2,8 @@ Map = require 'Map'
 Player = require 'Player'
 Itens = require 'Itens'
 state = "move"
+Dungeon = require 'Dungeon'
+FogWar = require 'Fog'
 
 local mapControl = nil
 
@@ -9,60 +11,8 @@ function love.load()
 
     love.graphics.setFont(love.graphics.newFont("assets/fonts/cc.otf", 14))
 
-    local m = {
-        {"x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","x","f","f","f","f","f","f","f","f"},
-        {"f","f","f","f","f","f","f","f","f","f","f","f","x","x","x","x","x","f","f","f","f","f","f","f","f"},
-        {"f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","x","x","f","f","f","f","f","f","f","f"},
-        {"f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","x","x","f","f","f","f","f","f","f","f"},
-        {"f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","x","x","f","f","f","f","f","f","f","f"},
-        {"f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","x","x","f","f","f","f","f","f","f","f"},
-        {"f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","x","x","f","f","f","f","f","f","f","f"},
-        {"f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","x","x","f","f","f","f","f","f","f","f"},
-        {"f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","x","x","f","f","f","f","f","f","f","f"},
-        {"f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f"},
-        {"f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f"},
-        {"f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f"},
-        {"f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f"},
-        {"f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f"},
-        {"f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f"},
-        {"f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f"},
-        {"f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f"},
-        {"f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f"},
-        {"f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f"},
-        {"f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f"},
-        {"f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f"},
-        {"f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f"},
-        {"f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f"},
-        {"f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f"},
-        {"f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f","f"},
-    }
-    fog = {
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-        {"w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w","w"},
-    }
+    local m = Dungeon
+    fog = FogWar
 
     -- futuramente trocar M por um arquivo
     mapControl = Map:new("Santuario", m, 1)
@@ -98,12 +48,8 @@ end
 
 function drawMap(map)
     love.graphics.setColor(1, 1, 1, 100) -- Cor Original
-
     local width = blocks["x"]:getDimensions()
 
-    print("W: "..table.getn(map))
-    print("H: "..table.getn(map[1]))
-    
     -- Desenha Mapa
     for i = 1, table.getn(map) do
         for j = 1 , table.getn(map[1]) do
@@ -242,10 +188,10 @@ function love.keypressed(key, scancode)
         local x = playerControl:getPy()
         local y = playerControl:getPx()
 
-        if key == "right" then x = x+1  playerControl:setSprite("spriteRight") end
-        if key == "left" then x = x-1 playerControl:setSprite("spriteLeft") end
-        if key == "up" then y = y - 1 playerControl:setSprite("spriteUp")  end
-        if key == "down" then  y = y + 1 playerControl:setSprite("spriteDown") end
+        if key == "right" or key == "d" then x = x+1  playerControl:setSprite("spriteRight") end
+        if key == "left" or key == "a" then x = x-1 playerControl:setSprite("spriteLeft") end
+        if key == "up" or key == "w" then y = y - 1 playerControl:setSprite("spriteUp")  end
+        if key == "down" or key == "s" then  y = y + 1 playerControl:setSprite("spriteDown") end
 
         if  not (mapControl:isCollider(x,y) == 'x')  then
             playerControl:setPx(x)
@@ -257,6 +203,7 @@ function love.keypressed(key, scancode)
             playerControl:setEquipSword( a:getRandomSword() )
             mapData[y][x] = 'f'
             state = "chest"
+            --love.window.setTitle(playerControl:getEquipSwordName())
         end
 
         if mapControl:isCollider(x,y) == 's' then
