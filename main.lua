@@ -93,6 +93,7 @@ end
 
 function drawPlayer()
     local width = playerControl:getSprite():getDimensions()
+    
     love.graphics.setColor(1, 1, 1, 100) -- Cor Original
     love.graphics.draw(playerControl:getSprite(), (width*playerControl:getPy())-6, (width*playerControl:getPx())-6 )
     
@@ -103,6 +104,9 @@ function drawMap(map)
 
     local width = blocks["x"]:getDimensions()
 
+    print("W: "..table.getn(map))
+    print("H: "..table.getn(map[1]))
+    
     -- Desenha Mapa
     for i = 1, table.getn(map) do
         for j = 1 , table.getn(map[1]) do
