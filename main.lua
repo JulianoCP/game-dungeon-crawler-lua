@@ -35,12 +35,12 @@ function love.load()
         dungeon = love.graphics.newImage("assets/gui/dungeonWalking.png"),
         frame = love.graphics.newImage("assets/gui/interface_scene.png")
     }
-
 end
 
 function drawPlayer()
 
     local width = playerControl:getSprite():getDimensions()
+    
     love.graphics.setColor(1, 1, 1, 100) -- Cor Original
     love.graphics.draw(playerControl:getSprite(), (width*playerControl:getPy())-6, (width*playerControl:getPx())-6 )
     
@@ -48,7 +48,6 @@ end
 
 function drawMap(map)
     love.graphics.setColor(1, 1, 1, 100) -- Cor Original
-
     local width = blocks["x"]:getDimensions()
 
     -- Desenha Mapa
@@ -160,8 +159,8 @@ end
 
 function love.draw()
     love.graphics.setColor(1, 1, 1)
-    love.graphics.draw(gui["interface"], 0, 0 )
     love.graphics.draw(gui["dungeon"], 420, 10 )
+    love.graphics.draw(gui["interface"], 0, 0 )
     
     --love.graphics.rectangle("fill", 10, 420, 810, 250 )
 
