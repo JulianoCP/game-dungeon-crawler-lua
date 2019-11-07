@@ -1,9 +1,7 @@
-
 Map = require 'Map'
 Player = require 'Player'
 Itens = require 'Itens'
 state = "move"
-
 
 local mapControl = nil
 
@@ -84,11 +82,10 @@ function love.load()
         frame = love.graphics.newImage("assets/gui/interface_scene.png")
 
     }
-    
-  
 end
 
 function drawPlayer()
+
     local width = playerControl:getSprite():getDimensions()
     love.graphics.setColor(1, 1, 1, 100) -- Cor Original
     love.graphics.draw(playerControl:getSprite(), (width*playerControl:getPy())-6, (width*playerControl:getPx())-6 )
@@ -118,14 +115,14 @@ function drawMap(map)
         end
     end
     
-        --Fog Nivel 1
-        for i = playerControl:getPx() - 1 , playerControl:getPx() + 1 do
-            for j = playerControl:getPy() - 1 , playerControl:getPy() + 1 do
-                if i <= 1 then i = 1 end
-                if j <= 1 then j = 1 end
-                fog[i][j] = "k"
-            end
+    --Fog Nivel 1
+    for i = playerControl:getPx() - 1 , playerControl:getPx() + 1 do
+        for j = playerControl:getPy() - 1 , playerControl:getPy() + 1 do
+            if i <= 1 then i = 1 end
+            if j <= 1 then j = 1 end
+            fog[i][j] = "k"
         end
+    end
 
     -- BlackOut
     for i = 1, table.getn(fog) do
@@ -139,17 +136,13 @@ function drawMap(map)
             end
         end
     end
-
-
 end
 
 
 function love.draw()
 
-    --love.graphics.rectangle("fill", 10, 10, 400, 400 )
     love.graphics.draw(gui["interface"], 0, 0 )
     love.graphics.draw(gui["dungeon"], 420, 10 )
-    love.graphics.draw(gui["frame"], 420, 10 )
     love.graphics.rectangle("fill", 10, 420, 810, 250 )
 
     drawMap(mapData)
@@ -162,7 +155,6 @@ function sceneDraw()
 
     if state == "chest" then
         love.graphics.draw(gui["chest"], 420,10 )
-        love.graphics.draw(gui["frame"], 420, 10 )
     end
 
 end
@@ -187,7 +179,8 @@ function love.keypressed(key, scancode)
 
         if mapControl:isCollider(x,y) == 'c' then
             a = Itens:new()
-            print(a:getRandomSword())
+            playerControl:setEquipSword( a:getRandomSword() )
+            print(playerControl:getEquipSword())
             mapData[y][x] = 'f'
             state = "chest"
         end

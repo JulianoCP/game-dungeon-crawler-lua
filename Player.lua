@@ -44,6 +44,21 @@ function Player:new(Px, Py, currentSprite)
 
 end
 
+function Player:setEquipSword(item)
+    self.equip["sword"] = item
+end
+
+function Player:getEquipSword()
+    return self.equip["sword"].name
+end
+
+function Player:setInventoryPotion(potion)
+    self.invetory["potion"] = self.invetory["potion"] + potion
+end
+
+function Player:getInventoryPotion()
+    return self.invetory["potion"]
+end
 
 function Player:getPx()
     return self.props["Px"]
@@ -65,10 +80,8 @@ function Player:getSprite()
     return self.props.Sprite[self.props.currentSprite]
 end
 
-
 function Player:setSprite(sprite)
     self.props["currentSprite"] = sprite
 end
-
 
 return Player
