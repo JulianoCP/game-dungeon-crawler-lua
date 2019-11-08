@@ -2,6 +2,7 @@ currentTileCode = ''
 map = {}
 filename = ''
 writeFileName = 0
+functionMap = 'edit'
 
 function fullMap()
     for i = 1, 25 do
@@ -169,48 +170,79 @@ function drawMenu()
     love.graphics.setColor(1, 1, 1)
     love.graphics.rectangle("fill", 20, 450, 420, 188 )
     love.graphics.setColor(0, 0, 0)
-    love.graphics.print("Nome do Arquivo: ", 30, 460)
+    love.graphics.print("Nome do Mapa: ", 30, 460)
     love.graphics.setColor(1, 0, 0)
     love.graphics.print(filename, 150, 460)
 
     love.graphics.setColor(0, 0, 1)
-    love.graphics.print("Instruções:\n Pressione S para Salvar\n Pressione F2 para editar o nome do Mapa \n(Se não colocar nome ele será salvo como data.lua )\n Pressione F5 para resetar o nome", 30, 500)
+    love.graphics.print("Instruções:\n Pressione F1 para Abrir um MAPA\n Pressione F2 para Salvar um Mapa \n(Se não colocar nome ele será salvo como data.lua )\n Pressione F5 para resetar o nome", 30, 500)
 
     love.graphics.setColor(0,1,0)
     if writeFileName == 0 then
-        love.graphics.print("Edição", 290, 645)
+        if functionMap == 'edit' then
+            love.graphics.print("Edição", 290, 645)
+        elseif functionMap == 'edit_save' then
+            love.graphics.setColor(1, 0, 1, 0.6)
+            love.graphics.print("Mapa SALVO", 290, 645)
+            love.graphics.setColor(1, 1, 1, 0.6)
+        end
     else
+        love.graphics.setColor(1, 0, 1, 0.6)
+        love.graphics.rectangle("fill", 25, 155, 400, 100 )
+
+        love.graphics.setColor(1, 1, 1, .8)
+        love.graphics.rectangle("fill", 30, 160, 390, 90 )
+
+        love.graphics.setColor(0,0,0,1)
+        if functionMap == 'open' then
+            love.graphics.printf("ABRIR MAPA:\n(Digite o Nome de um Mapa para Abrir)\nPressione F1 para Abrir\nPressione F5 para Limpar o Nome\nPressione ESC para Sair sem Abrir", 30, 160,400,"center")
+        elseif functionMap == 'save' then
+            love.graphics.printf("SALVAR MAPA:\n(Digite o Nome do Mapa para Salvar)\nPressione F2 para Salvar\nPressione F5 para Limpar o Nome\nPressione ESC para Sair sem Salvar", 30, 160,400,"center")
+        end
+
+        love.graphics.setColor(0,1,0)
         love.graphics.print("Escrevendo o Nome do Arquivo", 290, 645)
     end
     love.graphics.setColor(1,1,1)
+
 
 
 end
 
 function love.keypressed(key, scancode)
 
-    if key == "s" then
-        if writeFileName == 0 then
-            save(map)
-        end
-    end
-    if key == "f2" then
-        if writeFileName == 1 then
-            writeFileName = 0
-        else
-            writeFileName = 1
-        end
-    end
+    -- Sair
     if key == "escape" then
-        love.event.quit()
+        --love.event.quit()
+        functionMap = 'edit'
+        writeFileName = 0
      end
     
-     if key == "o" then
-        if  writeFileName == 0 then
+     -- Abrir Mapa
+     if key == "f1" then
+        if writeFileName == 1 and not(filename == '')then
             map = require("DungeonCrawler/maps/"..filename)
+            writeFileName = 0
+            functionMap = 'edit'
+        else
+            writeFileName = 1
+            functionMap = 'open'
         end
      end
 
+     -- Salvar Mapa
+    if key == "f2" then
+        if writeFileName == 1 then
+            save(map)
+            writeFileName = 0
+            functionMap = 'edit_save'
+        else
+            writeFileName = 1
+            functionMap = 'save'
+        end
+    end
+    
+     -- Limpar Nome
      if key == "f5" then
         filename = ''
      end
@@ -227,6 +259,8 @@ end
 function save(m)
     print("SAVE - MAP")
     if filename == '' then filename = "data" end
+
+    
     local filename = "DungeonCrawler/maps/"..filename..".lua"
     local file = io.open(filename, "w+")
     io.output(file)
@@ -242,16 +276,4 @@ function save(m)
     end
     io.write("    }")
     file:close()
-end
-
-function load()
-    local file = io.open("mapEditor/data/data.lua", "r")
-    if file then
-        local string = file:read()
-        print(string)
-        local string = file:read()
-        print(string)
-        file:close()
-        print("LOAD IN")
-    end
 end

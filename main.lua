@@ -9,6 +9,7 @@ Mix = require("/maps/Mix")
 Dungeon = require("/maps/Dungeon")
 Fosso = require("/maps/Fosso")
 Siberia = require("/maps/Siberia")
+Test = require("/maps/Test")
 
 mapControl = nil
 itemChest = nil
@@ -30,6 +31,8 @@ function love.load()
     maps = Map:new("Labirinto - Perdidos no Siberia" , Siberia , 3)
     table.insert( arrayMaps, maps )
     maps = Map:new("Labirinto - MIX" , Mix , 4)
+    table.insert( arrayMaps, maps )
+    maps = Map:new("Labirinto - Test" , Test , 5)
     table.insert( arrayMaps, maps )
     
     playerControl = Player:new(2,2,"spriteRight")
