@@ -29,6 +29,10 @@ function love.load()
         c = love.graphics.newImage("tiles/chest_1.png"), -- Bau Tipo 1
         c1 = love.graphics.newImage("tiles/chest.png"), -- Bau Tipo 2
         s = love.graphics.newImage("tiles/stair_1.png"), -- Escada
+        m = love.graphics.newImage("tiles/monster_1.png"), -- Monstro Tipo 1
+        m1 = love.graphics.newImage("tiles/monster_2.png"), -- Monstro Tipo 2
+        m2 = love.graphics.newImage("tiles/monster_3.png"), -- Monstro Tipo 3
+        m3 = love.graphics.newImage("tiles/monster_4.png"), -- Monstro Tipo 4
     }
     fullMap()
 end
@@ -58,12 +62,12 @@ function love.mousepressed(x, y, button)
 
         -- Menu de Tiles Coluna = range do X
         if (x > 445 and x < 516) then
-            --Parede
+            --[Slot 1]
             if y > 17 and y < 34 then
                 --love.mouse.setCursor(cursor)           
                 currentTileCode = "x"
             end
-            -- Bau 1
+            -- [Slot 2]
             if y > 35 and y < 52 then              
                 currentTileCode = "c1"
             end

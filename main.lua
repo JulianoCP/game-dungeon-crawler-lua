@@ -2,10 +2,12 @@ Map = require 'Map'
 Player = require 'Player'
 Itens = require 'Itens'
 state = "move"
-Dungeon = require("Dungeon")
 FogWar = require 'Fog'
-Fosso = require("Fosso")
-Siberia = require("Siberia")
+
+-- Maps
+Dungeon = require("/maps/Dungeon")
+Fosso = require("/maps/Fosso")
+Siberia = require("/maps/Siberia")
 
 mapControl = nil
 itemChest = nil
@@ -18,22 +20,33 @@ function love.load()
     
     love.graphics.setFont(love.graphics.newFont("assets/fonts/cc.otf", 14))
     mapControl = Map:new("Labirinto - Lamento Sombrio" , Dungeon , 1)
-    
     love.window.setTitle(mapControl:getNameMap())
     table.insert( arrayMaps, mapControl )
+    
+    -- Inserindo Outros Mapas
     maps = Map:new("Labirinto - Fosso das Lamentações" , Fosso , 2)
     table.insert( arrayMaps, maps )
     maps = Map:new("Labirinto - Perdidos no Siberia" , Siberia , 3)
     table.insert( arrayMaps, maps )
+    
     playerControl = Player:new(2,2,"spriteRight")
-
+    
     blocks = {
         x = love.graphics.newImage("assets/tiles/wall.png"), -- Parede
+        x1 = love.graphics.newImage("assets/tiles/wall_3.png"), -- Parede
         f = love.graphics.newImage("assets/tiles/floor_1.png"), -- Chão Tipo 1
         f1 = love.graphics.newImage("assets/tiles/floor_2.png"), -- Chão Tipo 2
+        f2 = love.graphics.newImage("assets/tiles/floor_3.png"), -- Chão Tipo 3
+        f3 = love.graphics.newImage("assets/tiles/floor_4.png"), -- Chão Tipo 4
+        f4 = love.graphics.newImage("assets/tiles/floor.png"), -- Chão Tipo 5
+        f5 = love.graphics.newImage("assets/tiles/floor_5.png"), -- Chão Tipo 6
         c = love.graphics.newImage("assets/obj/chest_1.png"), -- Bau Tipo 1
         c1 = love.graphics.newImage("assets/obj/chest.png"), -- Bau Tipo 2
         s = love.graphics.newImage("assets/tiles/stair_1.png"), -- Escada
+        m = love.graphics.newImage("assets/monsters/monster_1.png"), -- Monstro Tipo 1
+        m1 = love.graphics.newImage("assets/monsters/monster_2.png"), -- Monstro Tipo 2
+        m2 = love.graphics.newImage("assets/monsters/monster_3.png"), -- Monstro Tipo 3
+        m3 = love.graphics.newImage("assets/monsters/monster_4.png"), -- Monstro Tipo 4
     }
 
     gui ={
@@ -130,9 +143,10 @@ function drawText(text, x, y, align)
         myX = 20
     elseif myX == 2 then
         myX = 350
+        padding = 190
     elseif myX == 3 then
-        myX = 670
-        padding = 150
+        myX = 580
+        padding = 220
     end
 
     love.graphics.setColor(0, 0, 0, 100)
@@ -140,13 +154,13 @@ function drawText(text, x, y, align)
 end
 
 function drawMenu()
-
+    -- 9 Linhas -- 3 Colunas
     if state == "move" then
         drawText("COMANDO:", 1, 1, "center")
-        drawText("→   - Mover para Direita" , 1, 2)
-        drawText("←   - Mover para Esquerda" , 1, 3)
-        drawText("↑      - Mover para Cima" , 1, 4)
-        drawText("↓      - Mover para Cima" , 1, 5)
+        drawText("[D] ou (→)   - Mover para Direita" , 1, 2)
+        drawText("[A] ou (←)   - Mover para Esquerda" , 1, 3)
+        drawText("[W] ou  (  ↑  )      - Mover para Cima" , 1, 4)
+        drawText("[S] ou  (  ↓  )      - Mover para Baixo" , 1, 5)
     elseif state == "chest" then
         drawText("COMANDO:", 1, 1, "center")
         drawText("ITEM ENCONTRADO" , 1, 2)
@@ -158,7 +172,7 @@ function drawMenu()
         drawText("[E]   - Você Aceita a Troca" , 1, 8)
         drawText("[Q]   - Você Rejeita a Troca" , 1, 9)
     end
-    drawText("STATUS:" , 2, 1,"center")
+    drawText("STATUS:" , 2, 1, "center")
     drawText("Força: "..playerControl:getDamage() + playerControl:getDamageSword() , 2, 2)
     drawText("Defesa: "..playerControl:getDefese() , 2, 3)
     drawText("Acuracia: "..playerControl:getAccuracy(), 2, 4)
