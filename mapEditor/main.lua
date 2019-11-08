@@ -1,6 +1,6 @@
 currentTileCode = ''
 map = {}
-filename = ' '
+filename = ''
 writeFileName = 0
 
 function fullMap()
@@ -42,7 +42,6 @@ function love.load()
         m3 = love.graphics.newImage("tiles/monster_4.png"), -- Monstro Tipo 4
     }
     fullMap()
-
     love.graphics.setFont(love.graphics.newFont("cc.otf", 14))
 
 end
@@ -205,8 +204,15 @@ function love.keypressed(key, scancode)
     if key == "escape" then
         love.event.quit()
      end
+    
+     if key == "o" then
+        if  writeFileName == 0 then
+            map = require("DungeonCrawler/maps/"..filename)
+        end
+     end
+
      if key == "f5" then
-        filename = ' '
+        filename = ''
      end
 
 end
@@ -220,7 +226,7 @@ end
 
 function save(m)
     print("SAVE - MAP")
-    if filename == ' ' then filename = "data" end
+    if filename == '' then filename = "data" end
     local filename = "DungeonCrawler/maps/"..filename..".lua"
     local file = io.open(filename, "w+")
     io.output(file)
