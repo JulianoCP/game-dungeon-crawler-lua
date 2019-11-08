@@ -5,6 +5,7 @@ state = "move"
 FogWar = require 'Fog'
 
 -- Maps
+Mix = require("/maps/Mix")
 Dungeon = require("/maps/Dungeon")
 Fosso = require("/maps/Fosso")
 Siberia = require("/maps/Siberia")
@@ -27,6 +28,8 @@ function love.load()
     maps = Map:new("Labirinto - Fosso das Lamentações" , Fosso , 2)
     table.insert( arrayMaps, maps )
     maps = Map:new("Labirinto - Perdidos no Siberia" , Siberia , 3)
+    table.insert( arrayMaps, maps )
+    maps = Map:new("Labirinto - MIX" , Mix , 4)
     table.insert( arrayMaps, maps )
     
     playerControl = Player:new(2,2,"spriteRight")
@@ -258,7 +261,7 @@ function love.keypressed(key, scancode)
         if key == "up" or key == "w" then y = y - 1 playerControl:setSprite("spriteUp")  end
         if key == "down" or key == "s" then  y = y + 1 playerControl:setSprite("spriteDown") end
 
-        if  not (mapControl:isCollider(x,y) == 'x')  then
+        if  not (mapControl:isCollider(x,y) == 'x' or mapControl:isCollider(x,y) == 'x1')  then
 
             playerControl:setPx(x)
             playerControl:setPy(y)
