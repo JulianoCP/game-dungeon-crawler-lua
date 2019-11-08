@@ -48,6 +48,10 @@ function Player:setEquipSword(item)
     self.equip["sword"] = item
 end
 
+function Player:setEquipArmor(item)
+    self.equip["armor"] = item
+end
+
 function Player:getCriticalSword()
     if self.equip["sword"] == nil then return 0 end
     return self.equip["sword"].critical
@@ -66,6 +70,11 @@ end
 function Player:getEquipSwordName()
     if self.equip["sword"] == nil then return "No Equiped" end
     return self.equip["sword"].name
+end
+
+function Player:getEquipArmorName()
+    if self.equip["armor"] == nil then return "No Equiped" end
+    return self.equip["armor"].name
 end
 
 function Player:setInventoryPotion(potion)

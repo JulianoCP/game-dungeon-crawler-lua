@@ -151,13 +151,16 @@ function drawMenu()
         drawText("COMANDO:", 1, 1, "center")
         drawText("ITEM ENCONTRADO" , 1, 2)
         if itemChest.type == "sword" then drawText("["..itemChest.name .."]\n[DMG - "..itemChest.damage.."] [CRIT - "..itemChest.critical.."] [ACC - "..itemChest.accuracy.."]" , 1, 3) end
-        if itemChest.type == "armor" then drawText(itemChest.name , 1, 3) end
+        if itemChest.type == "armor" then drawText("["..itemChest.name.."]\n[DEF - "..itemChest.defense.."] [DEX - "..itemChest.dextery.."] [VIT - "..itemChest.life.."]" , 1, 3) end
         drawText("SEU ITEM" , 1, 5)
-        if itemChest.type == "sword" and not(playerControl:getEquipSwordName() == "No Equiped") then drawText("["..playerControl:getEquipSwordName().."]\n[DMG - "..playerControl:getDamageSword().."] [CRIT - "..playerControl:getCriticalSword().."] [ACC - "..playerControl:getAccuracySword().."]" , 1, 6) else drawText("VOCÊ NÃO TEM NADA EQUIPADO",1,6) end
-        if itemChest.type == "armor" then drawText(itemChest.name , 1, 3) end
+        if itemChest.type == "sword" and not(playerControl:getEquipSwordName() == "No Equiped") then drawText("["..playerControl:getEquipSwordName().."]\n[DMG - "..playerControl:getDamageSword().."] [CRIT - "..playerControl:getCriticalSword().."] [ACC - "..playerControl:getAccuracySword().."]" , 1, 6) elseif playerControl:getEquipSwordName() == "No Equiped" then drawText("Você não tem arma equipada!",1,6) end
+        if itemChest.type == "armor" and not(playerControl:getEquipArmorName() == "No Equiped") then drawText(itemChest.name , 1, 6) elseif playerControl:getEquipArmorName() == "No Equiped" then drawText("Você não tem arma equipada!",1,6) end
         drawText("[E]   - Você Aceita a Troca" , 1, 8)
         drawText("[Q]   - Você Rejeita a Troca" , 1, 9)
+    elseif state == "battle" then
+        ---A FAZER
     end
+
     drawText("STATUS:" , 2, 1,"center")
     drawText("Força: "..playerControl:getDamage() + playerControl:getDamageSword() , 2, 2)
     drawText("Defesa: "..playerControl:getDefese() , 2, 3)
@@ -170,21 +173,20 @@ function drawMenu()
     drawText("Vida: "..playerControl:getLife().."     Level: "..playerControl:getLevel() , 3, 6)
     drawText("XP: "..playerControl:getExp() , 3, 7)
     drawText("Sword: "..playerControl:getEquipSwordName() , 3, 8)
+    drawText("Armor: "..playerControl:getEquipArmorName() , 3, 9)
 end
 
 function love.draw()
+
     love.graphics.setColor(1, 1, 1)
     love.graphics.draw(gui["dungeon"], 420, 10 )
     love.graphics.draw(gui["interface"], 0, 0 )
-    
-    --love.graphics.rectangle("fill", 10, 420, 810, 250 )
 
     drawMap(mapControl:getMap())
     drawPlayer()
     drawScene()
     drawMenu()
 
-    
 end
 
 function drawScene()
@@ -213,36 +215,45 @@ function love.keypressed(key, scancode)
         if key == "down" or key == "s" then  y = y + 1 playerControl:setSprite("spriteDown") end
 
         if  not (mapControl:isCollider(x,y) == 'x')  then
+
             playerControl:setPx(x)
             playerControl:setPy(y)
+
         end
 
         if mapControl:isCollider(x,y) == 'c' then
-            a = Itens:new()
-            itemChest =  a:getRandomSword() 
+
+            math.randomseed(os.time())
+            local a = Itens:new()
+            local numSort = math.random(2)
+            if numSort == 1 then itemChest = a:getRandomSword() else itemChest = a:getRandomArmor() end
             mapControl:getMap()[y][x] = 'f'
             state = "chest"
+
         end
 
         if mapControl:isCollider(x,y) == 's' then
+
             mapControl = arrayMaps[mapControl:getMapLevel()+1]
             love.window.setTitle(mapControl:getNameMap())
             playerControl:setPx(2)
             playerControl:setPy(2)
             clearFog()
-        end
 
-        elseif state == "chest" then
+        end
+    end
+
+    if state == "chest" then
         
         if key == "e" then
-            playerControl:setEquipSword(itemChest)
+            if itemChest.type == "sword" then playerControl:setEquipSword(itemChest) else playerControl:setEquipArmor(itemChest) end
             state = "move"
         end
 
         if key == "q" then
             state = "move"
         end
-    end
 
+    end
 
 end
