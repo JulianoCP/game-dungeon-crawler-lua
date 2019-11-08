@@ -48,6 +48,16 @@ function Player:setEquipSword(item)
     self.equip["sword"] = item
 end
 
+function Player:getCriticalSword()
+    if self.equip["sword"] == nil then return 0 end
+    return self.equip["sword"].critical
+end
+
+function Player:getAccuracySword()
+    if self.equip["sword"] == nil then return 0 end
+    return self.equip["sword"].accuracy
+end
+
 function Player:getDamageSword()
     if self.equip["sword"] == nil then return 0 end
     return self.equip["sword"].damage

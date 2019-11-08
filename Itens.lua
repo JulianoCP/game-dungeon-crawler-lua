@@ -12,7 +12,8 @@ function Itens:new()
                     desc = "espada de fuego",
                     damage = 20,
                     critical = 1,
-                    accuracy = 1
+                    accuracy = 1,
+                    type = "sword",
                 },
 
                 poisonSword = {
@@ -20,7 +21,8 @@ function Itens:new()
                     desc = "espada de venenu",
                     damage = 10,
                     critical = 1,
-                    accuracy = 10
+                    accuracy = 10,
+                    type = "sword",
                 }
             },
 
@@ -32,6 +34,7 @@ function Itens:new()
                     defense = 10,
                     dextery = 1,
                     life = 20,
+                    type = "armor",
                 },
 
                 dragonArmor = {
@@ -40,6 +43,7 @@ function Itens:new()
                     defense = 50,
                     dextery = -5,
                     life = 50,
+                    type = "armor",
                 }
             }
     }
@@ -48,7 +52,7 @@ function Itens:new()
 
 end
 
-function Itens:getSword(name)
+function Itens:getNameItem()
     return self.sword[name]
 end
 

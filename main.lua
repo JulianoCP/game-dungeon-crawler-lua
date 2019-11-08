@@ -7,27 +7,24 @@ FogWar = require 'Fog'
 Fosso = require("Fosso")
 Siberia = require("Siberia")
 
-local mapControl = nil
-
+mapControl = nil
+itemChest = nil
 arrayMaps = {}
 
 function love.load()
 
     local maps = nil
     fog = FogWar
-    love.graphics.setFont(love.graphics.newFont("assets/fonts/cc.otf", 14))
     
+    love.graphics.setFont(love.graphics.newFont("assets/fonts/cc.otf", 14))
     mapControl = Map:new("Labirinto - Lamento Sombrio" , Dungeon , 1)
+    
+    love.window.setTitle(mapControl:getNameMap())
     table.insert( arrayMaps, mapControl )
     maps = Map:new("Labirinto - Fosso das Lamentações" , Fosso , 2)
     table.insert( arrayMaps, maps )
     maps = Map:new("Labirinto - Perdidos no Siberia" , Siberia , 3)
     table.insert( arrayMaps, maps )
-
-    love.window.setTitle(mapControl:getNameMap())
-
-    print(arrayMaps[2]:getNameMap())
-
     playerControl = Player:new(2,2,"spriteRight")
 
     blocks = {
@@ -45,6 +42,7 @@ function love.load()
         dungeon = love.graphics.newImage("assets/gui/dungeonWalking.png"),
         frame = love.graphics.newImage("assets/gui/interface_scene.png")
     }
+
 end
 
 function drawPlayer()
@@ -143,16 +141,23 @@ end
 
 function drawMenu()
 
-    drawText("COMANDO:", 1, 1, "center")
-    drawText("→   - Mover para Direita" , 1, 2)
-    drawText("←   - Mover para Esquerda" , 1, 3)
-    drawText("↑      - Mover para Cima" , 1, 4)
-    drawText("↓      - Mover para Cima" , 1, 5)
-    drawText("↓      - Teste Linha[6]Coluna[1]" , 1, 6)
-    drawText("↓      - Teste Linha[7]Coluna[1]" , 1, 7)
-    drawText("↓      - Teste Linha[8]Coluna[1]" , 1, 8)
-    drawText("↓      - Teste Linha[9]Coluna[1]" , 1, 9)
-    
+    if state == "move" then
+        drawText("COMANDO:", 1, 1, "center")
+        drawText("→   - Mover para Direita" , 1, 2)
+        drawText("←   - Mover para Esquerda" , 1, 3)
+        drawText("↑      - Mover para Cima" , 1, 4)
+        drawText("↓      - Mover para Cima" , 1, 5)
+    elseif state == "chest" then
+        drawText("COMANDO:", 1, 1, "center")
+        drawText("ITEM ENCONTRADO" , 1, 2)
+        if itemChest.type == "sword" then drawText("["..itemChest.name .."]\n[DMG - "..itemChest.damage.."] [CRIT - "..itemChest.critical.."] [ACC - "..itemChest.accuracy.."]" , 1, 3) end
+        if itemChest.type == "armor" then drawText(itemChest.name , 1, 3) end
+        drawText("SEU ITEM" , 1, 5)
+        if itemChest.type == "sword" and not(playerControl:getEquipSwordName() == "No Equiped") then drawText("["..playerControl:getEquipSwordName().."]\n[DMG - "..playerControl:getDamageSword().."] [CRIT - "..playerControl:getCriticalSword().."] [ACC - "..playerControl:getAccuracySword().."]" , 1, 6) else drawText("VOCÊ NÃO TEM NADA EQUIPADO",1,6) end
+        if itemChest.type == "armor" then drawText(itemChest.name , 1, 3) end
+        drawText("[E]   - Você Aceita a Troca" , 1, 8)
+        drawText("[Q]   - Você Rejeita a Troca" , 1, 9)
+    end
     drawText("STATUS:" , 2, 1,"center")
     drawText("Força: "..playerControl:getDamage() + playerControl:getDamageSword() , 2, 2)
     drawText("Defesa: "..playerControl:getDefese() , 2, 3)
@@ -183,16 +188,20 @@ function love.draw()
 end
 
 function drawScene()
-
     if state == "chest" then
         love.graphics.draw(gui["chest"], 420,10 )
     end
+end
 
+function clearFog()
+    for i = 1 , table.getn(fog) do
+        for j = 1 , table.getn(fog[1]) do
+            fog[i][j] = "w"
+        end
+    end
 end
 
 function love.keypressed(key, scancode)
-
-    if key == "m" then  state = "move" end
 
     if state == "move" then
         local x = playerControl:getPy()
@@ -210,17 +219,30 @@ function love.keypressed(key, scancode)
 
         if mapControl:isCollider(x,y) == 'c' then
             a = Itens:new()
-            playerControl:setEquipSword( a:getRandomSword() )
+            itemChest =  a:getRandomSword() 
             mapControl:getMap()[y][x] = 'f'
             state = "chest"
         end
 
         if mapControl:isCollider(x,y) == 's' then
-            mapControl = arrayMaps[3]
+            mapControl = arrayMaps[mapControl:getMapLevel()+1]
+            love.window.setTitle(mapControl:getNameMap())
             playerControl:setPx(2)
             playerControl:setPy(2)
+            clearFog()
         end
 
+        elseif state == "chest" then
+        
+        if key == "e" then
+            playerControl:setEquipSword(itemChest)
+            state = "move"
+        end
+
+        if key == "q" then
+            state = "move"
+        end
     end
+
 
 end

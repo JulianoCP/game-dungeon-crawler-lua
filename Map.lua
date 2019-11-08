@@ -16,8 +16,8 @@ function Map:new(mapName, mapData, mapLevel)
     
   end
 
-function Map:loadNewMap(map)
-
+function Map:getMapLevel()
+  return self.props["mapLevel"]
 end
 
 function Map:getNameMap()
