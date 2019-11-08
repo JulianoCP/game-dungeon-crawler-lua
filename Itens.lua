@@ -14,6 +14,7 @@ function Itens:new()
                     critical = 1,
                     accuracy = 1,
                     type = "sword",
+                    sprite = love.graphics.newImage("assets/gui/sword_1.png")
                 },
 
                 poisonSword = {
@@ -23,6 +24,7 @@ function Itens:new()
                     critical = 1,
                     accuracy = 10,
                     type = "sword",
+                    sprite = love.graphics.newImage("assets/gui/sword_2.png")
                 }
             },
 
@@ -35,6 +37,7 @@ function Itens:new()
                     dexterity = 1,
                     life = 20,
                     type = "armor",
+                    sprite = love.graphics.newImage("assets/gui/armor_1.png")
                 },
 
                 dragonArmor = {
@@ -44,6 +47,7 @@ function Itens:new()
                     dexterity = -5,
                     life = 50,
                     type = "armor",
+                    sprite = love.graphics.newImage("assets/gui/armor_2.png")
                 }
             }
     }
@@ -63,7 +67,7 @@ function Itens:getRandomSword()
 end
 
 function Itens:getRandomArmor()
-    math.randomseed(os.time())
+    math.randomseed(5)
     local name = {'leatherArmor','dragonArmor'}
     return self.armor[name[math.random(2)]]
 end

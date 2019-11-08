@@ -53,7 +53,9 @@ function love.load()
         interface = love.graphics.newImage("assets/gui/gui_interface.png"),
         chest = love.graphics.newImage("assets/gui/dungeonChest.png"),
         dungeon = love.graphics.newImage("assets/gui/dungeonWalking.png"),
-        frame = love.graphics.newImage("assets/gui/interface_scene.png")
+        frame = love.graphics.newImage("assets/gui/interface_scene.png"),
+        noArmor = love.graphics.newImage("assets/gui/NoArmor.png"),
+        noSword = love.graphics.newImage("assets/gui/NoSword.png"),
     }
 
 end
@@ -165,10 +167,16 @@ function drawMenu()
         drawText("COMANDO:", 1, 1, "center")
         drawText("ITEM ENCONTRADO" , 1, 2)
         if itemChest.type == "sword" then drawText("["..itemChest.name .."]\n[DMG : "..itemChest.damage.."] [CRIT : "..itemChest.critical.."] [ACC : "..itemChest.accuracy.."]" , 1, 3) end
-        if itemChest.type == "armor" then drawText("["..itemChest.name.."]\n[DEF : "..itemChest.defese.."] [DEX : "..itemChest.dexterity.."] [VIT : "..itemChest.life.."]" , 1, 3) end
+        if itemChest.type == "armor" then drawText("["..itemChest.name.."]\n[DEF : "..itemChest.defense.."] [DEX : "..itemChest.dexterity.."] [VIT : "..itemChest.life.."]" , 1, 3) end
         drawText("SEU ITEM" , 1, 5)
         if itemChest.type == "sword" and not(playerControl:getEquipSwordName() == "No Equiped") then drawText("["..playerControl:getEquipSwordName().."]\n[DMG : "..playerControl:getDamageSword().."] [CRIT : "..playerControl:getCriticalSword().."] [ACC : "..playerControl:getAccuracySword().."]" , 1, 6) elseif playerControl:getEquipSwordName() == "No Equiped" and itemChest.type == "sword" then drawText("Você não tem arma equipada!",1,6) end
-        if itemChest.type == "armor" and not(playerControl:getEquipArmorName() == "No Equiped") then drawText("["..playerControl:getEquipArmorName().."]\n[DEF : "..playerControl:getDefeseArmor().."] [DEX : "..playerControl:getDexterityArmor().."] [VIT : "..playerControl:getLifeArmor().."]" , 1, 6) elseif playerControl:getEquipArmorName() == "No Equiped" and itemChest.type == "armor" then drawText("Você não tem armadura equipada!",1,6) end
+       
+        if itemChest.type == "armor" and not(playerControl:getEquipArmorName() == "No Equiped") then 
+            drawText("["..playerControl:getEquipArmorName().."]\n[DEF : "..playerControl:getDefenseArmor().."] [DEX : "..playerControl:getDexterityArmor().."] [VIT : "..playerControl:getLifeArmor().."]" , 1, 6) 
+        elseif playerControl:getEquipArmorName() == "No Equiped" and itemChest.type == "armor" then 
+            drawText("Você não tem armadura equipada!",1,6) 
+        end
+        
         drawText("[E]   - Você Aceita a Troca" , 1, 8)
         drawText("[Q]   - Você Rejeita a Troca" , 1, 9)
     elseif state == "battle" then
@@ -186,6 +194,28 @@ function drawMenu()
     
     
     drawText("INVENTARIO:" , 3, 1, "center")
+
+    -- Controle do SET na GUI
+    love.graphics.setColor(1, 1, 1, 100)
+
+    if (playerControl:getEquipArmorSprite() == nil) then
+        love.graphics.draw(gui["noArmor"], 580, 460 )
+
+    else
+        love.graphics.draw(gui["noArmor"], 580, 460 )
+        love.graphics.draw(playerControl:getEquipArmorSprite(), 580, 460 )
+
+    end
+
+    if (playerControl:getEquipSwordSprite() == nil) then
+        love.graphics.draw(gui["noSword"], 580, 500 )
+
+    else
+        love.graphics.draw(gui["noSword"], 580, 500 )
+        love.graphics.draw(playerControl:getEquipSwordSprite(), 580, 500 )
+
+    end
+
     drawText("Vida: "..playerControl:getLife().."     Level: "..playerControl:getLevel() , 3, 6)
     drawText("XP: "..playerControl:getExp() , 3, 7)
     drawText("Sword: "..playerControl:getEquipSwordName() , 3, 8)

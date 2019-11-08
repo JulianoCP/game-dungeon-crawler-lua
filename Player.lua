@@ -52,9 +52,9 @@ function Player:setEquipArmor(item)
     self.equip["armor"] = item
 end
 
-function Player:getDefeseArmor()
+function Player:getDefenseArmor()
     if self.equip["armor"] == nil then return 0 end
-    return self.equip["armor"].defese
+    return self.equip["armor"].defense
 end
 
 function Player:getDexterityArmor()
@@ -90,6 +90,17 @@ end
 function Player:getEquipArmorName()
     if self.equip["armor"] == nil then return "No Equiped" end
     return self.equip["armor"].name
+end
+
+function Player:getEquipArmorSprite()
+    if self.equip["armor"] == nil then return nil end
+    return self.equip["armor"].sprite
+end
+
+
+function Player:getEquipSwordSprite()
+    if self.equip["sword"] == nil then return nil end
+    return self.equip["sword"].sprite
 end
 
 function Player:setInventoryPotion(potion)
