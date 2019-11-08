@@ -14,10 +14,10 @@ itemChest = nil
 arrayMaps = {}
 
 function love.load()
+    love.keyboard.setKeyRepeat(true)
 
     local maps = nil
     fog = FogWar
-    
     love.graphics.setFont(love.graphics.newFont("assets/fonts/cc.otf", 14))
     mapControl = Map:new("Labirinto - Lamento Sombrio" , Dungeon , 1)
     love.window.setTitle(mapControl:getNameMap())

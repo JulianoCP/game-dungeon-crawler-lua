@@ -1,5 +1,7 @@
 currentTileCode = ''
 map = {}
+filename = ''
+writeFile = 0
 
 function fullMap()
     for i = 1, 25 do
@@ -123,6 +125,9 @@ function love.keypressed(key, scancode)
     if key == "s" then
         saveMap()
     end
+    if key == "f2" then
+        print("Enterrr")
+    end
 
 end
 
@@ -130,6 +135,13 @@ function saveMap()
     print("SAVE - MAP")
     save(map)
 
+end
+
+function love.textinput(t)
+    if writeFile == 1 then
+        filename = filename .. t
+        print(filename)
+    end
 end
 
 function save(m)
