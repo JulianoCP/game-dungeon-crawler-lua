@@ -184,6 +184,8 @@ function drawMenu()
         drawText("[Q]   - Você Rejeita a Troca" , 1, 9)
     elseif state == "battle" then
         ---A FAZER
+    elseif state == "winner" then
+        --A FAZER
     end
 
     drawText("STATUS:" , 2, 1,"center")
