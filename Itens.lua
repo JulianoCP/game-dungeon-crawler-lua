@@ -32,7 +32,7 @@ function Itens:new()
                     name = "Leather Armor",
                     desc = "armadura de cabra",
                     defense = 10,
-                    dextery = 1,
+                    dexterity = 1,
                     life = 20,
                     type = "armor",
                 },
@@ -40,8 +40,8 @@ function Itens:new()
                 dragonArmor = {
                     name = "Dragon Armor",
                     desc = "escama do dragão da sua mae",
-                    defense = 50,
-                    dextery = -5,
+                    defese = 50,
+                    dexterity = -5,
                     life = 50,
                     type = "armor",
                 }

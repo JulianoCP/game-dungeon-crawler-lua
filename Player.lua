@@ -52,6 +52,21 @@ function Player:setEquipArmor(item)
     self.equip["armor"] = item
 end
 
+function Player:getDefeseArmor()
+    if self.equip["armor"] == nil then return 0 end
+    return self.equip["armor"].defese
+end
+
+function Player:getDexterityArmor()
+    if self.equip["armor"] == nil then return 0 end
+    return self.equip["armor"].dexterity
+end
+
+function Player:getLifeArmor()
+    if self.equip["armor"] == nil then return 0 end
+    return self.equip["armor"].life
+end
+
 function Player:getCriticalSword()
     if self.equip["sword"] == nil then return 0 end
     return self.equip["sword"].critical
