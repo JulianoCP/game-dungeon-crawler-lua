@@ -52,9 +52,9 @@ function Player:setEquipArmor(item)
     self.equip["armor"] = item
 end
 
-function Player:getDefenseArmor()
+function Player:getDefeseArmor()
     if self.equip["armor"] == nil then return 0 end
-    return self.equip["armor"].defense
+    return self.equip["armor"].defese
 end
 
 function Player:getDexterityArmor()

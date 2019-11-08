@@ -170,12 +170,12 @@ function drawMenu()
         drawText("COMANDO:", 1, 1, "center")
         drawText("ITEM ENCONTRADO" , 1, 2)
         if itemChest.type == "sword" then drawText("["..itemChest.name .."]\n[DMG : "..itemChest.damage.."] [CRIT : "..itemChest.critical.."] [ACC : "..itemChest.accuracy.."]" , 1, 3) end
-        if itemChest.type == "armor" then drawText("["..itemChest.name.."]\n[DEF : "..itemChest.defense.."] [DEX : "..itemChest.dexterity.."] [VIT : "..itemChest.life.."]" , 1, 3) end
+        if itemChest.type == "armor" then drawText("["..itemChest.name.."]\n[DEF : "..itemChest.defese.."] [DEX : "..itemChest.dexterity.."] [VIT : "..itemChest.life.."]" , 1, 3) end
         drawText("SEU ITEM" , 1, 5)
         if itemChest.type == "sword" and not(playerControl:getEquipSwordName() == "No Equiped") then drawText("["..playerControl:getEquipSwordName().."]\n[DMG : "..playerControl:getDamageSword().."] [CRIT : "..playerControl:getCriticalSword().."] [ACC : "..playerControl:getAccuracySword().."]" , 1, 6) elseif playerControl:getEquipSwordName() == "No Equiped" and itemChest.type == "sword" then drawText("Você não tem arma equipada!",1,6) end
        
         if itemChest.type == "armor" and not(playerControl:getEquipArmorName() == "No Equiped") then 
-            drawText("["..playerControl:getEquipArmorName().."]\n[DEF : "..playerControl:getDefenseArmor().."] [DEX : "..playerControl:getDexterityArmor().."] [VIT : "..playerControl:getLifeArmor().."]" , 1, 6) 
+            drawText("["..playerControl:getEquipArmorName().."]\n[DEF : "..playerControl:getDefeseArmor().."] [DEX : "..playerControl:getDexterityArmor().."] [VIT : "..playerControl:getLifeArmor().."]" , 1, 6) 
         elseif playerControl:getEquipArmorName() == "No Equiped" and itemChest.type == "armor" then 
             drawText("Você não tem armadura equipada!",1,6) 
         end
