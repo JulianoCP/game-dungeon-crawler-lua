@@ -28,12 +28,13 @@ function Map:getMap()
   return self.props["mapData"]
 end
 
-function Map:isCollider(x,y)
+function Map:isColliderInside(x,y)
   return self.props["mapData"][y][x]
 end
 
-function Map:isColliderNow(x,y,name)
-  if self.props["mapData"][y - 1][x] == name then return true 
+function Map:isCollider(x,y,name)
+  if x < 2 or y < 2 then return false
+  elseif self.props["mapData"][y - 1][x] == name then return true 
   elseif self.props["mapData"][y + 1][x] == name then return true 
   elseif self.props["mapData"][y][x - 1] == name then return true 
   elseif self.props["mapData"][y][x + 1] == name then return true 

@@ -274,13 +274,6 @@ function love.keypressed(key, scancode)
         playerControl:setInventoryPotion(-1)
     end
 
-    if state == "battle" then
-        if key == 'v' then
-            state = "move"
-        end
-    end
-
-
     if state == "move" then
 
         if key == "right" or key == "d" then x = x+1  playerControl:setSprite("spriteRight") end
@@ -288,7 +281,7 @@ function love.keypressed(key, scancode)
         if key == "up" or key == "w" then y = y - 1 playerControl:setSprite("spriteUp")  end
         if key == "down" or key == "s" then  y = y + 1 playerControl:setSprite("spriteDown") end
 
-        if  not (mapControl:isCollider(x,y) == 'x' or mapControl:isCollider(x,y) == 'x1')  then
+        if  not (mapControl:isColliderInside(x,y) == 'x' or mapControl:isColliderInside(x,y) == 'x1')  then
 
             playerControl:setPx(x)
             playerControl:setPy(y)
@@ -296,12 +289,12 @@ function love.keypressed(key, scancode)
         end
 
         --Colisao com os Monstros
-        if mapControl:isColliderNow(x,y) == 'm1' then
-            state = "battle"
+        if mapControl:isCollider(x,y,'m1') == true then
+            --state = "battle"
 
         end
 
-        if mapControl:isCollider(x,y) == 'c' then
+        if mapControl:isColliderInside(x,y) == 'c' then
 
             math.randomseed(os.time())
             local a = Itens:new()
@@ -313,7 +306,7 @@ function love.keypressed(key, scancode)
 
         end
 
-        if mapControl:isCollider(x,y) == 's' then
+        if mapControl:isColliderInside(x,y) == 's' then
 
             mapControl = arrayMaps[mapControl:getMapLevel()+1]
             love.window.setTitle(mapControl:getNameMap())
