@@ -208,7 +208,7 @@ function drawMenu()
     love.graphics.print(filename, 150, 460)
 
     love.graphics.setColor(0, 0, 1)
-    love.graphics.print("Instruções:\n Pressione F1 para Abrir um MAPA\n Pressione F2 para Salvar um Mapa \n(Se não colocar nome ele será salvo como data.lua )\n Pressione F5 para resetar o nome", 30, 500)
+    love.graphics.print("Instruções:\n Pressione F1 para Abrir um MAPA\n Pressione F2 para Salvar um Mapa \n(Se não colocar nome ele será salvo como data.lua )\n Pressione F5 para resetar o nome\n Pressione F6 para Gerar um novo Mapa com o Tile Selecionado\nna Seta\n Pressione F7 para gerar Bordas para o Mapa", 30, 480)
 
     love.graphics.setColor(0,1,0)
     if writeFileName == 0 then
@@ -278,8 +278,54 @@ function love.keypressed(key, scancode)
      -- Limpar Nome
      if key == "f5" then
         filename = ''
+        print("Clear FileName")
+     end
+         
+     -- Novo Mapa
+     if key == "f6" then
+        newMap()
+        print("New Map")
      end
 
+     -- Novo Mapa
+     if key == "f7" then
+        drawBorder()
+        print("Border Print")
+     end
+
+end
+
+function drawBorder()
+    if currentTileCode == '' then currentTileCode = 'x' end
+
+    --Printa os X
+    for i = 1, table.getn(map) do
+        if i == 1 or i == table.getn(map) then
+            for j = 1, table.getn(map) do
+                map[i][j] = currentTileCode
+            end
+        end
+    end
+
+        --Printa os Y
+        for i = 1, table.getn(map) do
+            for j = 1, table.getn(map) do
+                if j == 1 or j == table.getn(map[1]) then
+                    map[i][j] = currentTileCode
+                end
+            end
+        end
+end
+
+function newMap()
+    if currentTileCode == '' then currentTileCode = 'f' end
+    for i = 1, table.getn(map) do
+        for j = 1, table.getn(map[1]) do
+            map[i][j] = currentTileCode
+        end
+    end
+    currentTileCode = ''
+    love.mouse.setVisible(true)
 end
 
 function love.textinput(t)
