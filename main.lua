@@ -62,6 +62,7 @@ function love.load()
         frame = love.graphics.newImage("assets/gui/interface_scene.png"),
         noArmor = love.graphics.newImage("assets/gui/NoArmor.png"),
         noSword = love.graphics.newImage("assets/gui/NoSword.png"),
+        potion = love.graphics.newImage("assets/gui/potion.png"),
     }
 
 end
@@ -221,11 +222,22 @@ function drawMenu()
         love.graphics.draw(playerControl:getEquipSwordSprite(), 580, 500 )
 
     end
+    drawText(playerControl:getEquipArmorName() , 3, 2,'center')
+    drawText(playerControl:getEquipSwordName() , 3, 4,'center')
 
-    drawText("Vida: "..playerControl:getLife().."     Level: "..playerControl:getLevel() , 3, 6)
-    drawText("XP: "..playerControl:getExp() , 3, 7)
-    drawText("Sword: "..playerControl:getEquipSwordName() , 3, 8)
-    drawText("Armor: "..playerControl:getEquipArmorName() , 3, 9)
+    love.graphics.setColor(1, 1, 1, 100)
+
+   local potionQtd = 0
+    for i = 1, playerControl:getInventoryPotion() do
+        --print(i)
+        love.graphics.draw(gui["potion"], 580+potionQtd, 540 )
+        potionQtd = potionQtd + 35
+    end
+
+
+    drawText("Vida: "..playerControl:getLife().."     Level: "..playerControl:getLevel() , 3, 7)
+    drawText("XP: "..playerControl:getExp() , 3, 8)
+
 end
 
 function love.draw()
