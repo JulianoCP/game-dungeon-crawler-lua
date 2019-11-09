@@ -52,9 +52,9 @@ function Player:setEquipArmor(item)
     self.equip["armor"] = item
 end
 
-function Player:getDefenseArmor()
+function Player:getDefeseArmor()
     if self.equip["armor"] == nil then return 0 end
-    return self.equip["armor"].defense
+    return self.equip["armor"].defese
 end
 
 function Player:getDexterityArmor()
@@ -104,7 +104,9 @@ function Player:getEquipSwordSprite()
 end
 
 function Player:setInventoryPotion(potion)
-    self.invetory["potion"] = self.invetory["potion"] + potion
+    if not(self.invetory["potion"] + potion > 6 or self.invetory["potion"] + potion < 0) then
+        self.invetory["potion"] = self.invetory["potion"] + potion
+    end
 end
 
 function Player:getInventoryPotion()

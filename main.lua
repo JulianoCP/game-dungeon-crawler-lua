@@ -5,9 +5,11 @@ state = "move"
 FogWar = require 'Fog'
 
 -- Maps
+Mix = require("/maps/Mix")
 Dungeon = require("/maps/Dungeon")
 Fosso = require("/maps/Fosso")
 Siberia = require("/maps/Siberia")
+Test = require("/maps/Test")
 
 mapControl = nil
 itemChest = nil
@@ -27,6 +29,10 @@ function love.load()
     maps = Map:new("Labirinto - Fosso das Lamentações" , Fosso , 2)
     table.insert( arrayMaps, maps )
     maps = Map:new("Labirinto - Perdidos no Siberia" , Siberia , 3)
+    table.insert( arrayMaps, maps )
+    maps = Map:new("Labirinto - MIX" , Mix , 4)
+    table.insert( arrayMaps, maps )
+    maps = Map:new("Labirinto - Test" , Test , 5)
     table.insert( arrayMaps, maps )
     
     playerControl = Player:new(2,2,"spriteRight")
@@ -56,6 +62,7 @@ function love.load()
         frame = love.graphics.newImage("assets/gui/interface_scene.png"),
         noArmor = love.graphics.newImage("assets/gui/NoArmor.png"),
         noSword = love.graphics.newImage("assets/gui/NoSword.png"),
+        potion = love.graphics.newImage("assets/gui/potion.png"),
     }
 
 end
@@ -167,12 +174,12 @@ function drawMenu()
         drawText("COMANDO:", 1, 1, "center")
         drawText("ITEM ENCONTRADO" , 1, 2)
         if itemChest.type == "sword" then drawText("["..itemChest.name .."]\n[DMG : "..itemChest.damage.."] [CRIT : "..itemChest.critical.."] [ACC : "..itemChest.accuracy.."]" , 1, 3) end
-        if itemChest.type == "armor" then drawText("["..itemChest.name.."]\n[DEF : "..itemChest.defense.."] [DEX : "..itemChest.dexterity.."] [VIT : "..itemChest.life.."]" , 1, 3) end
+        if itemChest.type == "armor" then drawText("["..itemChest.name.."]\n[DEF : "..itemChest.defese.."] [DEX : "..itemChest.dexterity.."] [VIT : "..itemChest.life.."]" , 1, 3) end
         drawText("SEU ITEM" , 1, 5)
         if itemChest.type == "sword" and not(playerControl:getEquipSwordName() == "No Equiped") then drawText("["..playerControl:getEquipSwordName().."]\n[DMG : "..playerControl:getDamageSword().."] [CRIT : "..playerControl:getCriticalSword().."] [ACC : "..playerControl:getAccuracySword().."]" , 1, 6) elseif playerControl:getEquipSwordName() == "No Equiped" and itemChest.type == "sword" then drawText("Você não tem arma equipada!",1,6) end
        
         if itemChest.type == "armor" and not(playerControl:getEquipArmorName() == "No Equiped") then 
-            drawText("["..playerControl:getEquipArmorName().."]\n[DEF : "..playerControl:getDefenseArmor().."] [DEX : "..playerControl:getDexterityArmor().."] [VIT : "..playerControl:getLifeArmor().."]" , 1, 6) 
+            drawText("["..playerControl:getEquipArmorName().."]\n[DEF : "..playerControl:getDefeseArmor().."] [DEX : "..playerControl:getDexterityArmor().."] [VIT : "..playerControl:getLifeArmor().."]" , 1, 6) 
         elseif playerControl:getEquipArmorName() == "No Equiped" and itemChest.type == "armor" then 
             drawText("Você não tem armadura equipada!",1,6) 
         end
@@ -215,11 +222,22 @@ function drawMenu()
         love.graphics.draw(playerControl:getEquipSwordSprite(), 580, 500 )
 
     end
+    drawText(playerControl:getEquipArmorName() , 3, 2,'center')
+    drawText(playerControl:getEquipSwordName() , 3, 4,'center')
 
-    drawText("Vida: "..playerControl:getLife().."     Level: "..playerControl:getLevel() , 3, 6)
-    drawText("XP: "..playerControl:getExp() , 3, 7)
-    drawText("Sword: "..playerControl:getEquipSwordName() , 3, 8)
-    drawText("Armor: "..playerControl:getEquipArmorName() , 3, 9)
+    love.graphics.setColor(1, 1, 1, 100)
+
+   local potionQtd = 0
+    for i = 1, playerControl:getInventoryPotion() do
+        --print(i)
+        love.graphics.draw(gui["potion"], 580+potionQtd, 540 )
+        potionQtd = potionQtd + 35
+    end
+
+
+    drawText("Vida: "..playerControl:getLife().."     Level: "..playerControl:getLevel() , 3, 7)
+    drawText("XP: "..playerControl:getExp() , 3, 8)
+
 end
 
 function love.draw()
@@ -251,6 +269,18 @@ end
 
 function love.keypressed(key, scancode)
 
+    if key == 'f1' then
+        playerControl:setInventoryPotion(1)
+
+    end
+
+
+    if key == 'f2' then
+        playerControl:setInventoryPotion(-1)
+
+    end
+
+
     if state == "move" then
         local x = playerControl:getPy()
         local y = playerControl:getPx()
@@ -260,10 +290,16 @@ function love.keypressed(key, scancode)
         if key == "up" or key == "w" then y = y - 1 playerControl:setSprite("spriteUp")  end
         if key == "down" or key == "s" then  y = y + 1 playerControl:setSprite("spriteDown") end
 
-        if  not (mapControl:isCollider(x,y) == 'x')  then
+        if  not (mapControl:isCollider(x,y) == 'x' or mapControl:isCollider(x,y) == 'x1')  then
 
             playerControl:setPx(x)
             playerControl:setPy(y)
+
+        end
+
+        --Colisao com os Monstros
+        if mapControl:isCollider(x,y) == 'm1' then
+
 
         end
 

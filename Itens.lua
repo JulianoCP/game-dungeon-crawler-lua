@@ -33,7 +33,7 @@ function Itens:new()
                 leatherArmor = {
                     name = "Leather Armor",
                     desc = "armadura de cabra",
-                    defense = 10,
+                    defese = 10,
                     dexterity = 1,
                     life = 20,
                     type = "armor",
@@ -42,7 +42,7 @@ function Itens:new()
 
                 dragonArmor = {
                     name = "Dragon Armor",
-                    desc = "escama do dragão da sua mae",
+                    desc = "Escama do dragão da sua mae",
                     defese = 50,
                     dexterity = -5,
                     life = 50,
@@ -67,7 +67,7 @@ function Itens:getRandomSword()
 end
 
 function Itens:getRandomArmor()
-    math.randomseed(5)
+    math.randomseed(os.time())
     local name = {'leatherArmor','dragonArmor'}
     return self.armor[name[math.random(2)]]
 end
