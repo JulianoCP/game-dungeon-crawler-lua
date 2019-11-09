@@ -174,20 +174,14 @@ function drawMenu()
         drawText("COMANDO:", 1, 1, "center")
         drawText("ITEM ENCONTRADO" , 1, 2)
         if itemChest.type == "sword" then drawText("["..itemChest.name .."]\n[DMG : "..itemChest.damage.."] [CRIT : "..itemChest.critical.."] [ACC : "..itemChest.accuracy.."]" , 1, 3) end
-        if itemChest.type == "armor" then drawText("["..itemChest.name.."]\n[DEF : "..itemChest.defese.."] [DEX : "..itemChest.dexterity.."] [VIT : "..itemChest.life.."]" , 1, 3) end
+        if itemChest.type == "armor" then drawText("["..itemChest.name.."]\n[DEF : "..itemChest.defese.."] [DEX : "..itemChest.dexterity.."] [VIT : "..itemChest.life.."]" , 1, 3) end 
         drawText("SEU ITEM" , 1, 5)
         if itemChest.type == "sword" and not(playerControl:getEquipSwordName() == "No Equiped") then drawText("["..playerControl:getEquipSwordName().."]\n[DMG : "..playerControl:getDamageSword().."] [CRIT : "..playerControl:getCriticalSword().."] [ACC : "..playerControl:getAccuracySword().."]" , 1, 6) elseif playerControl:getEquipSwordName() == "No Equiped" and itemChest.type == "sword" then drawText("Você não tem arma equipada!",1,6) end
-       
-        if itemChest.type == "armor" and not(playerControl:getEquipArmorName() == "No Equiped") then 
-            drawText("["..playerControl:getEquipArmorName().."]\n[DEF : "..playerControl:getDefeseArmor().."] [DEX : "..playerControl:getDexterityArmor().."] [VIT : "..playerControl:getLifeArmor().."]" , 1, 6) 
-        elseif playerControl:getEquipArmorName() == "No Equiped" and itemChest.type == "armor" then 
-            drawText("Você não tem armadura equipada!",1,6) 
-        end
-        
+        if itemChest.type == "armor" and not(playerControl:getEquipArmorName() == "No Equiped") then drawText("["..playerControl:getEquipArmorName().."]\n[DEF : "..playerControl:getDefeseArmor().."] [DEX : "..playerControl:getDexterityArmor().."] [VIT : "..playerControl:getLifeArmor().."]" , 1, 6) elseif playerControl:getEquipArmorName() == "No Equiped" and itemChest.type == "armor" then drawText("Você não tem armadura equipada!",1,6) end
         drawText("[E]   - Você Aceita a Troca" , 1, 8)
         drawText("[Q]   - Você Rejeita a Troca" , 1, 9)
     elseif state == "battle" then
-        ---A FAZER
+        print("entrei")
     elseif state == "winner" then
         --A FAZER
     end
@@ -230,7 +224,6 @@ function drawMenu()
 
    local potionQtd = 0
     for i = 1, playerControl:getInventoryPotion() do
-        --print(i)
         love.graphics.draw(gui["potion"], 580+potionQtd, 540 )
         potionQtd = potionQtd + 35
     end
@@ -270,21 +263,25 @@ end
 
 function love.keypressed(key, scancode)
 
+    local x = playerControl:getPy()
+    local y = playerControl:getPx()
+
     if key == 'f1' then
         playerControl:setInventoryPotion(1)
-
     end
-
 
     if key == 'f2' then
         playerControl:setInventoryPotion(-1)
+    end
 
+    if state == "battle" then
+        if key == 'v' then
+            state = "move"
+        end
     end
 
 
     if state == "move" then
-        local x = playerControl:getPy()
-        local y = playerControl:getPx()
 
         if key == "right" or key == "d" then x = x+1  playerControl:setSprite("spriteRight") end
         if key == "left" or key == "a" then x = x-1 playerControl:setSprite("spriteLeft") end
@@ -299,8 +296,8 @@ function love.keypressed(key, scancode)
         end
 
         --Colisao com os Monstros
-        if mapControl:isCollider(x,y) == 'm1' then
-
+        if mapControl:isColliderNow(x,y) == 'm1' then
+            state = "battle"
 
         end
 
@@ -308,8 +305,8 @@ function love.keypressed(key, scancode)
 
             math.randomseed(os.time())
             local a = Itens:new()
-            local numSort = math.random(2)
-            print(numSort)
+            local numSort = 0
+            for i = 0 , 10 do numSort = math.random(2) end
             if numSort == 1 then itemChest = a:getRandomSword() else itemChest = a:getRandomArmor() end
             mapControl:getMap()[y][x] = 'f'
             state = "chest"
