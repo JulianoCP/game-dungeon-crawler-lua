@@ -63,13 +63,17 @@ end
 function Itens:getRandomSword()
     math.randomseed(os.time())
     local name = {'fireSword','poisonSword'}
-    return self.sword[name[math.random(2)]]
+    local numSort = 0
+    for i = 0 , 10 do numSort = math.random(2) end
+    return self.sword[name[numSort]]
 end
 
 function Itens:getRandomArmor()
-    math.randomseed(os.time())
+    math.randomseed(255)
     local name = {'leatherArmor','dragonArmor'}
-    return self.armor[name[math.random(2)]]
+    local numSort = 0
+    for i = 0 , 10 do numSort = math.random(2) end
+    return self.armor[name[numSort]]
 end
 
 return Itens

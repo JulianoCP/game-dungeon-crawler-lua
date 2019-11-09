@@ -192,12 +192,13 @@ function drawMenu()
         --A FAZER
     end
 
-    drawText("STATUS:" , 2, 1,"center")
-    drawText("Força: "..playerControl:getDamage() + playerControl:getDamageSword() , 2, 2)
-    drawText("Defesa: "..playerControl:getDefese() , 2, 3)
-    drawText("Acuracia: "..playerControl:getAccuracy(), 2, 4)
-    drawText("Destreza: "..playerControl:getDexterity() , 2, 5)
-    drawText("Critico: "..playerControl:getCritical() , 2, 6)
+    drawText("BASE        SWORD       ARMOR" , 2, 1)
+    drawText("STR: "..playerControl:getDamage().."          "..playerControl:getDamageSword() , 2, 2)
+    drawText("DEF: "..playerControl:getDefese().."                                "..playerControl:getDefeseArmor(), 2, 3)
+    drawText("ACC: "..playerControl:getAccuracy().."        "..playerControl:getAccuracySword(), 2, 4)
+    drawText("DEX: "..playerControl:getDexterity().."                                "..playerControl:getDexterityArmor() , 2, 5)
+    drawText("CRT: "..playerControl:getCritical().."         "..playerControl:getCriticalSword(), 2, 6)
+    drawText("VIT: "..playerControl:getLife().."                              "..playerControl:getLifeArmor(), 2, 7)
     
     
     drawText("INVENTARIO:" , 3, 1, "center")
@@ -308,6 +309,7 @@ function love.keypressed(key, scancode)
             math.randomseed(os.time())
             local a = Itens:new()
             local numSort = math.random(2)
+            print(numSort)
             if numSort == 1 then itemChest = a:getRandomSword() else itemChest = a:getRandomArmor() end
             mapControl:getMap()[y][x] = 'f'
             state = "chest"
