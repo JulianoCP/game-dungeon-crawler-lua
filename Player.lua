@@ -104,7 +104,9 @@ function Player:getEquipSwordSprite()
 end
 
 function Player:setInventoryPotion(potion)
-    self.invetory["potion"] = self.invetory["potion"] + potion
+    if not(self.invetory["potion"] + potion > 6 or self.invetory["potion"] + potion < 0) then
+        self.invetory["potion"] = self.invetory["potion"] + potion
+    end
 end
 
 function Player:getInventoryPotion()

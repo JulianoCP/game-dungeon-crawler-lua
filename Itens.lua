@@ -42,7 +42,7 @@ function Itens:new()
 
                 dragonArmor = {
                     name = "Dragon Armor",
-                    desc = "escama do dragão da sua mae",
+                    desc = "Escama do dragão da sua mae",
                     defese = 50,
                     dexterity = -5,
                     life = 50,

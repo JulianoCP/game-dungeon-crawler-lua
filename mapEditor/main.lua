@@ -66,16 +66,30 @@ function mouseCursor()
     --print(love.mouse.getCursor())
 end
 
-function love.mousepressed(x, y, button)
+local correndo = 0
+local mouse_x = nil
+local mouse_y = nil
 
+function love.mousereleased( x, y, button, istouch, presses )
     if  button == 1 then
+        print("SOLTEI O PRESOO")
+        correndo = 0
+    end
+end
 
+function love.mousepressed(x, y, button)
+    mouse_x = x
+    mouse_y = y
+    if  button == 1 then
+        correndo = 1
+        print('X['..x..'] Y['..y..']')
         -- Menu de Tiles Coluna = range do X
-        if (x > 445 and x < 516) then
+        if (x > 455 and x < 516) then
             --[Slot 1]
             if y > 17 and y < 34 then
                 --love.mouse.setCursor(cursor)           
                 currentTileCode = "f4"
+                
             end
             -- [Slot 2]
             if y > 35 and y < 52 then              
@@ -136,14 +150,24 @@ function love.mousepressed(x, y, button)
             love.mouse.setVisible(false)
         end
 
-        paintTile(x,y)
+        
 
        
 
     end
+
+
     if  button == 2 then
         love.mouse.setVisible(true)
         currentTileCode = ''
+    end
+end
+
+function love.mousemoved( x, y, dx, dy, istouch )
+    if correndo == 1 then
+        print('DX['..dx..'] DY['..dy..']')
+        mouse_x = x+dx
+        mouse_y = y+dy
     end
 end
 
@@ -156,13 +180,22 @@ function paintTile(x, y)
 end
 
 function love.draw()
-    --love.graphics.scale(1.5, 1.5)
+   -- love.graphics.setColor(1, 0, 0)
+   -- for i = 1, 15 do
+    --    love.graphics.rectangle("fill", 450, (i*17), 40, 16 )
+   -- end
+
+    love.graphics.setColor(1, 1, 1)
 
     drawGrid()
     drawAllTiles()
     mouseCursor()
 
     drawMenu()
+    if correndo == 1 and mouse_x > 17 and mouse_x < 440 and mouse_y > 17 and mouse_y < 440 then
+        paintTile(mouse_x,mouse_y)
+    end
+        
   
 end
 

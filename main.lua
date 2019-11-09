@@ -269,6 +269,18 @@ end
 
 function love.keypressed(key, scancode)
 
+    if key == 'f1' then
+        playerControl:setInventoryPotion(1)
+
+    end
+
+
+    if key == 'f2' then
+        playerControl:setInventoryPotion(-1)
+
+    end
+
+
     if state == "move" then
         local x = playerControl:getPy()
         local y = playerControl:getPx()
@@ -282,6 +294,12 @@ function love.keypressed(key, scancode)
 
             playerControl:setPx(x)
             playerControl:setPy(y)
+
+        end
+
+        --Colisao com os Monstros
+        if mapControl:isCollider(x,y) == 'm1' then
+
 
         end
 
