@@ -5,6 +5,16 @@ function Itens:new()
   
     local itens = {
 
+            potions = {
+
+                potionHeal = {
+                    name = "Potion of Healing",
+                    desc = "potion de curita",
+                    type = "potion"
+                }
+                
+            },
+
             sword = {
                 
                 fireSword = {
@@ -58,6 +68,10 @@ end
 
 function Itens:getNameItem()
     return self.sword[name]
+end
+
+function Itens:getPotion()
+    return self.potions["potionHeal"]
 end
 
 function Itens:getRandomSword()
