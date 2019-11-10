@@ -1,8 +1,7 @@
+-- Require
 Map = require 'Map'
 Player = require 'Player'
 Itens = require 'Itens'
-state = "move"
-FogWar = require 'Fog'
 
 -- Maps
 Mix = require("/maps/Mix")
@@ -10,9 +9,14 @@ Dungeon = require("/maps/Dungeon")
 Fosso = require("/maps/Fosso")
 Siberia = require("/maps/Siberia")
 Test = require("/maps/Test")
+FogWar = require 'Fog'
 
+-- Controll
+state = "move"
 mapControl = nil
 itemChest = nil
+pressRunAway = false
+numberTryToRun = 0
 arrayMaps = {}
 
 function love.load()
@@ -165,23 +169,48 @@ end
 function drawMenu()
     -- 9 Linhas -- 3 Colunas
     if state == "move" then
+
         drawText("COMANDO:", 1, 1, "center")
         drawText("[D] ou (→)   - Mover para Direita" , 1, 2)
         drawText("[A] ou (←)   - Mover para Esquerda" , 1, 3)
         drawText("[W] ou  (  ↑  )      - Mover para Cima" , 1, 4)
         drawText("[S] ou  (  ↓  )      - Mover para Baixo" , 1, 5)
+
     elseif state == "chest" then
+
         drawText("COMANDO:", 1, 1, "center")
         drawText("ITEM ENCONTRADO" , 1, 2)
+
         if itemChest.type == "sword" then drawText("["..itemChest.name .."]\n[DMG : "..itemChest.damage.."] [CRIT : "..itemChest.critical.."] [ACC : "..itemChest.accuracy.."]" , 1, 3) end
         if itemChest.type == "armor" then drawText("["..itemChest.name.."]\n[DEF : "..itemChest.defese.."] [DEX : "..itemChest.dexterity.."] [VIT : "..itemChest.life.."]" , 1, 3) end 
+
         drawText("SEU ITEM" , 1, 5)
+
         if itemChest.type == "sword" and not(playerControl:getEquipSwordName() == "No Equiped") then drawText("["..playerControl:getEquipSwordName().."]\n[DMG : "..playerControl:getDamageSword().."] [CRIT : "..playerControl:getCriticalSword().."] [ACC : "..playerControl:getAccuracySword().."]" , 1, 6) elseif playerControl:getEquipSwordName() == "No Equiped" and itemChest.type == "sword" then drawText("Você não tem arma equipada!",1,6) end
         if itemChest.type == "armor" and not(playerControl:getEquipArmorName() == "No Equiped") then drawText("["..playerControl:getEquipArmorName().."]\n[DEF : "..playerControl:getDefeseArmor().."] [DEX : "..playerControl:getDexterityArmor().."] [VIT : "..playerControl:getLifeArmor().."]" , 1, 6) elseif playerControl:getEquipArmorName() == "No Equiped" and itemChest.type == "armor" then drawText("Você não tem armadura equipada!",1,6) end
+
         drawText("[E]   - Você Aceita a Troca" , 1, 8)
         drawText("[Q]   - Você Rejeita a Troca" , 1, 9)
+
     elseif state == "battle" then
-        print("entrei")
+
+        drawText("BATTLE:", 1, 1, "center")
+
+        if pressRunAway == false then
+            drawText("[E] ou (←)   - Start the battle" , 1, 3)
+            drawText("[Q] ou (→)   - Try to run away" , 1, 4)
+        end
+
+        if pressRunAway == true then
+            if numberTryToRun > 128 then 
+                drawText("Can you run away" , 1, 2) 
+                drawText("[V] ou (→)   - To run away" , 1, 4)
+                elseif numberTryToRun < 128 and numberTryToRun > 0 then
+                    drawText("Could not run away" , 1, 2) 
+                    drawText("[C] ou (→)   - Start the battle" , 1, 4)
+            end
+        end
+            
     elseif state == "winner" then
         --A FAZER
     end
@@ -266,13 +295,8 @@ function love.keypressed(key, scancode)
     local x = playerControl:getPy()
     local y = playerControl:getPx()
 
-    if key == 'f1' then
-        playerControl:setInventoryPotion(1)
-    end
-
-    if key == 'f2' then
-        playerControl:setInventoryPotion(-1)
-    end
+    if key == 'f1' then playerControl:setInventoryPotion(1) end
+    if key == 'f2' then playerControl:setInventoryPotion(-1) end
 
     if state == "move" then
 
@@ -281,21 +305,15 @@ function love.keypressed(key, scancode)
         if key == "up" or key == "w" then y = y - 1 playerControl:setSprite("spriteUp")  end
         if key == "down" or key == "s" then  y = y + 1 playerControl:setSprite("spriteDown") end
 
-        if  not (mapControl:isColliderInside(x,y) == 'x' or mapControl:isColliderInside(x,y) == 'x1')  then
-
+        if  not (mapControl:isColliderInside(x,y) == 'x' or mapControl:isColliderInside(x,y) == 'x1') then
             playerControl:setPx(x)
             playerControl:setPy(y)
-
         end
 
         --Colisao com os Monstros
-        if mapControl:isCollider(x,y,'m1') == true then
-            --state = "battle"
-
-        end
+        if mapControl:isCollider(x,y,'m1') == true then state = "battle" end
 
         if mapControl:isColliderInside(x,y) == 'c' then
-
             math.randomseed(os.time())
             local a = Itens:new()
             local numSort = 0
@@ -303,31 +321,32 @@ function love.keypressed(key, scancode)
             if numSort == 1 then itemChest = a:getRandomSword() else itemChest = a:getRandomArmor() end
             mapControl:getMap()[y][x] = 'f'
             state = "chest"
-
         end
 
         if mapControl:isColliderInside(x,y) == 's' then
-
             mapControl = arrayMaps[mapControl:getMapLevel()+1]
             love.window.setTitle(mapControl:getNameMap())
             playerControl:setPx(2)
             playerControl:setPy(2)
             clearFog()
-
         end
+
     end
 
     if state == "chest" then
-        
-        if key == "e" then
-            if itemChest.type == "sword" then playerControl:setEquipSword(itemChest) else playerControl:setEquipArmor(itemChest) end
-            state = "move"
-        end
+        if key == "e" then if itemChest.type == "sword" then playerControl:setEquipSword(itemChest) else playerControl:setEquipArmor(itemChest) end state = "move" end
+        if key == "q" then state = "move" end
+    end
 
-        if key == "q" then
-            state = "move"
+    if state == "battle" then
+        if key == "e" then state = "move" end
+        if key == "q" then 
+            pressRunAway = true 
+            math.randomseed(os.time())
+            for i = 0 , 10 do numberTryToRun = math.random(255) end 
         end
-
+        if key == "v" and pressRunAway == true then pressRunAway = false state = "move"  numberTryToRun = 0 end
+        if key == "c" and pressRunAway == true then pressRunAway = false state = "move"  numberTryToRun = 0 end
     end
 
 end
