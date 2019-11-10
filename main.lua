@@ -2,6 +2,8 @@
 Map = require 'Map'
 Player = require 'Player'
 Itens = require 'Itens'
+blocks = require 'Blocks'
+gui = require 'Gui'
 
 -- Maps
 Mix = require("/maps/Mix")
@@ -17,6 +19,7 @@ mapControl = nil
 itemChest = nil
 pressRunAway = false
 numberTryToRun = 0
+potionHeal = 20
 arrayMaps = {}
 
 function love.load()
@@ -40,41 +43,12 @@ function love.load()
     table.insert( arrayMaps, maps )
     
     playerControl = Player:new(2,2,"spriteRight")
-    
-    blocks = {
-        x = love.graphics.newImage("assets/tiles/wall.png"), -- Parede
-        x1 = love.graphics.newImage("assets/tiles/wall_3.png"), -- Parede
-        f = love.graphics.newImage("assets/tiles/floor_1.png"), -- Chão Tipo 1
-        f1 = love.graphics.newImage("assets/tiles/floor_2.png"), -- Chão Tipo 2
-        f2 = love.graphics.newImage("assets/tiles/floor_3.png"), -- Chão Tipo 3
-        f3 = love.graphics.newImage("assets/tiles/floor_4.png"), -- Chão Tipo 4
-        f4 = love.graphics.newImage("assets/tiles/floor.png"), -- Chão Tipo 5
-        f5 = love.graphics.newImage("assets/tiles/floor_5.png"), -- Chão Tipo 6
-        c = love.graphics.newImage("assets/obj/chest_1.png"), -- Bau Tipo 1
-        c1 = love.graphics.newImage("assets/obj/chest.png"), -- Bau Tipo 2
-        s = love.graphics.newImage("assets/tiles/stair_1.png"), -- Escada
-        m = love.graphics.newImage("assets/monsters/monster_1.png"), -- Monstro Tipo 1
-        m1 = love.graphics.newImage("assets/monsters/monster_2.png"), -- Monstro Tipo 2
-        m2 = love.graphics.newImage("assets/monsters/monster_3.png"), -- Monstro Tipo 3
-        m3 = love.graphics.newImage("assets/monsters/monster_4.png"), -- Monstro Tipo 4
-    }
-
-    gui ={
-        interface = love.graphics.newImage("assets/gui/gui_interface.png"),
-        chest = love.graphics.newImage("assets/gui/dungeonChest.png"),
-        dungeon = love.graphics.newImage("assets/gui/dungeonWalking.png"),
-        frame = love.graphics.newImage("assets/gui/interface_scene.png"),
-        noArmor = love.graphics.newImage("assets/gui/NoArmor.png"),
-        noSword = love.graphics.newImage("assets/gui/NoSword.png"),
-        potion = love.graphics.newImage("assets/gui/potion.png"),
-    }
 
 end
 
 function drawPlayer()
 
     local width = playerControl:getSprite():getDimensions()
-    
     love.graphics.setColor(1, 1, 1, 100) -- Cor Original
     love.graphics.draw(playerControl:getSprite(), (width*playerControl:getPy())-6, (width*playerControl:getPx())-6 )
     
@@ -126,79 +100,52 @@ function drawMap(map)
 end
 
 function drawText(text, x, y, align)
+
     local myY = y
     local myX = x
     local padding = 300
 
     if align == nil then align = "left" end
 
-    if myY == 1 then
-        myY = 430
-    elseif myY == 2 then
-        myY = 460
-    elseif myY == 3 then
-        myY = 485
-    elseif myY == 4 then
-        myY = 510
-    elseif myY == 5 then
-        myY = 535
-    elseif myY == 6 then
-        myY = 560
-    elseif myY == 7 then
-        myY = 585
-    elseif myY == 8 then
-        myY = 610
-    elseif myY == 9 then
-        myY = 635
+    if myY == 1 then myY = 430
+        elseif myY == 2 then myY = 460
+        elseif myY == 3 then myY = 485
+        elseif myY == 4 then myY = 510
+        elseif myY == 5 then myY = 535
+        elseif myY == 6 then myY = 560
+        elseif myY == 7 then myY = 585
+        elseif myY == 8 then myY = 610
+        elseif myY == 9 then myY = 635
     end
 
-    if myX == 1 then
-        myX = 20
-    elseif myX == 2 then
-        myX = 300
-        padding = 240
-    elseif myX == 3 then
-        myX = 580
-        padding = 220
+    if myX == 1 then myX = 20
+        elseif myX == 2 then myX = 300 padding = 240
+        elseif myX == 3 then myX = 580 padding = 220
     end
-
 
     love.graphics.setColor(0, 0, 0, 100)
     love.graphics.printf(text, myX, myY, padding, align)
 
-
 end
 
 function  drawStat(text, x, y)
+    
     local myY = y
     local myX = x
     local padding = 300
     
+    if myX == 1 then myX = 238 end
+    if myX == 2 then myX = 304 end
+    if myX == 3 then myX = 370 end
 
-    
-    if myX == 1 then
-        myX = 238
-    end
-    if myX == 2 then
-        myX = 304
-    end
-    if myX == 3 then
-        myX = 370
+    if myY == 1 then myY = 460
+        elseif myY == 2 then myY = 485
+        elseif myY == 3 then myY = 510
+        elseif myY == 4 then myY = 535
+        elseif myY == 5 then myY = 560
+        elseif myY == 6 then myY = 585
     end
 
-    if myY == 1 then
-        myY = 460
-    elseif myY == 2 then
-        myY = 485
-    elseif myY == 3 then
-        myY = 510
-    elseif myY == 4 then
-        myY = 535
-    elseif myY == 5 then
-        myY = 560
-    elseif myY == 6 then
-        myY = 585
-    end
     love.graphics.setColor(0, 0, 0, 100)
     if text < 0 then love.graphics.setColor(1, 0, 0, 100) end
     love.graphics.printf(text, myX, myY, padding, "center")
@@ -210,10 +157,12 @@ function drawMenu()
     if state == "move" then
 
         drawText("                COMANDO:", 1, 1)
-        drawText("[D] ou (→)   - Mover para Direita" , 1, 2)
-        drawText("[A] ou (←)   - Mover para Esquerda" , 1, 3)
-        drawText("[W] ou  (  ↑  )      - Mover para Cima" , 1, 4)
-        drawText("[S] ou  (  ↓  )      - Mover para Baixo" , 1, 5)
+        drawText("[D] ou ( → ) - Mover para Direita" , 1, 2)
+        drawText("[A] ou ( ← ) - Mover para Esquerda" , 1, 3)
+        drawText("[W] ou  ( ↑ ) - Mover para Cima" , 1, 4)
+        drawText("[S] ou  ( ↓ ) - Mover para Baixo" , 1, 5)
+        drawText("[F] - Para usar Potion" , 1, 6)
+
     elseif state == "chest" then
 
         drawText("                COMANDO:", 1, 1)
@@ -231,16 +180,14 @@ function drawMenu()
         drawText("[Q]   - Você Rejeita a Troca" , 1, 9)
 
     elseif state == "battle" then
-
         drawText("BATTLE:", 1, 1, "center")
-
         if pressRunAway == false then
             drawText("[E] ou (←)   - Start the battle" , 1, 3)
-            drawText("[Q] ou (→)   - Try to run away" , 1, 4)
+            drawText("[Q] ou (→)   - Try to run away" , 1, 4)    
         end
 
         if pressRunAway == true then
-            if numberTryToRun > 128 then 
+            if numberTryToRun >= 128 then 
                 drawText("Can you run away" , 1, 2) 
                 drawText("[V] ou (→)   - To run away" , 1, 4)
                 elseif numberTryToRun < 128 and numberTryToRun > 0 then
@@ -371,7 +318,14 @@ function love.keypressed(key, scancode)
     local y = playerControl:getPx()
 
     if key == 'f1' then playerControl:setInventoryPotion(1) end
-    if key == 'f2' then playerControl:setInventoryPotion(-1) end
+
+    if key == 'f' then
+        if playerControl:getInventoryPotion() > 0 then 
+            playerControl:setInventoryPotion(-1)
+            if ( playerControl:getLife() + potionHeal ) > playerControl:getMaxLife() then playerControl:setLife(playerControl:getMaxLife()) 
+            elseif playerControl:getLife() <  playerControl:getMaxLife() then playerControl:setLife( playerControl:getLife() + potionHeal ) end
+        end
+    end 
 
     if state == "move" then
 
@@ -415,13 +369,13 @@ function love.keypressed(key, scancode)
 
     if state == "battle" then
         if key == "e" then state = "move" end
-        if key == "q" then 
+        if key == "q" then
             pressRunAway = true 
             math.randomseed(os.time())
             for i = 0 , 10 do numberTryToRun = math.random(255) end 
         end
-        if key == "v" and pressRunAway == true then pressRunAway = false state = "move"  numberTryToRun = 0 end
-        if key == "c" and pressRunAway == true then pressRunAway = false state = "move"  numberTryToRun = 0 end
+        if key == "v" and pressRunAway == true and numberTryToRun >= 128 then pressRunAway = false state = "move"  numberTryToRun = 0 end
+        if key == "c" and pressRunAway == true and numberTryToRun < 128 then pressRunAway = false state = "move"  numberTryToRun = 0 end
     end
 
 end

@@ -187,6 +187,10 @@ function Player:setLife(value)
     self.status["life"] = value
 end
 
+function Player:getMaxLife()
+    return 100
+end
+
 function Player:getExp()
     return self.status["exp"] 
 end
