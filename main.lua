@@ -170,6 +170,7 @@ function drawMenu()
         drawText("[A] ou (←)   - Mover para Esquerda" , 1, 3)
         drawText("[W] ou  (  ↑  )      - Mover para Cima" , 1, 4)
         drawText("[S] ou  (  ↓  )      - Mover para Baixo" , 1, 5)
+        drawText("F1                   - Usar Potion" , 1, 6)
     elseif state == "chest" then
         drawText("COMANDO:", 1, 1, "center")
         drawText("ITEM ENCONTRADO" , 1, 2)
