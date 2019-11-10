@@ -177,8 +177,13 @@ function drawMenu()
         if itemChest.type == "armor" and not(playerControl:getEquipArmorName() == "No Equiped") then drawText("["..playerControl:getEquipArmorName().."]\n[DEF : "..playerControl:getDefeseArmor().."] [DEX : "..playerControl:getDexterityArmor().."] [VIT : "..playerControl:getLifeArmor().."]" , 1, 6) elseif playerControl:getEquipArmorName() == "No Equiped" and itemChest.type == "armor" then drawText("Você não tem armadura equipada!",1,6) end
         if itemChest.type == "potion" then drawText("[POTION] = ".."[ "..playerControl:getInventoryPotion().." ]" , 1, 6) end
 
-        drawText("[E]   - Você Aceita a Troca" , 1, 8)
-        drawText("[Q]   - Você Rejeita a Troca" , 1, 9)
+        if itemChest.type == "armor" or itemChest.type == "sword" then
+            drawText("[E]   - Você Aceita a Troca" , 1, 8)
+            drawText("[Q]   - Você Rejeita a Troca" , 1, 9)
+        elseif itemChest.type == "potion" then
+            drawText("[E]   - Você Pega o Potion" , 1, 8)
+            drawText("[Q]   - Você Rejeita o Potion" , 1, 9)
+        end
 
     elseif state == "battle" then
         drawText("BATTLE:", 1, 1, "center")
