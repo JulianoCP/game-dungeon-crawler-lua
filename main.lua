@@ -4,7 +4,7 @@ Player = require 'Player'
 Itens = require 'Itens'
 blocks = require 'Blocks'
 gui = require 'Gui'
-arrayMaps = require 'MapLoad' 
+names = require 'MapLoad' 
 FogWar = require 'Fog'
 
 -- Controll
@@ -14,6 +14,7 @@ itemChest = nil
 pressRunAway = false
 numberTryToRun = 0
 potionHeal = 20
+arrayMaps = {}
 
 function love.load()
     love.keyboard.setKeyRepeat(true)
@@ -22,7 +23,12 @@ function love.load()
     fog = FogWar
     love.graphics.setFont(love.graphics.newFont("assets/fonts/cc.otf", 14))
     
-    -- Seta o Primeiro Mapa
+    -- Seta os Mapas
+    for i = 1, table.getn(names) do
+        maps = Map:new("Labirinto - "..names[i] , require("/maps/"..names[i]) , i)
+        table.insert( arrayMaps, maps )
+    end
+
     mapControl = arrayMaps[1]
     love.window.setTitle(mapControl:getNameMap())
 

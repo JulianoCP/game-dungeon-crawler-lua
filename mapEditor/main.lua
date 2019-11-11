@@ -3,6 +3,8 @@ map = {}
 filename = ''
 writeFileName = 0
 functionMap = 'edit'
+mapList = require('DungeonCrawler/MapLoad')
+
 
 function fullMap()
     for i = 1, 25 do
@@ -184,6 +186,7 @@ function love.draw()
    -- for i = 1, 15 do
     --    love.graphics.rectangle("fill", 450, (i*17), 40, 16 )
    -- end
+   
 
     love.graphics.setColor(1, 1, 1)
 
@@ -200,6 +203,19 @@ function love.draw()
 end
 
 function drawMenu()
+    love.graphics.print("Mapas Disponiveis: ", 530, 20)
+    love.graphics.setColor(0, 1, 0)
+
+    for i = 1, table.getn(mapList) do
+        
+        love.graphics.print(i.." - "..mapList[i], 530, 20+(20*i))
+
+    end
+
+
+
+
+
     love.graphics.setColor(1, 1, 1)
     love.graphics.rectangle("fill", 20, 450, 420, 188 )
     love.graphics.setColor(0, 0, 0)
@@ -243,14 +259,13 @@ function drawMenu()
 end
 
 function love.keypressed(key, scancode)
-
     -- Sair
     if key == "escape" then
         --love.event.quit()
         functionMap = 'edit'
         writeFileName = 0
      end
-    
+
      -- Abrir Mapa
      if key == "f1" then
         if writeFileName == 1 and not(filename == '')then
@@ -335,13 +350,13 @@ function love.textinput(t)
     end
 end
 
+
+
 function save(m)
     print("SAVE - MAP")
     if filename == '' then filename = "data" end
 
-    
-    local filename = "DungeonCrawler/maps/"..filename..".lua"
-    local file = io.open(filename, "w+")
+    local file = io.open("DungeonCrawler/maps/"..filename..".lua", "w+")
     io.output(file)
     io.write("    return {\n")
     for i = 1, table.getn(m) do
@@ -355,4 +370,19 @@ function save(m)
     end
     io.write("    }")
     file:close()
+    saveMap()
+end
+
+function saveMap()
+    
+    local file2 = io.open("DungeonCrawler/MapLoad.lua", "w")
+    io.output(file2)
+
+    io.write("names = {\n")
+    for i = 1 , table.getn(mapList) do
+        io.write("    \""..mapList[i].."\",\n")
+    end
+    io.write("    \""..filename.."\",\n")
+    io.write("}\nreturn names")
+    io.close(file2)
 end
