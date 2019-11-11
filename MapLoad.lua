@@ -3,5 +3,6 @@ names = {
     "Fosso",
     "Siberia",
     "Mix",
+    "Novo",
 }
 return names

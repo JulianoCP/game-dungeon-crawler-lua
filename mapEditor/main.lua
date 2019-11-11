@@ -261,15 +261,15 @@ end
 
 function love.keypressed(key, scancode)
 
-    if key == '1' then delMap(1) end
-    if key == '2' then delMap(2) end
-    if key == '3' then delMap(3) end
-    if key == '4' then delMap(4) end
-    if key == '5' then delMap(5) end
-    if key == '6' then delMap(6) end
-    if key == '7' then delMap(7) end
-    if key == '8' then delMap(8) end
-    if key == '9' then delMap(9) end
+    if key == '1' then delMap(1) print("Delete Map ") end
+    if key == '2' then delMap(2) print("Delete Map ") end
+    if key == '3' then delMap(3) print("Delete Map ") end
+    if key == '4' then delMap(4) print("Delete Map ") end
+    if key == '5' then delMap(5) print("Delete Map ") end
+    if key == '6' then delMap(6) print("Delete Map ") end
+    if key == '7' then delMap(7) print("Delete Map ") end
+    if key == '8' then delMap(8) print("Delete Map ") end
+    if key == '9' then delMap(9) print("Delete Map ") end
 
     -- Sair
     if key == "escape" then
@@ -383,7 +383,13 @@ function save(m)
     io.write("    }")
     file:close()
     saveMap()
-    
+    local jatem = 0
+    for i = 1 , table.getn(mapList) do
+        if filename == mapList[i] then jatem = 1 end
+    end
+    if jatem == 0 then
+        table.insert(mapList, filename)
+    end
 end
 
 function saveMap()
@@ -399,6 +405,7 @@ function saveMap()
     if not (isExist == 1) then io.write("    \""..filename.."\",\n")end
     io.write("}\nreturn names")
     io.close(file2)
+    
 end
 
 function delMap(num)
