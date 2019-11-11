@@ -187,6 +187,7 @@ function love.draw()
     --    love.graphics.rectangle("fill", 450, (i*17), 40, 16 )
    -- end
    
+    mapList = require('DungeonCrawler/MapLoad')
 
     love.graphics.setColor(1, 1, 1)
 
@@ -259,6 +260,17 @@ function drawMenu()
 end
 
 function love.keypressed(key, scancode)
+
+    if key == '1' then delMap(1) end
+    if key == '2' then delMap(2) end
+    if key == '3' then delMap(3) end
+    if key == '4' then delMap(4) end
+    if key == '5' then delMap(5) end
+    if key == '6' then delMap(6) end
+    if key == '7' then delMap(7) end
+    if key == '8' then delMap(8) end
+    if key == '9' then delMap(9) end
+
     -- Sair
     if key == "escape" then
         --love.event.quit()
@@ -371,6 +383,7 @@ function save(m)
     io.write("    }")
     file:close()
     saveMap()
+    
 end
 
 function saveMap()
@@ -384,6 +397,19 @@ function saveMap()
         io.write("    \""..mapList[i].."\",\n")
     end
     if not (isExist == 1) then io.write("    \""..filename.."\",\n")end
+    io.write("}\nreturn names")
+    io.close(file2)
+end
+
+function delMap(num)
+    os.remove ("DungeonCrawler/maps/"..mapList[num]..".lua")
+    table.remove (mapList, num)
+    local file2 = io.open("DungeonCrawler/MapLoad.lua", "w")
+    io.output(file2)
+    io.write("names = {\n")
+    for i = 1 , table.getn(mapList) do
+        io.write("    \""..mapList[i].."\",\n")
+    end
     io.write("}\nreturn names")
     io.close(file2)
 end
