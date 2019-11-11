@@ -377,12 +377,13 @@ function saveMap()
     
     local file2 = io.open("DungeonCrawler/MapLoad.lua", "w")
     io.output(file2)
-
+    local isExist = 0
     io.write("names = {\n")
     for i = 1 , table.getn(mapList) do
+        if filename == mapList[i] then isExist = 1 end
         io.write("    \""..mapList[i].."\",\n")
     end
-    io.write("    \""..filename.."\",\n")
+    if not (isExist == 1) then io.write("    \""..filename.."\",\n")end
     io.write("}\nreturn names")
     io.close(file2)
 end
