@@ -40,6 +40,17 @@ function Map:isCollider(x,y,name)
   elseif self.props["mapData"][y][x - 1] == name then return true 
   elseif self.props["mapData"][y][x + 1] == name then return true 
   else return false end
+
+end
+
+function Map:getMonsterTile(x,y,name)
+
+  if self.props["mapData"][y - 1][x] == name then return y - 1, x ,name
+  elseif self.props["mapData"][y + 1][x] == name then return y + 1, x ,name
+  elseif self.props["mapData"][y][x - 1] == name then return y, x - 1 ,name
+  elseif self.props["mapData"][y][x + 1] == name then return y, x + 1 ,name
+  else return false end
+  
 end
 
 return Map

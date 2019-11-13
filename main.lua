@@ -6,18 +6,25 @@ blocks = require 'Blocks'
 gui = require 'Gui'
 names = require 'MapLoad' 
 FogWar = require 'Fog'
+Monster = require 'Monster'
 
 -- Controll
 state = "move"
 mapControl = nil
 itemChest = nil
+arrayMonster = nil
+currentMonster = {}
 pressRunAway = false
+pressBattleAway = false
 numberTryToRun = 0
 potionHeal = 20
 arrayMaps = {}
+arrayMonsterName = {'m','m1','m2','m3'}
 
 function love.load()
     love.keyboard.setKeyRepeat(true)
+
+    arrayMonster = Monster:new()
 
     local maps = nil
     fog = FogWar
@@ -177,9 +184,35 @@ function drawMenu()
 
     elseif state == "battle" then
         drawText("BATTLE:", 1, 1, "center")
-        if pressRunAway == false then
+        if pressRunAway == false and pressBattleAway == false then
             drawText("[E] ou (←)   - Start the battle" , 1, 3)
             drawText("[Q] ou (→)   - Try to run away" , 1, 4)    
+        end
+
+        if pressBattleAway == true then
+
+            local typeMonster = nil
+            local My,Mx = nil
+
+            for key,i in pairs(arrayMonsterName) do
+                if not (mapControl:getMonsterTile(playerControl:getPy(),playerControl:getPx(),i) == false) then
+                    My,Mx,typeMonster = mapControl:getMonsterTile(playerControl:getPy(),playerControl:getPx(),i)
+                end
+            end
+
+            drawText("["..arrayMonster[typeMonster].name.."]" , 1, 2)
+            drawText(arrayMonster[typeMonster].msg , 1, 3)
+            table.insert( currentMonster,arrayMonster:getMonster(typeMonster) )  
+            print(currentMonster.name)
+
+            print(currentMonster.life)
+            print(arrayMonster[typeMonster].life)
+
+            if not(currentMonster == "") then
+                while (currentMonster.life > 0) do
+                    drawText(currentMonster.life, 1, 4)
+                end
+            end
         end
 
         if pressRunAway == true then
@@ -365,12 +398,13 @@ function love.keypressed(key, scancode)
     end
 
     if state == "battle" then
-        if key == "e" then state = "move" end
+        if key == "e" then pressBattleAway = true end
         if key == "q" then
             pressRunAway = true 
             math.randomseed(os.time())
             for i = 0 , 10 do numberTryToRun = math.random(255) end 
         end
+        if key == "a" and pressBattleAway == true and not(currentMonster == "") then currentMonster.life = (currentMonster.life - 10) print("ENTRO CARAI") end
         if key == "v" and pressRunAway == true and numberTryToRun >= 128 then pressRunAway = false state = "move"  numberTryToRun = 0 end
         if key == "c" and pressRunAway == true and numberTryToRun < 128 then pressRunAway = false state = "move"  numberTryToRun = 0 end
     end
