@@ -8,7 +8,7 @@ function Monster:new()
             m = {
                 
                 name = "Ghost of Dead",
-                msg = "Booooooooooooooooooohhhhhhhhhhhhhh",
+                msg = "Booooooooooooooooooohhhhhhhhhhh",
                 damage = 10,
                 defese = 10,
                 dexterity = 10,

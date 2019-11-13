@@ -18,7 +18,6 @@ pressRunAway = false
 pressBattleAway = false
 pressKeyForDmgEnemy = false
 numberTryToRun = 0
-maxLifeMobCurrent = 0
 potionHeal = 20
 arrayMaps = {}
 arrayMonsterName = {'m','m1','m2','m3'}
@@ -120,7 +119,7 @@ function drawText(text, x, y, align)
         elseif myY == 9 then myY = 635
     end
 
-    if myX == 1 then myX = 20
+    if myX == 1 then myX = 20 padding = 250
         elseif myX == 2 then myX = 300 padding = 240
         elseif myX == 3 then myX = 580 padding = 220
     end
@@ -198,24 +197,28 @@ function drawMenu()
 
             drawText("["..arrayMonster[typeMonster].name.."]" , 1, 2)
             drawText(arrayMonster[typeMonster].msg , 1, 3)
+            drawText("Life: "..currentMonster.life , 1, 5)
+            drawText("[A]  - Attack" , 1, 6)
+            drawText("[F]  - Use Potion" , 1, 7 )
             
-            print("OD",currentMonster[1].life)
-            print("AD",arrayMonster[typeMonster].life)
-            print("MX",maxLifeMobCurrent)
-            print("MY",My)
-            print("MX",Mx)
 
+                print("\nOD",currentMonster.life)
+                print("AD",arrayMonster[typeMonster].life)
+
+                
             if pressKeyForDmgEnemy == true then
 
-                if currentMonster[1].life <= 0 then
-                    pressBattleAway = false
+                if currentMonster.life <= 0 then
+
+                    pressBattleAway = false --Nao tem mais batalha
+                    pressKeyForDmgEnemy = false -- Não tem como Atacar mais
                     state = "move"
                     mapControl:getMap()[My][Mx] = "f"
-                    arrayMonster[typeMonster].life = maxLifeMobCurrent
-                end
 
-                pressKeyForDmgEnemy = false
-                currentMonster[1].life = currentMonster[1].life - 10
+                else
+                    pressKeyForDmgEnemy = false
+                    currentMonster.life = currentMonster.life - 10
+                end
 
             end
 
@@ -280,8 +283,8 @@ function drawMenu()
     drawText("\nVida: "..playerControl:getLife()..
     "\nLevel: "..playerControl:getLevel() , 3, 1)
     drawText("XP: "..playerControl:getExp() , 3, 3)
+
     -- Controle do SET na GUI
-    
     drawText("INVENTARIO:" , 3, 4, "center")
     
     love.graphics.setColor(1, 1, 1, 100)
@@ -313,10 +316,6 @@ function drawMenu()
         love.graphics.draw(gui["potion"], 580+potionQtd, 625 )
         potionQtd = potionQtd + 35
     end
-    
-    --[[
-        ]]
-        
         
     end
 
@@ -370,13 +369,17 @@ function love.keypressed(key, scancode)
         if key == "up" or key == "w" then y = y - 1 playerControl:setSprite("spriteUp")  end
         if key == "down" or key == "s" then  y = y + 1 playerControl:setSprite("spriteDown") end
 
+        --Colisao com as Paredes
         if  not (mapControl:isColliderInside(x,y) == 'x' or mapControl:isColliderInside(x,y) == 'x1') then
             playerControl:setPx(x)
             playerControl:setPy(y)
         end
 
         --Colisao com os Monstros
+        if mapControl:isCollider(x,y,'m') == true then state = "battle" end
         if mapControl:isCollider(x,y,'m1') == true then state = "battle" end
+        if mapControl:isCollider(x,y,'m2') == true then state = "battle" end
+        if mapControl:isCollider(x,y,'m3') == true then state = "battle" end
 
         if mapControl:isColliderInside(x,y) == 'c' then
             math.randomseed(os.time())
@@ -415,12 +418,11 @@ function love.keypressed(key, scancode)
                 end
             end
     
-            maxLifeMobCurrent = arrayMonster[typeMonster].life 
-            table.insert( currentMonster, arrayMonster[typeMonster] )
+            currentMonster = copy1(arrayMonster[typeMonster])
 
         end
         if key == "q" then
-            pressRunAway = true 
+            pressRunAway = true
             math.randomseed(os.time())
             for i = 0 , 10 do numberTryToRun = math.random(255) end 
         end
@@ -429,3 +431,10 @@ function love.keypressed(key, scancode)
     end
 
 end
+
+function copy1(obj)
+    if type(obj) ~= 'table' then return obj end
+    local res = {}
+    for k, v in pairs(obj) do res[copy1(k)] = copy1(v) end
+    return res
+  end
