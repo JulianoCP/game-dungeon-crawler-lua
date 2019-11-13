@@ -32,7 +32,7 @@ function Itens:new()
                     desc = "espada de venenu",
                     damage = 10,
                     critical = 1,
-                    accuracy = 10,
+                    accuracy = 7,
                     type = "sword",
                     sprite = love.graphics.newImage("assets/gui/sword_2.png")
                 }
@@ -75,7 +75,7 @@ function Itens:getPotion()
 end
 
 function Itens:getRandomSword()
-    math.randomseed(os.time())
+    math.randomseed(os.clock())
     --for i = 0 , 10 do math.randomseed(os.time()) end
     local name = {'fireSword','poisonSword'}
     local numSort = 0
@@ -84,7 +84,7 @@ function Itens:getRandomSword()
 end
 
 function Itens:getRandomArmor()
-    math.randomseed(os.time())
+    math.randomseed(os.clock())
     --for i = 0 , 10 do math.randomseed(os.time()) end
     local name = {'leatherArmor','dragonArmor'}
     local numSort = 0

@@ -17,11 +17,18 @@ currentMonster = {}
 pressRunAway = false
 pressBattleAway = false
 pressKeyForDmgEnemy = false
+criticalFlag = false
+deadMonsterFlag = false
+
 numberTryToRun = 0
 potionHeal = 20
+maxCritical = 10
+currentCritical = 1
+
 arrayMaps = {}
 arrayMonsterName = {'m','m1','m2','m3'}
 typeMonster = nil
+missorhit = nil
 My = 0
 Mx = 0
 
@@ -188,42 +195,56 @@ function drawMenu()
 
     elseif state == "battle" then
         drawText("BATTLE:", 1, 1, "center")
-        if pressRunAway == false and pressBattleAway == false then
-            drawText("[E] ou (←)   - Start the battle" , 1, 3)
-            drawText("[Q] ou (→)   - Try to run away" , 1, 4)    
-        end
 
-        if pressBattleAway == true then
+        if not(deadMonsterFlag) then
 
-            drawText("["..arrayMonster[typeMonster].name.."]" , 1, 2)
-            drawText(arrayMonster[typeMonster].msg , 1, 3)
-            drawText("Life: "..currentMonster.life , 1, 5)
-            drawText("[A]  - Attack" , 1, 6)
-            drawText("[F]  - Use Potion" , 1, 7 )
-            
-
-                print("\nOD",currentMonster.life)
-                print("AD",arrayMonster[typeMonster].life)
-
-                
-            if pressKeyForDmgEnemy == true then
-
-                if currentMonster.life <= 0 then
-
-                    pressBattleAway = false --Nao tem mais batalha
-                    pressKeyForDmgEnemy = false -- Não tem como Atacar mais
-                    state = "move"
-                    mapControl:getMap()[My][Mx] = "f"
-
-                else
-                    pressKeyForDmgEnemy = false
-                    currentMonster.life = currentMonster.life - 10
-                end
-
+            if pressRunAway == false and pressBattleAway == false then
+                drawText("[E] ou (←)   - Start the battle" , 1, 3)
+                drawText("[Q] ou (→)   - Try to run away" , 1, 4)    
             end
 
-        end
+            if pressBattleAway == true then
+            
+                drawText("["..arrayMonster[typeMonster].name.."]" , 1, 2)
+                drawText(arrayMonster[typeMonster].msg , 1, 3)
+                drawText("Life: "..currentMonster.life , 1, 5)
+                drawText("[A]  - Attack" , 1, 6)
+                drawText("[F]  - Use Potion" , 1, 7 )
 
+                
+                if missorhit then drawText("Hit Attack" , 1, 8 ) elseif not(missorhit == nil) then drawText("Miss Attack" , 1, 8 ) end
+
+                
+                if criticalFlag then drawText("Attack Critical" , 1, 9 ) end
+                
+                if pressKeyForDmgEnemy == true  then
+                    
+                    if currentMonster.life > 0 and missorhit then
+                        if math.random(maxCritical) <= playerControl:getCritical()+playerControl:getCriticalSword() then
+                            currentCritical = 2
+                            criticalFlag = true
+                        end
+                        --Dano
+                        pressKeyForDmgEnemy = false
+                        currentMonster.life = currentMonster.life - ( ((playerControl:getDamage()+playerControl:getDamageSword()) * currentCritical) - currentMonster.defese)
+                        if currentMonster.life <= 0 then currentMonster.life = 0 end                  
+                    end
+
+                end
+                if currentMonster.life == 0 then
+                    pressBattleAway = false --Nao tem mais batalha
+                    pressKeyForDmgEnemy = false -- Não tem como Atacar mais
+                    --state = "move"
+                    deadMonsterFlag = true
+                    mapControl:getMap()[My][Mx] = "f"
+                    
+                end
+            end
+        end
+        if deadMonsterFlag == true then
+            drawText("You won the battle" , 1, 2 )
+            drawText("[A] - You go will leave the battle " , 1, 3 )
+        end
         if pressRunAway == true then
             if numberTryToRun >= 128 then 
                 drawText("Can you run away" , 1, 2) 
@@ -385,11 +406,18 @@ function love.keypressed(key, scancode)
         if mapControl:isCollider(x,y,'m3') == true then state = "battle" end
 
         if mapControl:isColliderInside(x,y) == 'c' then
-            math.randomseed(os.time())
+            math.randomseed(os.clock())
             local a = Itens:new()
             local numSort = 0
-            for i = 0 , 10 do numSort = math.random(3) end
-            if numSort == 1 then itemChest = a:getRandomSword() elseif numSort == 1 then itemChest = a:getRandomArmor() else itemChest = a:getPotion() end
+
+            for i = 0 , 10 do numSort = math.random(100) end
+
+            if numSort >= 0 and numSort < 43 then numSort = 1
+                elseif numSort >= 43 and numSort < 86 then numSort = 2
+                elseif numSort >= 86 and numSort <= 100 then numSort = 3
+            end
+            
+            if numSort == 1 then itemChest = a:getRandomSword() elseif numSort == 2 then itemChest = a:getRandomArmor() else itemChest = a:getPotion() end
             mapControl:getMap()[y][x] = 'f'
             state = "chest"
         end
@@ -411,28 +439,33 @@ function love.keypressed(key, scancode)
 
     if state == "battle" then
 
-        if key == "a" and pressBattleAway == true then pressKeyForDmgEnemy = true end
-
+        if key == "a" and pressBattleAway == true then pressKeyForDmgEnemy = true missorhit = isHit() currentCritical = 1 criticalFlag = false end
+        if key == "a" and deadMonsterFlag == true then state = "move" deadMonsterFlag = false end
         if key == "e" then pressBattleAway = true
         
-            for key,i in pairs(arrayMonsterName) do
-                if not (mapControl:getMonsterTile(playerControl:getPy(),playerControl:getPx(),i) == false) then
-                    My,Mx,typeMonster = mapControl:getMonsterTile(playerControl:getPy(),playerControl:getPx(),i)
-                end
-            end
-    
-            currentMonster = copy1(arrayMonster[typeMonster])
+            activeBattle()
 
         end
         if key == "q" then
             pressRunAway = true
-            math.randomseed(os.time())
+            math.randomseed(os.clock())
             for i = 0 , 10 do numberTryToRun = math.random(255) end 
         end
         if key == "v" and pressRunAway == true and numberTryToRun >= 128 then pressRunAway = false state = "move"  numberTryToRun = 0 end
-        if key == "c" and pressRunAway == true and numberTryToRun < 128 then pressRunAway = false state = "move"  numberTryToRun = 0 end
+        if key == "c" and pressRunAway == true and numberTryToRun < 128 then pressRunAway = false pressBattleAway = true  numberTryToRun = 0 activeBattle() end
     end
 
+end
+
+
+function activeBattle()
+    for key,i in pairs(arrayMonsterName) do
+        if not (mapControl:getMonsterTile(playerControl:getPy(),playerControl:getPx(),i) == false) then
+            My,Mx,typeMonster = mapControl:getMonsterTile(playerControl:getPy(),playerControl:getPx(),i)
+        end
+    end
+
+    currentMonster = copy1(arrayMonster[typeMonster])
 end
 
 function copy1(obj)
@@ -440,4 +473,10 @@ function copy1(obj)
     local res = {}
     for k, v in pairs(obj) do res[copy1(k)] = copy1(v) end
     return res
+  end
+
+  function isHit()
+    if (math.random(currentMonster.dexterity) <= playerControl:getAccuracy()+playerControl:getAccuracySword()) then return true end
+    return false
+    
   end

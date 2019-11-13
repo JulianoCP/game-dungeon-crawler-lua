@@ -18,11 +18,11 @@ function Player:new(Px, Py, currentSprite)
           },
 
         status = {
-            damage = 10,
+            damage = 1,
             defese = 10,
             dexterity = 10,
-            accuracy = 10,
-            critical = 10,
+            accuracy = 2,
+            critical = 1,
             life = 100,
             exp = 0,
             level = 0
