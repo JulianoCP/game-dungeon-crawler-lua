@@ -335,6 +335,9 @@ end
 function drawScene()
     if state == "chest" then
         love.graphics.draw(gui["chest"], 420,10 )
+    elseif state == "battle" then
+        love.graphics.draw(gui["monster"], 420,10 )
+
     end
 end
 

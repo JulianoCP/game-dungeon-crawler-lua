@@ -1,6 +1,7 @@
 gui = {
     interface = love.graphics.newImage("assets/gui/gui_interface.png"),
     chest = love.graphics.newImage("assets/gui/dungeonChest.png"),
+    monster = love.graphics.newImage("assets/gui/dungeonMonster.png"),
     dungeon = love.graphics.newImage("assets/gui/dungeonWalking.png"),
     frame = love.graphics.newImage("assets/gui/interface_scene.png"),
     noArmor = love.graphics.newImage("assets/gui/NoArmor.png"),
