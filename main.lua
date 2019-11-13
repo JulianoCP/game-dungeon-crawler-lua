@@ -16,10 +16,15 @@ arrayMonster = nil
 currentMonster = {}
 pressRunAway = false
 pressBattleAway = false
+pressKeyForDmgEnemy = false
 numberTryToRun = 0
+maxLifeMobCurrent = 0
 potionHeal = 20
 arrayMaps = {}
 arrayMonsterName = {'m','m1','m2','m3'}
+typeMonster = nil
+My = 0
+Mx = 0
 
 function love.load()
     love.keyboard.setKeyRepeat(true)
@@ -191,28 +196,29 @@ function drawMenu()
 
         if pressBattleAway == true then
 
-            local typeMonster = nil
-            local My,Mx = nil
-
-            for key,i in pairs(arrayMonsterName) do
-                if not (mapControl:getMonsterTile(playerControl:getPy(),playerControl:getPx(),i) == false) then
-                    My,Mx,typeMonster = mapControl:getMonsterTile(playerControl:getPy(),playerControl:getPx(),i)
-                end
-            end
-
             drawText("["..arrayMonster[typeMonster].name.."]" , 1, 2)
             drawText(arrayMonster[typeMonster].msg , 1, 3)
-            table.insert( currentMonster,arrayMonster:getMonster(typeMonster) )  
-            print(currentMonster.name)
+            
+            print("OD",currentMonster[1].life)
+            print("AD",arrayMonster[typeMonster].life)
+            print("MX",maxLifeMobCurrent)
+            print("MY",My)
+            print("MX",Mx)
 
-            print(currentMonster.life)
-            print(arrayMonster[typeMonster].life)
+            if pressKeyForDmgEnemy == true then
 
-            if not(currentMonster == "") then
-                while (currentMonster.life > 0) do
-                    drawText(currentMonster.life, 1, 4)
+                if currentMonster[1].life <= 0 then
+                    pressBattleAway = false
+                    state = "move"
+                    mapControl:getMap()[My][Mx] = "f"
+                    arrayMonster[typeMonster].life = maxLifeMobCurrent
                 end
+
+                pressKeyForDmgEnemy = false
+                currentMonster[1].life = currentMonster[1].life - 10
+
             end
+
         end
 
         if pressRunAway == true then
@@ -398,13 +404,26 @@ function love.keypressed(key, scancode)
     end
 
     if state == "battle" then
-        if key == "e" then pressBattleAway = true end
+
+        if key == "a" and pressBattleAway == true then pressKeyForDmgEnemy = true end
+
+        if key == "e" then pressBattleAway = true
+        
+            for key,i in pairs(arrayMonsterName) do
+                if not (mapControl:getMonsterTile(playerControl:getPy(),playerControl:getPx(),i) == false) then
+                    My,Mx,typeMonster = mapControl:getMonsterTile(playerControl:getPy(),playerControl:getPx(),i)
+                end
+            end
+    
+            maxLifeMobCurrent = arrayMonster[typeMonster].life 
+            table.insert( currentMonster, arrayMonster[typeMonster] )
+
+        end
         if key == "q" then
             pressRunAway = true 
             math.randomseed(os.time())
             for i = 0 , 10 do numberTryToRun = math.random(255) end 
         end
-        if key == "a" and pressBattleAway == true and not(currentMonster == "") then currentMonster.life = (currentMonster.life - 10) print("ENTRO CARAI") end
         if key == "v" and pressRunAway == true and numberTryToRun >= 128 then pressRunAway = false state = "move"  numberTryToRun = 0 end
         if key == "c" and pressRunAway == true and numberTryToRun < 128 then pressRunAway = false state = "move"  numberTryToRun = 0 end
     end
