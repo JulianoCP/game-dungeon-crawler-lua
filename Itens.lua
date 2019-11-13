@@ -45,7 +45,6 @@ function Itens:new()
                     desc = "armadura de cabra",
                     defese = 10,
                     dexterity = 1,
-                    life = 20,
                     type = "armor",
                     sprite = love.graphics.newImage("assets/gui/armor_1.png")
                 },
@@ -55,7 +54,6 @@ function Itens:new()
                     desc = "Escama do dragão da sua mae",
                     defese = 50,
                     dexterity = -5,
-                    life = 50,
                     type = "armor",
                     sprite = love.graphics.newImage("assets/gui/armor_2.png")
                 }

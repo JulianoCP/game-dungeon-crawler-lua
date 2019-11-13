@@ -21,7 +21,7 @@ function Player:new(Px, Py, currentSprite)
             damage = 1,
             defese = 10,
             dexterity = 10,
-            accuracy = 2,
+            accuracy = 20,
             critical = 1,
             life = 100,
             exp = 0,
@@ -60,11 +60,6 @@ end
 function Player:getDexterityArmor()
     if self.equip["armor"] == nil then return 0 end
     return self.equip["armor"].dexterity
-end
-
-function Player:getLifeArmor()
-    if self.equip["armor"] == nil then return 0 end
-    return self.equip["armor"].life
 end
 
 function Player:getCriticalSword()

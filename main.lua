@@ -19,6 +19,7 @@ pressBattleAway = false
 pressKeyForDmgEnemy = false
 criticalFlag = false
 deadMonsterFlag = false
+turnAtk = true
 
 numberTryToRun = 0
 potionHeal = 20
@@ -177,12 +178,12 @@ function drawMenu()
         drawText("ITEM ENCONTRADO" , 1, 2)
 
         if itemChest.type == "sword" then drawText("["..itemChest.name .."]\n[DMG : "..itemChest.damage.."] [CRIT : "..itemChest.critical.."] [ACC : "..itemChest.accuracy.."]" , 1, 3) end
-        if itemChest.type == "armor" then drawText("["..itemChest.name.."]\n[DEF : "..itemChest.defese.."] [DEX : "..itemChest.dexterity.."] [VIT : "..itemChest.life.."]" , 1, 3) end 
+        if itemChest.type == "armor" then drawText("["..itemChest.name.."]\n[DEF : "..itemChest.defese.."] [DEX : "..itemChest.dexterity.."]" , 1, 3) end 
         if itemChest.type == "potion" then drawText("[POTION] + [ 1 ]" , 1, 3) end 
         drawText("SEU ITEM" , 1, 5)
 
         if itemChest.type == "sword" and not(playerControl:getEquipSwordName() == "No Equiped") then drawText("["..playerControl:getEquipSwordName().."]\n[DMG : "..playerControl:getDamageSword().."] [CRIT : "..playerControl:getCriticalSword().."] [ACC : "..playerControl:getAccuracySword().."]" , 1, 6) elseif playerControl:getEquipSwordName() == "No Equiped" and itemChest.type == "sword" then drawText("Você não tem arma equipada!",1,6) end
-        if itemChest.type == "armor" and not(playerControl:getEquipArmorName() == "No Equiped") then drawText("["..playerControl:getEquipArmorName().."]\n[DEF : "..playerControl:getDefeseArmor().."] [DEX : "..playerControl:getDexterityArmor().."] [VIT : "..playerControl:getLifeArmor().."]" , 1, 6) elseif playerControl:getEquipArmorName() == "No Equiped" and itemChest.type == "armor" then drawText("Você não tem armadura equipada!",1,6) end
+        if itemChest.type == "armor" and not(playerControl:getEquipArmorName() == "No Equiped") then drawText("["..playerControl:getEquipArmorName().."]\n[DEF : "..playerControl:getDefeseArmor().."] [DEX : "..playerControl:getDexterityArmor().."]" , 1, 6) elseif playerControl:getEquipArmorName() == "No Equiped" and itemChest.type == "armor" then drawText("Você não tem armadura equipada!",1,6) end
         if itemChest.type == "potion" then drawText("[POTION] = ".."[ "..playerControl:getInventoryPotion().." ]" , 1, 6) end
 
         if itemChest.type == "armor" or itemChest.type == "sword" then
@@ -196,7 +197,7 @@ function drawMenu()
     elseif state == "battle" then
         drawText("BATTLE:", 1, 1, "center")
 
-        if not(deadMonsterFlag) then
+        if not(deadMonsterFlag) and turnAtk then
 
             if pressRunAway == false and pressBattleAway == false then
                 drawText("[E] ou (←)   - Start the battle" , 1, 3)
@@ -204,7 +205,7 @@ function drawMenu()
             end
 
             if pressBattleAway == true then
-            
+                
                 drawText("["..arrayMonster[typeMonster].name.."]" , 1, 2)
                 drawText(arrayMonster[typeMonster].msg , 1, 3)
                 drawText("Life: "..currentMonster.life , 1, 5)
@@ -226,8 +227,14 @@ function drawMenu()
                         end
                         --Dano
                         pressKeyForDmgEnemy = false
-                        currentMonster.life = currentMonster.life - ( ((playerControl:getDamage()+playerControl:getDamageSword()) * currentCritical) - currentMonster.defese)
-                        if currentMonster.life <= 0 then currentMonster.life = 0 end                  
+                        if ((playerControl:getDamage()+playerControl:getDamageSword()) * currentCritical) <= currentMonster.defese then
+                            
+                        else
+                            currentMonster.life = currentMonster.life - ( ((playerControl:getDamage()+playerControl:getDamageSword()) * currentCritical) - currentMonster.defese)
+                        end
+                        
+                        turnAtk = false         
+                        if currentMonster.life <= 0 then currentMonster.life = 0 end
                     end
 
                 end
@@ -241,10 +248,33 @@ function drawMenu()
                 end
             end
         end
+
+        if turnAtk == false then
+            if playerControl:getLife() > 0 --[[and missorhitMonster ]]then
+                if math.random(maxCritical) <= currentMonster.critical then
+                    currentCritical = 2
+                end
+                --Dano
+                --currentMonster.life = currentMonster.life - ( ((playerControl:getDamage()+playerControl:getDamageSword()) * currentCritical) - currentMonster.defese)
+                playerControl:setLife(playerControl:getLife()-((currentMonster.damage*currentCritical)-playerControl:getDefese()+playerControl:getDefeseArmor() ) )
+                turnAtk = true 
+                if playerControl:getLife()<= 0 then playerControl:setLife(0) end                  
+            end
+  
+        end
+        if playerControl:getLife() <= 0 then
+             print("MORREU!!!!!")
+            love.graphics.setColor(1, 0 , 0, 0.7)
+            love.graphics.rectangle("fill", 50, 130, 730, 180 )
+            love.graphics.setColor(1, 1 , 1)
+            love.graphics.draw(gui["youdied"], 50, 130 )
+        end
+        
         if deadMonsterFlag == true then
             drawText("You won the battle" , 1, 2 )
             drawText("[A] - You go will leave the battle " , 1, 3 )
         end
+
         if pressRunAway == true then
             if numberTryToRun >= 128 then 
                 drawText("Can you run away" , 1, 2) 
@@ -295,8 +325,8 @@ function drawMenu()
     drawStat(playerControl:getCriticalSword(), 1,5)
     drawStat(playerControl:getCritical(), 3,5)
 
-    drawText("VIT: "..playerControl:getLife()+playerControl:getLifeArmor(), 2, 7)
-    drawStat(playerControl:getLifeArmor(), 2,6)
+    drawText("VIT: "..playerControl:getLife(), 2, 7)
+   -- drawStat(playerControl:getLifeArmor(), 2,6)
     drawStat(playerControl:getLife(), 3,6)
     
     

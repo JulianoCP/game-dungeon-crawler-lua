@@ -7,6 +7,7 @@ gui = {
     noArmor = love.graphics.newImage("assets/gui/NoArmor.png"),
     noSword = love.graphics.newImage("assets/gui/NoSword.png"),
     potion = love.graphics.newImage("assets/gui/potion.png"),
+    youdied = love.graphics.newImage("assets/gui/youdied.png"),
 }
 
 return gui
