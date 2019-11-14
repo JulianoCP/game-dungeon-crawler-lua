@@ -237,12 +237,13 @@ function drawMenu()
                             currentMonster.life = currentMonster.life - losslife
                             print("Monstro Perdeu ["..losslife.."] de Vida")
                         end
-                        
-                        turnAtk = false         
+      
                         if currentMonster.life <= 0 then currentMonster.life = 0  print("Monstro Morreu\n") end
                     elseif not(missorhit)then
-                        print("Miss Player")    
+                        print("Miss Player")
+                         
                     end
+                    turnAtk = false    
                 end
                 if currentMonster.life == 0 then
                     pressBattleAway = false --Nao tem mais batalha
@@ -271,11 +272,12 @@ function drawMenu()
                     playerControl:setLife(playerControl:getLife()-losslife)
                     print("Você perdeu ["..losslife.."] de Vida ")
                 end
-                turnAtk = true 
+
                 if playerControl:getLife()<= 0 then playerControl:setLife(0) print("Voce Morreu") end                  
             elseif not(missorhitMonster) then
                 print("Miss Monster")
             end
+            turnAtk = true  
   
         end
         if playerControl:getLife() <= 0 then
