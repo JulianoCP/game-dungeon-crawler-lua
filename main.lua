@@ -21,11 +21,13 @@ criticalFlag = false
 deadMonsterFlag = false
 turnAtk = true
 playerLoseLife = false
+changeColortText = false
 
 numberTryToRun = 0
 potionHeal = 20
 maxCritical = 10
 currentCritical = 1
+baseLifePlayer = 0
 
 arrayMaps = {}
 arrayMonsterName = {'m','m1','m2','m3'}
@@ -54,6 +56,8 @@ function love.load()
     love.window.setTitle(mapControl:getNameMap())
 
     playerControl = Player:new(2,2,"spriteRight")
+
+    baseLifePlayer = playerControl:getLife()
 
 end
 
@@ -134,6 +138,8 @@ function drawText(text, x, y, align)
         elseif myX == 3 then myX = 580 padding = 220
     end
 
+    if changeColortText == false then love.graphics.setColor(0, 0, 0, 100)
+    elseif changeColortText == true then love.graphics.setColor(1, 0, 0, 100)  end
     love.graphics.printf(text, myX, myY, padding, align)
 
 end
@@ -164,7 +170,6 @@ end
 
 function drawMenu()
 
-    love.graphics.setColor(0, 0, 0, 100)
     if playerControl:getLife() == 100 then playerLoseLife = false end
 
     if state == "move" then
@@ -358,21 +363,20 @@ function drawMenu()
 
     if playerLoseLife == false then
         drawText("VIT: "..playerControl:getLife(), 2, 7)
-        drawStat(playerControl:getLife(), 3,6)
+        drawStat(baseLifePlayer, 3,6)
     elseif playerLoseLife then
-        love.graphics.setColor(1, 0 , 0, 100)
+        changeColortText = true
         drawText("VIT: "..playerControl:getLife(), 2, 7)
-        drawStat(playerControl:getLife(), 3,6)
-        love.graphics.setColor(1, 1 , 1, 100)
+        drawStat(baseLifePlayer, 3,6)
+        changeColortText = false
     end
     
-    
-    drawText("\nVida: "..playerControl:getLife()..
-    "\nLevel: "..playerControl:getLevel() , 3, 1)
-    drawText("XP: "..playerControl:getExp() , 3, 3)
+
+    drawText("Level: "..playerControl:getLevel(), 3, 1)
+    drawText("XP: "..playerControl:getExp(), 3, 2)
 
     -- Controle do SET na GUI
-    drawText("INVENTARIO:" , 3, 4, "center")
+    drawText("------  INVENTARIO ------" , 3, 4, "center")
     
     love.graphics.setColor(1, 1, 1, 100)
     
