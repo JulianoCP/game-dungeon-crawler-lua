@@ -13,7 +13,7 @@ function Monster:new()
                 defese = 10,
                 dexterity = 10,
                 accuracy = 10,
-                critical = 10,
+                critical = 1,
                 life = 60,
                 expWin = 0,
                 level = 0
@@ -24,11 +24,11 @@ function Monster:new()
                 
                 name = "Esqueleto do Terror",
                 msg = "Você não esta no tutorial",
-                damage = 10,
-                defese = 10,
+                damage = 15,
+                defese = 5,
                 dexterity = 10,
                 accuracy = 10,
-                critical = 10,
+                critical = 1,
                 life = 30,
                 expWin = 0,
                 level = 0

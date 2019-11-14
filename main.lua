@@ -30,6 +30,7 @@ arrayMaps = {}
 arrayMonsterName = {'m','m1','m2','m3'}
 typeMonster = nil
 missorhit = nil
+missorhitMonster = nil
 My = 0
 Mx = 0
 
@@ -221,22 +222,27 @@ function drawMenu()
                 if pressKeyForDmgEnemy == true  then
                     
                     if currentMonster.life > 0 and missorhit then
+                        print("Hit Player")
                         if math.random(maxCritical) <= playerControl:getCritical()+playerControl:getCriticalSword() then
                             currentCritical = 2
                             criticalFlag = true
+                            print("Você fez um Ataque Critico")
                         end
                         --Dano
                         pressKeyForDmgEnemy = false
                         if ((playerControl:getDamage()+playerControl:getDamageSword()) * currentCritical) <= currentMonster.defese then
-                            
+                            print("Seu Dano é Menor que a Defesa do Monstro")
                         else
-                            currentMonster.life = currentMonster.life - ( ((playerControl:getDamage()+playerControl:getDamageSword()) * currentCritical) - currentMonster.defese)
+                            local losslife = ( ((playerControl:getDamage()+playerControl:getDamageSword()) * currentCritical) - currentMonster.defese)
+                            currentMonster.life = currentMonster.life - losslife
+                            print("Monstro Perdeu ["..losslife.."] de Vida")
                         end
                         
                         turnAtk = false         
-                        if currentMonster.life <= 0 then currentMonster.life = 0 end
+                        if currentMonster.life <= 0 then currentMonster.life = 0  print("Monstro Morreu\n") end
+                    elseif not(missorhit)then
+                        print("Miss Player")    
                     end
-
                 end
                 if currentMonster.life == 0 then
                     pressBattleAway = false --Nao tem mais batalha
@@ -250,20 +256,28 @@ function drawMenu()
         end
 
         if turnAtk == false then
-            if playerControl:getLife() > 0 --[[and missorhitMonster ]]then
+            if playerControl:getLife() > 0 and missorhitMonster  and not(currentMonster.life == 0)then
+                print("Hit Monster")
                 if math.random(maxCritical) <= currentMonster.critical then
                     currentCritical = 2
+                    print("Ataque Critico do Monstro ")
                 end
                 --Dano
-                --currentMonster.life = currentMonster.life - ( ((playerControl:getDamage()+playerControl:getDamageSword()) * currentCritical) - currentMonster.defese)
-                playerControl:setLife(playerControl:getLife()-((currentMonster.damage*currentCritical)-playerControl:getDefese()+playerControl:getDefeseArmor() ) )
+                if (currentMonster.damage*currentCritical) <= playerControl:getDefese()+playerControl:getDefeseArmor() then
+                    print("O Dano do Monstro é Menor que a sua Defesa")
+                else 
+                    local losslife = ((currentMonster.damage*currentCritical)-(playerControl:getDefese()+playerControl:getDefeseArmor()) ) 
+                    playerControl:setLife(playerControl:getLife()-losslife)
+                    print("Você perdeu ["..losslife.."] de Vida ")
+                end
                 turnAtk = true 
-                if playerControl:getLife()<= 0 then playerControl:setLife(0) end                  
+                if playerControl:getLife()<= 0 then playerControl:setLife(0) print("Voce Morreu") end                  
+            elseif not(missorhitMonster) then
+                print("Miss Monster")
             end
   
         end
         if playerControl:getLife() <= 0 then
-             print("MORREU!!!!!")
             love.graphics.setColor(1, 0 , 0, 0.7)
             love.graphics.rectangle("fill", 50, 130, 730, 180 )
             love.graphics.setColor(1, 1 , 1)
@@ -408,6 +422,7 @@ function love.keypressed(key, scancode)
     if key == 'f1' then playerControl:setInventoryPotion(1) end
     if key == 'f2' then playerControl:setLife(playerControl:getLife() - 20) end
 
+    --Usa Potion
     if key == 'f' then
         if playerControl:getInventoryPotion() > 0 then 
             playerControl:setInventoryPotion(-1)
@@ -469,7 +484,7 @@ function love.keypressed(key, scancode)
 
     if state == "battle" then
 
-        if key == "a" and pressBattleAway == true then pressKeyForDmgEnemy = true missorhit = isHit() currentCritical = 1 criticalFlag = false end
+        if key == "a" and pressBattleAway == true then pressKeyForDmgEnemy = true missorhit = isHitPlayer() missorhitMonster = isHitMonster() currentCritical = 1 criticalFlag = false end
         if key == "a" and deadMonsterFlag == true then state = "move" deadMonsterFlag = false end
         if key == "e" then pressBattleAway = true
         
@@ -505,8 +520,12 @@ function copy1(obj)
     return res
   end
 
-  function isHit()
+  function isHitPlayer()
     if (math.random(currentMonster.dexterity) <= playerControl:getAccuracy()+playerControl:getAccuracySword()) then return true end
     return false
-    
-  end
+    end
+
+function isHitMonster()
+    if (math.random(playerControl:getDexterity()+playerControl:getDexterityArmor()) <= currentMonster.accuracy) then return true end
+    return false
+end

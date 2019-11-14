@@ -19,7 +19,7 @@ function Player:new(Px, Py, currentSprite)
 
         status = {
             damage = 1,
-            defese = 10,
+            defese = 1,
             dexterity = 10,
             accuracy = 20,
             critical = 1,

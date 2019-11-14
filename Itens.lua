@@ -43,7 +43,7 @@ function Itens:new()
                 leatherArmor = {
                     name = "Leather Armor",
                     desc = "armadura de cabra",
-                    defese = 10,
+                    defese = 3,
                     dexterity = 1,
                     type = "armor",
                     sprite = love.graphics.newImage("assets/gui/armor_1.png")
@@ -52,7 +52,7 @@ function Itens:new()
                 dragonArmor = {
                     name = "Dragon Armor",
                     desc = "Escama do dragão da sua mae",
-                    defese = 50,
+                    defese = 10,
                     dexterity = -5,
                     type = "armor",
                     sprite = love.graphics.newImage("assets/gui/armor_2.png")
