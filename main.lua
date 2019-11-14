@@ -20,6 +20,7 @@ pressKeyForDmgEnemy = false
 criticalFlag = false
 deadMonsterFlag = false
 turnAtk = true
+playerLoseLife = false
 
 numberTryToRun = 0
 potionHeal = 20
@@ -133,7 +134,6 @@ function drawText(text, x, y, align)
         elseif myX == 3 then myX = 580 padding = 220
     end
 
-    love.graphics.setColor(0, 0, 0, 100)
     love.graphics.printf(text, myX, myY, padding, align)
 
 end
@@ -163,7 +163,10 @@ function  drawStat(text, x, y)
 end
 
 function drawMenu()
-    -- 9 Linhas -- 3 Colunas
+
+    love.graphics.setColor(0, 0, 0, 100)
+    if playerControl:getLife() == 100 then playerLoseLife = false end
+
     if state == "move" then
 
         drawText("                COMANDO:", 1, 1)
@@ -174,7 +177,7 @@ function drawMenu()
         drawText("[F] - Para usar Potion" , 1, 6)
 
     elseif state == "chest" then
-
+        
         drawText("                COMANDO:", 1, 1)
         drawText("ITEM ENCONTRADO" , 1, 2)
 
@@ -196,6 +199,7 @@ function drawMenu()
         end
 
     elseif state == "battle" then
+     
         drawText("BATTLE:", 1, 1, "center")
 
         if not(deadMonsterFlag) and turnAtk then
@@ -260,6 +264,7 @@ function drawMenu()
         end
 
         if turnAtk == false then
+       
             if playerControl:getLife() > 0 and missorhitMonster  and not(currentMonster.life == 0)then
                 print("Hit Monster")
                 if math.random(maxCritical) <= currentMonster.critical then
@@ -273,6 +278,7 @@ function drawMenu()
                     local losslife = ((currentMonster.damage*currentCritical)-(playerControl:getDefese()+playerControl:getDefeseArmor()) ) 
                     playerControl:setLife(playerControl:getLife()-losslife)
                     print("Você perdeu ["..losslife.."] de Vida ")
+                    playerLoseLife = true
                 end
 
                 if playerControl:getLife()<= 0 then playerControl:setLife(0) print("Voce Morreu") end                  
@@ -283,10 +289,7 @@ function drawMenu()
   
         end
         if playerControl:getLife() <= 0 then
-            love.graphics.setColor(1, 0 , 0, 0.7)
-            love.graphics.rectangle("fill", 50, 130, 730, 180 )
-            love.graphics.setColor(1, 1 , 1)
-            love.graphics.draw(gui["youdied"], 50, 130 )
+            state = "died"
         end
         
         if deadMonsterFlag == true then
@@ -303,6 +306,15 @@ function drawMenu()
                     drawText("[C] ou (→)   - Start the battle" , 1, 4)
             end
         end
+
+    elseif state == "died" then
+        love.graphics.setColor(1, 0 , 0, 0.7)
+        love.graphics.rectangle("fill", 50, 130, 730, 180 )
+        love.graphics.setColor(1, 1 , 1)
+        love.graphics.draw(gui["youdied"], 50, 130 )
+        drawText("You Died" , 1, 1)
+        drawText("[R] To Restart the game now !" , 1, 2)
+        drawText("[Q] To Quit the game now !" , 1, 3)
             
     elseif state == "winner" then
         --A FAZER
@@ -322,7 +334,7 @@ function drawMenu()
         love.graphics.setColor(1,1 , 1, 0.4)
         love.graphics.rectangle("fill", 295, 435+(25*i), 245, 18 )
     end
-
+   
     drawText("                    SWORD      ARMOR      BASE" , 2, 1)
     drawText("STR: "..playerControl:getDamage()+playerControl:getDamageSword(), 2, 2)
     drawStat(playerControl:getDamageSword(), 1,1)
@@ -344,10 +356,15 @@ function drawMenu()
     drawStat(playerControl:getCriticalSword(), 1,5)
     drawStat(playerControl:getCritical(), 3,5)
 
-    drawText("VIT: "..playerControl:getLife(), 2, 7)
-   -- drawStat(playerControl:getLifeArmor(), 2,6)
-    drawStat(playerControl:getLife(), 3,6)
-    
+    if playerLoseLife == false then
+        drawText("VIT: "..playerControl:getLife(), 2, 7)
+        drawStat(playerControl:getLife(), 3,6)
+    elseif playerLoseLife then
+        love.graphics.setColor(1, 0 , 0, 100)
+        drawText("VIT: "..playerControl:getLife(), 2, 7)
+        drawStat(playerControl:getLife(), 3,6)
+        love.graphics.setColor(1, 1 , 1, 100)
+    end
     
     
     drawText("\nVida: "..playerControl:getLife()..
@@ -425,7 +442,7 @@ function love.keypressed(key, scancode)
     local y = playerControl:getPx()
 
     if key == 'f1' then playerControl:setInventoryPotion(1) end
-    if key == 'f2' then playerControl:setLife(playerControl:getLife() - 20) end
+    if key == 'f2' then love.event.quit( "restart" ) end
 
     --Usa Potion
     if key == 'f' then
@@ -503,6 +520,11 @@ function love.keypressed(key, scancode)
         end
         if key == "v" and pressRunAway == true and numberTryToRun >= 128 then pressRunAway = false state = "move"  numberTryToRun = 0 end
         if key == "c" and pressRunAway == true and numberTryToRun < 128 then pressRunAway = false pressBattleAway = true  numberTryToRun = 0 activeBattle() end
+    end
+
+    if state == "died" then
+        if key == "q" then love.event.quit() end
+        if key == "r" then love.event.quit( "restart" ) end
     end
 
 end
