@@ -247,6 +247,7 @@ function drawMenu()
                 if currentMonster.life == 0 then
                     pressBattleAway = false --Nao tem mais batalha
                     pressKeyForDmgEnemy = false -- Não tem como Atacar mais
+                    turnAtk = true
                     --state = "move"
                     deadMonsterFlag = true
                     mapControl:getMap()[My][Mx] = "f"
