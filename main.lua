@@ -249,9 +249,11 @@ function drawMenu()
                     pressBattleAway = false --Nao tem mais batalha
                     pressKeyForDmgEnemy = false -- Não tem como Atacar mais
                     turnAtk = true
-                    --state = "move"
                     deadMonsterFlag = true
                     mapControl:getMap()[My][Mx] = "f"
+
+                    --LOOT MONSTER HERE
+                    lootMonster()
                     
                 end
             end
@@ -531,4 +533,12 @@ function copy1(obj)
 function isHitMonster()
     if (math.random(playerControl:getDexterity()+playerControl:getDexterityArmor()) <= currentMonster.accuracy) then return true end
     return false
+end
+
+function lootMonster()
+    --Inserir aqui as coisas que o Player irá ganhar depois de matar o Monstro
+    -- Xp
+    --Verificar aqui se Vai pro Level 2 3 4 e assim por diante
+    -- Aumentar Stats
+    print("Você Ganhou meus Parabens!")
 end
