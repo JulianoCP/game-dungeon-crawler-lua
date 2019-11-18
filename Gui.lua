@@ -1,3 +1,7 @@
+--[[
+    All Gui used in the game
+]]
+
 gui = {
     interface = love.graphics.newImage("assets/gui/gui_interface.png"),
     chest = love.graphics.newImage("assets/gui/dungeonChest.png"),

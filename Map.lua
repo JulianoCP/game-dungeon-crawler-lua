@@ -1,3 +1,7 @@
+--[[
+    Structure made for game maps.
+]]
+
 local Map = {}
 Map.__index = Map
 
@@ -28,10 +32,12 @@ function Map:getMap()
   return self.props["mapData"]
 end
 
+-- Return which tile the player is on.
 function Map:isColliderInside(x,y)
   return self.props["mapData"][y][x]
 end
 
+-- Checks if player is near tile sent
 function Map:isCollider(x,y,name)
 
   if x < 2 or y < 2 or x > table.getn(self.props["mapData"][1])-1 or y > table.getn(self.props["mapData"])-1 then return false
@@ -43,6 +49,7 @@ function Map:isCollider(x,y,name)
 
 end
 
+-- Returns which position the player collided with monster
 function Map:getMonsterTile(x,y,name)
 
   if self.props["mapData"][y - 1][x] == name then return y - 1, x ,name

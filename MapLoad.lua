@@ -1,3 +1,8 @@
+--[[
+    All maps used in the game.
+    
+]]
+
 names = {
     "Dungeon",
     "Fosso",

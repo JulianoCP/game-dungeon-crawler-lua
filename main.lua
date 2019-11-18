@@ -44,6 +44,8 @@ Mx = 0                      -- Verify position Mx in map
 
 ------- [ Function Init in lua ] -------
 function love.load()
+
+
     love.keyboard.setKeyRepeat(true)
 
     arrayMonster = Monster:new()
@@ -52,7 +54,7 @@ function love.load()
     fog = FogWar
     love.graphics.setFont(love.graphics.newFont("assets/fonts/cc.otf", 14))
     
-    -- Seta os Mapas
+    -- Load all maps
     for i = 1, table.getn(names) do
         maps = Map:new("Labirinto - "..names[i] , require("/maps/"..names[i]) , i)
         table.insert( arrayMaps, maps )
@@ -61,17 +63,18 @@ function love.load()
     mapControl = arrayMaps[1]
     love.window.setTitle(mapControl:getNameMap())
 
+    -- Set player char
     playerControl = Player:new(2,2,"spriteRight")
 
     baseLifePlayer = playerControl:getLife()
 
 end
 
-------- [ Function draw objects in the window ] -------
+------- [ Function draw player in the window ] -------
 function drawPlayer()
 
     local width = playerControl:getSprite():getDimensions()
-    love.graphics.setColor(1, 1, 1, 100) -- Cor Original
+    love.graphics.setColor(1, 1, 1, 100) 
     love.graphics.draw(playerControl:getSprite(), (width*playerControl:getPy())-6, (width*playerControl:getPx())-6 )
     
 end
@@ -81,7 +84,7 @@ function drawMap(map)
     love.graphics.setColor(1, 1, 1, 100) -- Cor Original
     local width = blocks["x"]:getDimensions()
 
-    -- Desenha Mapa
+    -- Draw Original Map
     for i = 1, table.getn(map) do
         for j = 1 , table.getn(map[1]) do
             local code = map[i][j]
@@ -108,7 +111,7 @@ function drawMap(map)
         end
     end
 
-    -- BlackOut
+    -- Draw BlackOut
     for i = 1, table.getn(fog) do
         for j = 1 , table.getn(fog[1]) do
             if fog[i][j] == 'w' then
@@ -246,7 +249,6 @@ function drawMenu()
                             criticalFlag = true
                             print("Você fez um Ataque Critico")
                         end
-                        --Dano
                         pressKeyForDmgEnemy = false
                         if ((playerControl:getDamage()+playerControl:getDamageSword()) * currentCritical) <= currentMonster.defese then
                             missorhit = false
@@ -268,8 +270,8 @@ function drawMenu()
                     turnAtk = false    
                 end
                 if currentMonster.life == 0 then
-                    pressBattleAway = false --Nao tem mais batalha
-                    pressKeyForDmgEnemy = false -- Não tem como Atacar mais
+                    pressBattleAway = false
+                    pressKeyForDmgEnemy = false
                     turnAtk = true
                     deadMonsterFlag = true
                     mapControl:getMap()[My][Mx] = "f"
@@ -289,7 +291,6 @@ function drawMenu()
                     currentCritical = 2
                     print("Ataque Critico do Monstro ")
                 end
-                --Dano
                 if (currentMonster.damage*currentCritical) <= playerControl:getDefese()+playerControl:getDefeseArmor() then
                     print("O Dano do Monstro é Menor que a sua Defesa")
                 else 
@@ -338,7 +339,7 @@ function drawMenu()
         --A FAZER
     end
 
-    -- Desenha as cores nos Stats
+    -- Draw Color in Stats Column
     love.graphics.setColor(1, 0 , 0, 0.2)
     love.graphics.rectangle("fill", 355, 430, 65, 180 )
 
@@ -353,6 +354,7 @@ function drawMenu()
         love.graphics.rectangle("fill", 295, 435+(25*i), 245, 18 )
     end
    
+    -- Draw All Stats 
     drawText("                    SWORD      ARMOR      BASE" , 2, 1)
     drawText("STR: "..playerControl:getDamage()+playerControl:getDamageSword(), 2, 2)
     drawStat(playerControl:getDamageSword(), 1,1)
@@ -388,7 +390,7 @@ function drawMenu()
     drawText("Level: "..playerControl:getLevel(), 3, 1)
     drawText("XP: "..playerControl:getXP(), 3, 2)
 
-    -- Controle do SET na GUI
+    -- Inventory GUI
     drawText("------  INVENTARIO ------" , 3, 4, "center")
     
     love.graphics.setColor(1, 1, 1, 100)
@@ -423,7 +425,7 @@ function drawMenu()
         
     end
 
-------- [ Function draw in the window ] -------
+------- [ Function draw(loop) in the window ] -------
 function love.draw()
 
     love.graphics.setColor(1, 1, 1)
@@ -458,10 +460,11 @@ end
 ------- [ Function capture key pressed ] -------
 function love.keypressed(key, scancode)
 
+    -- Player coordinates
     local x = playerControl:getPy()
     local y = playerControl:getPx()
 
-    --Usa Potion
+    --Use Potion
     if key == 'f' then
         if playerControl:getInventoryPotion() > 0 then 
             playerControl:setInventoryPotion(-1)
@@ -470,6 +473,7 @@ function love.keypressed(key, scancode)
         end
     end 
 
+    -- Movement Arrows
     if state == "move" then
 
         if key == "right" or key == "d" then x = x+1  playerControl:setSprite("spriteRight") end
@@ -477,18 +481,19 @@ function love.keypressed(key, scancode)
         if key == "up" or key == "w" then y = y - 1 playerControl:setSprite("spriteUp")  end
         if key == "down" or key == "s" then  y = y + 1 playerControl:setSprite("spriteDown") end
 
-        --Colisao com as Paredes
+        -- Collision with the Walls
         if  not (mapControl:isColliderInside(x,y) == 'x' or mapControl:isColliderInside(x,y) == 'x1') then
             playerControl:setPx(x)
             playerControl:setPy(y)
         end
 
-        --Colisao com os Monstros
+        -- Collision with the Monsters
         if mapControl:isCollider(x,y,'m') == true then state = "battle" end
         if mapControl:isCollider(x,y,'m1') == true then state = "battle" end
         if mapControl:isCollider(x,y,'m2') == true then state = "battle" end
         if mapControl:isCollider(x,y,'m3') == true then state = "battle" end
 
+        -- Collision with the Chest
         if mapControl:isColliderInside(x,y) == 'c' then
             math.randomseed(os.clock())
             local a = Itens:new()
@@ -505,7 +510,8 @@ function love.keypressed(key, scancode)
             mapControl:getMap()[y][x] = 'f'
             state = "chest"
         end
-
+        
+        -- Collision with the Stairs
         if mapControl:isColliderInside(x,y) == 's' then
             mapControl = arrayMaps[mapControl:getMapLevel()+1]
             love.window.setTitle(mapControl:getNameMap())
@@ -516,11 +522,13 @@ function love.keypressed(key, scancode)
 
     end
 
+    -- State Chest
     if state == "chest" then
         if key == "e" then if itemChest.type == "sword" then playerControl:setEquipSword(itemChest) elseif itemChest.type == "armor" then playerControl:setEquipArmor(itemChest) else playerControl:setInventoryPotion(1) end state = "move" end
         if key == "q" then state = "move" end
     end
 
+    -- State Battle
     if state == "battle" then
 
         if key == "a" and pressBattleAway == true then pressKeyForDmgEnemy = true missorhit = isHitPlayer() missorhitMonster = isHitMonster() currentCritical = 1 criticalFlag = false dmgLow = false end
@@ -539,6 +547,7 @@ function love.keypressed(key, scancode)
         if key == "c" and pressRunAway == true and numberTryToRun < 128 then pressRunAway = false pressBattleAway = true  numberTryToRun = 0 activeBattle() end
     end
 
+    -- State Died
     if state == "died" then
         if key == "q" then love.event.quit() end
         if key == "r" then love.event.quit( "restart" ) end

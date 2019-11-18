@@ -1,3 +1,8 @@
+--[[
+    All Monsters used in the game.
+    Gets and Sets.
+]]
+
 local Monster = {}
 Monster.__index = Monster
 
@@ -57,7 +62,5 @@ function Monster:getMonster(tileName)
     return self.m
 
 end
-
-
 
 return Monster

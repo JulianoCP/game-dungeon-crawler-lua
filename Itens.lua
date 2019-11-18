@@ -1,3 +1,8 @@
+--[[
+    All Itens used in the game.
+    Gets and Sets for the itens.
+]]
+
 local Itens = {}
 Itens.__index = Itens
 
