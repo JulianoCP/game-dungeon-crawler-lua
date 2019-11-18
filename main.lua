@@ -1,39 +1,41 @@
 -- Require
-Map = require 'Map'
-Player = require 'Player'
-Itens = require 'Itens'
-blocks = require 'Blocks'
-gui = require 'Gui'
-names = require 'MapLoad' 
-FogWar = require 'Fog'
 Monster = require 'Monster'
+Player = require 'Player'
+blocks = require 'Blocks'
+names = require 'MapLoad' 
+Itens = require 'Itens'
+FogWar = require 'Fog'
+Map = require 'Map'
+gui = require 'Gui'
 
 -- Controll
-state = "move"
+pressKeyForDmgEnemy = false
+changeColortText = false
+pressBattleAway = false
+deadMonsterFlag = false
+playerLoseLife = false
+pressRunAway = false
+criticalFlag = false
+currentMonster = {}
+arrayMonster = nil
 mapControl = nil
 itemChest = nil
-arrayMonster = nil
-currentMonster = {}
-pressRunAway = false
-pressBattleAway = false
-pressKeyForDmgEnemy = false
-criticalFlag = false
-deadMonsterFlag = false
 turnAtk = true
-playerLoseLife = false
-changeColortText = false
+isHit = false
 
-numberTryToRun = 0
-potionHeal = 20
-maxCritical = 10
+damageHitPlayer = 0
 currentCritical = 1
+numberTryToRun = 0
 baseLifePlayer = 0
+maxCritical = 10
+potionHeal = 20
 
-arrayMaps = {}
 arrayMonsterName = {'m','m1','m2','m3'}
+missorhitMonster = nil
 typeMonster = nil
 missorhit = nil
-missorhitMonster = nil
+arrayMaps = {}
+state = "move"
 My = 0
 Mx = 0
 
@@ -222,11 +224,9 @@ function drawMenu()
                 drawText("[A]  - Attack" , 1, 6)
                 drawText("[F]  - Use Potion" , 1, 7 )
 
-                
-                if missorhit == false then drawText("Hit Attack" , 1, 8 ) elseif not(missorhit == nil) then drawText("Miss Attack" , 1, 8 ) end
-
-                
-                if criticalFlag and missorhit == false then drawText("Attack Critical" , 1, 9 ) end
+                if missorhit == false then drawText("Miss Attack" , 1, 8 ) elseif isHit == true and missorhit == true and criticalFlag == false then drawText("Hit Attack : "..damageHitPlayer , 1, 8 ) end
+                if criticalFlag and missorhit == true and isHit == true then drawText("Attack Critical : ".. damageHitPlayer , 1, 8 ) end
+                if missorhit == true then isHit = true end               
                 
                 if pressKeyForDmgEnemy == true  then
                     
@@ -240,17 +240,21 @@ function drawMenu()
                         --Dano
                         pressKeyForDmgEnemy = false
                         if ((playerControl:getDamage()+playerControl:getDamageSword()) * currentCritical) <= currentMonster.defese then
+                            missorhit = false
+                            isHit = false
                             print("Seu Dano é Menor que a Defesa do Monstro")
                         else
                             local losslife = ( ((playerControl:getDamage()+playerControl:getDamageSword()) * currentCritical) - currentMonster.defese)
                             currentMonster.life = currentMonster.life - losslife
                             print("Monstro Perdeu ["..losslife.."] de Vida")
+                            damageHitPlayer = losslife
                         end
       
                         if currentMonster.life <= 0 then currentMonster.life = 0  print("Monstro Morreu\n") end
                     elseif not(missorhit)then
                         print("Miss Player")
-                         
+                        missorhit = false
+                        isHit = false
                     end
                     turnAtk = false    
                 end
@@ -507,7 +511,7 @@ function love.keypressed(key, scancode)
 
     if state == "battle" then
 
-        if key == "a" and pressBattleAway == true then pressKeyForDmgEnemy = true missorhit = isHitPlayer() missorhitMonster = isHitMonster() currentCritical = 1 criticalFlag = false end
+        if key == "a" and pressBattleAway == true then pressKeyForDmgEnemy = true missorhit = isHitPlayer() missorhitMonster = isHitMonster() currentCritical = 1 criticalFlag = false dmgLow = false end
         if key == "a" and deadMonsterFlag == true then state = "move" deadMonsterFlag = false end
         if key == "e" then pressBattleAway = true
         
