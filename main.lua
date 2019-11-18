@@ -1,44 +1,48 @@
--- Require
-Monster = require 'Monster'
-Player = require 'Player'
-blocks = require 'Blocks'
-names = require 'MapLoad' 
-Itens = require 'Itens'
-FogWar = require 'Fog'
-Map = require 'Map'
-gui = require 'Gui'
+------- [ Require ] -------
+Monster = require 'Monster' -- Load class Monster
+Player = require 'Player'   -- Load class Player
+blocks = require 'Blocks'   -- Load class Blocks
+names = require 'MapLoad'   -- Load class Names
+Itens = require 'Itens'     -- Load class Itens
+FogWar = require 'Fog'      -- Load class Fog
+Map = require 'Map'         -- Load class Map
+gui = require 'Gui'         -- Load class Gui
 
--- Controll
-pressKeyForDmgEnemy = false
-changeColortText = false
-pressBattleAway = false
-deadMonsterFlag = false
-playerLoseLife = false
-pressRunAway = false
-criticalFlag = false
-currentMonster = {}
-arrayMonster = nil
-mapControl = nil
-itemChest = nil
-turnAtk = true
-isHit = false
+------- [ Flag Control ] -------
+pressKeyForDmgEnemy = false -- Verify key for damage monster is pressed
+changeColortText = false    -- Verify to change color text status
+pressBattleAway = false     -- Verify key for start battle
+deadMonsterFlag = false     -- Verify if the monster dead
+playerLoseLife = false      -- Verify if the player lose life
+pressRunAway = false        -- Verify key for player run away
+criticalFlag = false        -- Verify if the player damage is critical
+currentMonster = {}         -- Verify the current monster
+playerControl = nil         -- Controller the player
+arrayMonster = nil          -- List of monsters
+mapControl = nil            -- Controller the map
+itemChest = nil             -- Controller the chest
+missorhit = nil             -- Verify if is hit or miss
+turnAtk = true              -- Verify who's the turn
+isHit = false               -- Verify if is possible the hit
 
-damageHitPlayer = 0
-currentCritical = 1
-numberTryToRun = 0
-baseLifePlayer = 0
-maxCritical = 10
-potionHeal = 20
+------- [ Base Control ] -------
+damageHitPlayer = 0         -- Verify damage of hit player
+currentCritical = 1         -- Verify if is critical
+numberTryToRun = 0          -- Verify if is possible the run away
+baseLifePlayer = 0          -- Verify base life player
+maxCritical = 10            -- Verify max critical
+potionHeal = 20             -- Verify quantity of healing in the potion
+state = "move"              -- Verify current state in game
 
-arrayMonsterName = {'m','m1','m2','m3'}
-missorhitMonster = nil
-typeMonster = nil
-missorhit = nil
-arrayMaps = {}
-state = "move"
-My = 0
-Mx = 0
+------- [ Map Control ] -------
+arrayMonsterName = {'m','m1','m2','m3'} -- List of maps name
+missorhitMonster = nil      -- Verify hit or miss of monster
+typeMonster = nil           -- Verify type of monster
+arrayMaps = {}              -- List maps
+My = 0                      -- Verify position My in map
+Mx = 0                      -- Verify position Mx in map
 
+------- [ Function Init in lua ] -------
 function love.load()
     love.keyboard.setKeyRepeat(true)
 
@@ -63,6 +67,7 @@ function love.load()
 
 end
 
+------- [ Function draw objects in the window ] -------
 function drawPlayer()
 
     local width = playerControl:getSprite():getDimensions()
@@ -71,6 +76,7 @@ function drawPlayer()
     
 end
 
+------- [ Function draw map in the window ] -------
 function drawMap(map)
     love.graphics.setColor(1, 1, 1, 100) -- Cor Original
     local width = blocks["x"]:getDimensions()
@@ -116,6 +122,7 @@ function drawMap(map)
     end
 end
 
+------- [ Function draw text in the window ] -------
 function drawText(text, x, y, align)
 
     local myY = y
@@ -146,6 +153,7 @@ function drawText(text, x, y, align)
 
 end
 
+------- [ Function draw stats text in the window ] -------
 function  drawStat(text, x, y)
     
     local myY = y
@@ -170,6 +178,7 @@ function  drawStat(text, x, y)
 
 end
 
+------- [ Function draw commands in the window ] -------
 function drawMenu()
 
     if playerControl:getLife() == playerControl:getMaxLife() then playerLoseLife = false end
@@ -414,6 +423,7 @@ function drawMenu()
         
     end
 
+------- [ Function draw in the window ] -------
 function love.draw()
 
     love.graphics.setColor(1, 1, 1)
@@ -427,15 +437,16 @@ function love.draw()
 
 end
 
+------- [ Function draw interface in the window ] -------
 function drawScene()
     if state == "chest" then
         love.graphics.draw(gui["chest"], 420,10 )
     elseif state == "battle" then
         love.graphics.draw(gui["monster"], 420,10 )
-
     end
 end
 
+------- [ Function reset the fog map ] -------
 function clearFog()
     for i = 1 , table.getn(fog) do
         for j = 1 , table.getn(fog[1]) do
@@ -444,6 +455,7 @@ function clearFog()
     end
 end
 
+------- [ Function capture key pressed ] -------
 function love.keypressed(key, scancode)
 
     local x = playerControl:getPy()
@@ -534,7 +546,7 @@ function love.keypressed(key, scancode)
 
 end
 
-
+------- [ Function start the battle ] -------
 function activeBattle()
     for key,i in pairs(arrayMonsterName) do
         if not (mapControl:getMonsterTile(playerControl:getPy(),playerControl:getPx(),i) == false) then
@@ -545,23 +557,27 @@ function activeBattle()
     currentMonster = copy1(arrayMonster[typeMonster])
 end
 
+------- [ Function copy the objects ] -------
 function copy1(obj)
     if type(obj) ~= 'table' then return obj end
     local res = {}
     for k, v in pairs(obj) do res[copy1(k)] = copy1(v) end
     return res
-  end
+end
 
-  function isHitPlayer()
+------- [ Function verify accuracy player ] -------
+function isHitPlayer()
     if (math.random(currentMonster.dexterity) <= playerControl:getAccuracy()+playerControl:getAccuracySword()) then return true end
     return false
-    end
+end
 
+------- [ Function verify accuracy monster ] -------
 function isHitMonster()
     if (math.random(playerControl:getDexterity()+playerControl:getDexterityArmor()) <= currentMonster.accuracy) then return true end
     return false
 end
 
+------- [ Function loot of the monster ] -------
 function lootMonster()
     print("Você Ganhou meus Parabens!")
     print("XP ganho :",currentMonster.expWin)
