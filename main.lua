@@ -170,7 +170,7 @@ end
 
 function drawMenu()
 
-    if playerControl:getLife() == 100 then playerLoseLife = false end
+    if playerControl:getLife() == playerControl:getMaxLife() then playerLoseLife = false end
 
     if state == "move" then
 
@@ -373,7 +373,7 @@ function drawMenu()
     
 
     drawText("Level: "..playerControl:getLevel(), 3, 1)
-    drawText("XP: "..playerControl:getExp(), 3, 2)
+    drawText("XP: "..playerControl:getXP(), 3, 2)
 
     -- Controle do SET na GUI
     drawText("------  INVENTARIO ------" , 3, 4, "center")
@@ -445,8 +445,8 @@ function love.keypressed(key, scancode)
     local x = playerControl:getPy()
     local y = playerControl:getPx()
 
-    if key == 'f1' then playerControl:setInventoryPotion(1) end
-    if key == 'f2' then love.event.quit( "restart" ) end
+    --if key == 'f1' then playerControl:setInventoryPotion(1) end
+    --if key == 'f2' then love.event.quit( "restart" ) end
 
     --Usa Potion
     if key == 'f' then
@@ -488,7 +488,7 @@ function love.keypressed(key, scancode)
                 elseif numSort >= 86 and numSort <= 100 then numSort = 3
             end
             
-            if numSort == 1 then itemChest = a:getRandomSword() elseif numSort == 2 then itemChest = a:getRandomArmor() else itemChest = a:getPotion() end
+            if numSort == 1 then itemChest = a:getRandomSword(mapControl:getMapLevel()) elseif numSort == 2 then itemChest = a:getRandomArmor(mapControl:getMapLevel()) else itemChest = a:getPotion() end
             mapControl:getMap()[y][x] = 'f'
             state = "chest"
         end
@@ -562,9 +562,10 @@ function isHitMonster()
 end
 
 function lootMonster()
-    --Inserir aqui as coisas que o Player irá ganhar depois de matar o Monstro
-    -- Xp
-    --Verificar aqui se Vai pro Level 2 3 4 e assim por diante
-    -- Aumentar Stats
     print("Você Ganhou meus Parabens!")
+    print("XP ganho :",currentMonster.expWin)
+    if not(currentMonster == nil) then
+        playerControl:setXP(currentMonster.expWin)
+    end
+    baseLifePlayer = playerControl:getMaxLife()
 end

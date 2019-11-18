@@ -22,6 +22,7 @@ function Player:new(Px, Py, currentSprite)
             defese = 1,
             dexterity = 10,
             accuracy = 20,
+            maxLife = 100,
             critical = 1,
             life = 100,
             exp = 0,
@@ -42,6 +43,27 @@ function Player:new(Px, Py, currentSprite)
 
     return player
 
+end
+
+function Player:setXP(value)
+    self.status["exp"] = self.status["exp"] + value
+
+    if self.status["exp"] >= 100 then
+        self.status["exp"] = 0
+        self.status["level"] = self.status["level"] + 1
+        self.status["damage"] = self.status["damage"] + 2
+        self.status["defese"] = self.status["defese"] + 2
+        self.status["dexterity"] = self.status["dexterity"] + 2
+        self.status["accuracy"] = self.status["accuracy"] + 2
+        self.status["maxLife"] = self.status["maxLife"] + 10
+        self.status["life"] = self.status["maxLife"]
+        print("Você subiu de nivel e seus foram aprimorados")
+    end
+
+end
+
+function Player:getXP()
+    return self.status["exp"]
 end
 
 function Player:setEquipSword(item)
@@ -183,15 +205,7 @@ function Player:setLife(value)
 end
 
 function Player:getMaxLife()
-    return 100
-end
-
-function Player:getExp()
-    return self.status["exp"] 
-end
-
-function Player:setExp(value)
-    self.status["exp"] = value
+    return self.status["maxLife"]
 end
 
 function Player:getLevel()

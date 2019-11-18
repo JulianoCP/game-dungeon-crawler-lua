@@ -15,7 +15,7 @@ function Monster:new()
                 accuracy = 3,
                 critical = 1,
                 life = 60,
-                expWin = 0,
+                expWin = 50,
                 level = 0
                 
             },
@@ -30,7 +30,7 @@ function Monster:new()
                 accuracy = 4,
                 critical = 1,
                 life = 30,
-                expWin = 0,
+                expWin = 50,
                 level = 0
                 
             },
