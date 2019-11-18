@@ -223,10 +223,10 @@ function drawMenu()
                 drawText("[F]  - Use Potion" , 1, 7 )
 
                 
-                if missorhit then drawText("Hit Attack" , 1, 8 ) elseif not(missorhit == nil) then drawText("Miss Attack" , 1, 8 ) end
+                if missorhit == false then drawText("Hit Attack" , 1, 8 ) elseif not(missorhit == nil) then drawText("Miss Attack" , 1, 8 ) end
 
                 
-                if criticalFlag then drawText("Attack Critical" , 1, 9 ) end
+                if criticalFlag and missorhit == false then drawText("Attack Critical" , 1, 9 ) end
                 
                 if pressKeyForDmgEnemy == true  then
                     
@@ -444,9 +444,6 @@ function love.keypressed(key, scancode)
 
     local x = playerControl:getPy()
     local y = playerControl:getPx()
-
-    --if key == 'f1' then playerControl:setInventoryPotion(1) end
-    --if key == 'f2' then love.event.quit( "restart" ) end
 
     --Usa Potion
     if key == 'f' then
