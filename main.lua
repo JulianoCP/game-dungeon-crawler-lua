@@ -14,6 +14,7 @@ changeColortText = false    -- Verify to change color text status
 pressBattleAway = false     -- Verify key for start battle
 deadMonsterFlag = false     -- Verify if the monster dead
 playerLoseLife = false      -- Verify if the player lose life
+monsterAttack = false       -- Verify if the monster attack
 pressRunAway = false        -- Verify key for player run away
 criticalFlag = false        -- Verify if the player damage is critical
 currentMonster = {}         -- Verify the current monster
@@ -23,9 +24,11 @@ mapControl = nil            -- Controller the map
 itemChest = nil             -- Controller the chest
 missorhit = nil             -- Verify if is hit or miss
 turnAtk = true              -- Verify who's the turn
-isHit = false               -- Verify if is possible the hit
+isHitM = false              -- Verify if is possible the hit in monster
+isHit = false               -- Verify if is possible the hit in plyer
 
 ------- [ Base Control ] -------
+damageHitMonster = 0        -- Verify damage of hit monster
 damageHitPlayer = 0         -- Verify damage of hit player
 currentCritical = 1         -- Verify if is critical
 numberTryToRun = 0          -- Verify if is possible the run away
@@ -246,7 +249,8 @@ function drawMenu()
                 drawText("[A]  - Attack" , 1, 6)
                 drawText("[F]  - Use Potion" , 1, 7 )
 
-                if missorhit == false then drawText("Miss Attack" , 1, 8 ) elseif isHit == true and missorhit == true and criticalFlag == false then drawText("Hit Attack : "..damageHitPlayer , 1, 8 ) end
+                if missorhit == false then drawText("Miss Attack Player" , 1, 8 ) elseif isHit == true and missorhit == true and criticalFlag == false then drawText("Hit Attack : "..damageHitPlayer , 1, 8 ) end
+                if monsterAttack == true  then drawText("Dano do monstro : "..damageHitMonster , 1, 9 ) elseif isHitM == true  then drawText("Miss Attack Monster" , 1, 9 )  end
                 if criticalFlag and missorhit == true and isHit == true then drawText("Attack Critical : ".. damageHitPlayer , 1, 8 ) end
                 if missorhit == true then isHit = true end               
                 
@@ -303,15 +307,20 @@ function drawMenu()
                 end
                 if (currentMonster.damage*currentCritical) <= playerControl:getDefese()+playerControl:getDefeseArmor() then
                     print("O Dano do Monstro é Menor que a sua Defesa")
+                    isHitM = true
                 else 
                     local losslife = ((currentMonster.damage*currentCritical)-(playerControl:getDefese()+playerControl:getDefeseArmor()) ) 
                     playerControl:setLife(playerControl:getLife()-losslife)
                     print("Você perdeu ["..losslife.."] de Vida ")
+                    isHitM = false
+                    damageHitMonster = losslife
+                    monsterAttack = true
                     playerLoseLife = true
                 end
 
                 if playerControl:getLife()<= 0 then playerControl:setLife(0) print("Voce Morreu") end                  
             elseif not(missorhitMonster) then
+                isHitM = true
                 print("Miss Monster")
             end
             turnAtk = true  
@@ -549,7 +558,7 @@ function love.keypressed(key, scancode)
     -- State Battle
     if state == "battle" then
 
-        if key == "a" and pressBattleAway == true then pressKeyForDmgEnemy = true missorhit = isHitPlayer() missorhitMonster = isHitMonster() currentCritical = 1 criticalFlag = false dmgLow = false end
+        if key == "a" and pressBattleAway == true then pressKeyForDmgEnemy = true missorhit = isHitPlayer() missorhitMonster = isHitMonster() currentCritical = 1 criticalFlag = false dmgLow = false monsterAttack = false damageHitMonster = 0 end
         if key == "a" and deadMonsterFlag == true then state = "move" deadMonsterFlag = false end
         if key == "e" then pressBattleAway = true
         
