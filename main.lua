@@ -93,7 +93,7 @@ function drawMap(map)
         end
     end
     
-    -- Fog 
+    -- Draw Fog Alpha 0.5
     for i = 1 , table.getn(fog) do
         for j = 1 , table.getn(fog) do
             if fog[i][j] == "k" then
@@ -102,7 +102,7 @@ function drawMap(map)
         end
     end
     
-    --Fog Nivel 1
+    -- Clear Fog
     for i = playerControl:getPx() - 1 , playerControl:getPx() + 1 do
         for j = playerControl:getPy() - 1 , playerControl:getPy() + 1 do
             if i <= 1 then i = 1 end
@@ -132,8 +132,10 @@ function drawText(text, x, y, align)
     local myX = x
     local padding = 300
 
+    -- Set align to left
     if align == nil then align = "left" end
 
+    -- Set line in windowns
     if myY == 1 then myY = 430
         elseif myY == 2 then myY = 460
         elseif myY == 3 then myY = 485
@@ -145,28 +147,32 @@ function drawText(text, x, y, align)
         elseif myY == 9 then myY = 635
     end
 
+    -- Set Col in windowns
     if myX == 1 then myX = 20 padding = 250
         elseif myX == 2 then myX = 300 padding = 240
         elseif myX == 3 then myX = 580 padding = 220
     end
 
+    -- Set color Text
     if changeColortText == false then love.graphics.setColor(0, 0, 0, 100)
     elseif changeColortText == true then love.graphics.setColor(1, 0, 0, 100)  end
     love.graphics.printf(text, myX, myY, padding, align)
 
 end
 
-------- [ Function draw stats text in the window ] -------
+------- [ Function draw stats text in the windowns ] -------
 function  drawStat(text, x, y)
     
     local myY = y
     local myX = x
     local padding = 300
     
+    -- Set Line in windowns
     if myX == 1 then myX = 238 end
     if myX == 2 then myX = 304 end
     if myX == 3 then myX = 370 end
 
+     -- Set Line in windowns
     if myY == 1 then myY = 460
         elseif myY == 2 then myY = 485
         elseif myY == 3 then myY = 510
@@ -175,6 +181,7 @@ function  drawStat(text, x, y)
         elseif myY == 6 then myY = 585
     end
 
+     -- Set color Text
     love.graphics.setColor(0, 0, 0, 100)
     if text < 0 then love.graphics.setColor(1, 0, 0, 100) end
     love.graphics.printf(text, myX, myY, padding, "center")
@@ -186,6 +193,7 @@ function drawMenu()
 
     if playerControl:getLife() == playerControl:getMaxLife() then playerLoseLife = false end
 
+    -- Change current state for move
     if state == "move" then
 
         drawText("                COMANDO:", 1, 1)
@@ -195,6 +203,7 @@ function drawMenu()
         drawText("[S] ou  ( ↓ ) - Mover para Baixo" , 1, 5)
         drawText("[F] - Para usar Potion" , 1, 6)
 
+    -- Change current state for chest
     elseif state == "chest" then
         
         drawText("                COMANDO:", 1, 1)
@@ -217,6 +226,7 @@ function drawMenu()
             drawText("[Q]   - Você Rejeita o Potion" , 1, 9)
         end
 
+    -- Change current state for battle 
     elseif state == "battle" then
      
         drawText("BATTLE:", 1, 1, "center")
@@ -326,6 +336,7 @@ function drawMenu()
             end
         end
 
+    -- Change current state for died
     elseif state == "died" then
         love.graphics.setColor(1, 0 , 0, 0.7)
         love.graphics.rectangle("fill", 50, 130, 730, 180 )
@@ -354,28 +365,33 @@ function drawMenu()
         love.graphics.rectangle("fill", 295, 435+(25*i), 245, 18 )
     end
    
-    -- Draw All Stats 
+    -- Draw Stats STR
     drawText("                    SWORD      ARMOR      BASE" , 2, 1)
     drawText("STR: "..playerControl:getDamage()+playerControl:getDamageSword(), 2, 2)
     drawStat(playerControl:getDamageSword(), 1,1)
     drawStat(playerControl:getDamage(), 3,1)
     
+    -- Draw Stats DEF
     drawText("DEF: "..playerControl:getDefese()+playerControl:getDefeseArmor(), 2, 3)
     drawStat(playerControl:getDefeseArmor(), 2,2)
     drawStat(playerControl:getDefese(), 3,2)
     
+    -- Draw Stats ACC
     drawText("ACC: "..playerControl:getAccuracy()+playerControl:getAccuracySword(), 2, 4)
     drawStat(playerControl:getAccuracySword(), 1,3)
     drawStat(playerControl:getAccuracy(), 3,3)
     
+    -- Draw Stats DEX
     drawText("DEX: "..playerControl:getDexterity()+playerControl:getDexterityArmor(), 2, 5)
     drawStat(playerControl:getDexterityArmor(), 2,4)
     drawStat(playerControl:getDexterity(), 3,4)
 
+    -- Draw Stats CRT
     drawText("CRT: "..playerControl:getCritical()+playerControl:getCriticalSword(), 2, 6)
     drawStat(playerControl:getCriticalSword(), 1,5)
     drawStat(playerControl:getCritical(), 3,5)
 
+    -- Draw Stats VIT
     if playerLoseLife == false then
         drawText("VIT: "..playerControl:getLife(), 2, 7)
         drawStat(baseLifePlayer, 3,6)
@@ -386,7 +402,7 @@ function drawMenu()
         changeColortText = false
     end
     
-
+    -- Draw Level and XP
     drawText("Level: "..playerControl:getLevel(), 3, 1)
     drawText("XP: "..playerControl:getXP(), 3, 2)
 
@@ -395,6 +411,7 @@ function drawMenu()
     
     love.graphics.setColor(1, 1, 1, 100)
     
+    -- Draw Armor if exist
     if (playerControl:getEquipArmorSprite() == nil) then
         love.graphics.draw(gui["noArmor"], 580, 540 )
         
@@ -404,14 +421,15 @@ function drawMenu()
         
     end
     
+    -- Draw Sword if exist
     if (playerControl:getEquipSwordSprite() == nil) then
         love.graphics.draw(gui["noSword"], 580, 580 )
         
     else
         love.graphics.draw(gui["noSword"], 580, 580 )
         love.graphics.draw(playerControl:getEquipSwordSprite(), 580, 580 )
-        
     end
+
     drawText("\n\n"..playerControl:getEquipArmorName() , 3, 4,'center')
     drawText(playerControl:getEquipSwordName() , 3, 7,'center')
     
@@ -432,18 +450,18 @@ function love.draw()
     love.graphics.draw(gui["dungeon"], 420, 10 )
     love.graphics.draw(gui["interface"], 0, 0 )
 
-    drawMap(mapControl:getMap())
-    drawPlayer()
-    drawScene()
-    drawMenu()
+    drawMap(mapControl:getMap()) -- Load current Map
+    drawPlayer() -- Draw Player
+    drawScene() -- Draw Scene
+    drawMenu() -- Draw Menu
 
 end
 
 ------- [ Function draw interface in the window ] -------
 function drawScene()
-    if state == "chest" then
+    if state == "chest" then -- Select chest
         love.graphics.draw(gui["chest"], 420,10 )
-    elseif state == "battle" then
+    elseif state == "battle" then -- Select battle
         love.graphics.draw(gui["monster"], 420,10 )
     end
 end
@@ -464,7 +482,7 @@ function love.keypressed(key, scancode)
     local x = playerControl:getPy()
     local y = playerControl:getPx()
 
-    --Use Potion
+    -- Use Potion
     if key == 'f' then
         if playerControl:getInventoryPotion() > 0 then 
             playerControl:setInventoryPotion(-1)
@@ -473,7 +491,7 @@ function love.keypressed(key, scancode)
         end
     end 
 
-    -- Movement Arrows
+    -- Movement Arrows and buttons
     if state == "move" then
 
         if key == "right" or key == "d" then x = x+1  playerControl:setSprite("spriteRight") end
