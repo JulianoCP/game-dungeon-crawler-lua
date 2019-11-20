@@ -97,7 +97,7 @@ function Itens:new()
                     critical = 1,
                     accuracy = 10,
                     type = "sword",
-                    sprite = love.graphics.newImage("assets/itens/sword_6.png")
+                    sprite = love.graphics.newImage("assets/itens/sword_7.png")
                 },
             },
 
@@ -117,7 +117,7 @@ function Itens:new()
                     name = "Dragon Armor",
                     desc = "Escama do dragão da sua mae",
                     defese = 10,
-                    levelEquip = 2,
+                    levelEquip = 1,
                     dexterity = -5,
                     type = "armor",
                     sprite = love.graphics.newImage("assets/itens/armor_2.png")
@@ -137,7 +137,7 @@ function Itens:new()
                     name = "Poison Armor",
                     desc = "Poison da cobra da sua mae",
                     defese = 10,
-                    levelEquip = 2,
+                    levelEquip = 1,
                     dexterity = -5,
                     type = "armor",
                     sprite = love.graphics.newImage("assets/itens/armor_4.png")
@@ -147,7 +147,7 @@ function Itens:new()
                     name = "Ice Armor",
                     desc = "Gelinho",
                     defese = 8,
-                    levelEquip = 2,
+                    levelEquip = 1,
                     dexterity = 2,
                     type = "armor",
                     sprite = love.graphics.newImage("assets/itens/armor_5.png")
@@ -157,7 +157,7 @@ function Itens:new()
                     name = "Scale Armor",
                     desc = "O Matador",
                     defese = 3,
-                    levelEquip = 2,
+                    levelEquip = 1,
                     dexterity = 8,
                     type = "armor",
                     sprite = love.graphics.newImage("assets/itens/armor_6.png")
@@ -167,7 +167,7 @@ function Itens:new()
                     name = "Abyssal Armor",
                     desc = "Poder Infinito",
                     defese = 1,
-                    levelEquip = 2,
+                    levelEquip = 1,
                     dexterity = 10,
                     type = "armor",
                     sprite = love.graphics.newImage("assets/itens/armor_7.png")
@@ -189,7 +189,7 @@ end
 
 function Itens:getRandomSword(level)
     math.randomseed(os.clock())
-    local name = {'fireSword','poisonSword'}
+    local name = {'fireSword','poisonSword', 'ironSword', 'corruptionSword', 'soulSword', 'daggerSword', 'magicSword' }
     local numSort = 0
     local isLevel = true
     while isLevel do
