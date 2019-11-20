@@ -241,7 +241,7 @@ function drawMenu()
         love.graphics.setColor(1, 1, 1, 100)
         love.graphics.draw(gui["battle_button"], 60, 410 )
 
-        if not(deadMonsterFlag) and turnAtk then
+        if not(deadMonsterFlag) and turnAtk == true then
 
             if pressRunAway == false and pressBattleAway == false then
                 drawText("[E] ou (←)   - Start the battle" , 1, 3)
@@ -258,7 +258,7 @@ function drawMenu()
 
                 if missorhit == false then drawText("Miss Attack Player" , 1, 8 ) elseif isHit == true and missorhit == true and criticalFlag == false then drawText("Hit Attack : "..damageHitPlayer , 1, 8 ) end
                 if monsterAttack == true  then drawText("Dano do monstro : "..damageHitMonster , 1, 9 ) elseif isHitM == true  then drawText("Miss Attack Monster" , 1, 9 )  end
-                if criticalFlag and missorhit == true and isHit == true then drawText("Attack Critical : ".. damageHitPlayer , 1, 8 ) end
+                if isHit == true and criticalFlag and missorhit == true then drawText("Attack Critical : ".. damageHitPlayer , 1, 8 ) end
                 if missorhit == true then isHit = true end               
                 
                 if pressKeyForDmgEnemy == true  then
@@ -293,18 +293,15 @@ function drawMenu()
                 if currentMonster.life == 0 then
                     pressBattleAway = false
                     pressKeyForDmgEnemy = false
-                    turnAtk = true
                     deadMonsterFlag = true
+                    turnAtk = nil
                     mapControl:getMap()[My][Mx] = "f"
-
-                    --LOOT MONSTER HERE
                     lootMonster()
-                    
                 end
             end
         end
 
-        if turnAtk == false then
+        if turnAtk == false and not(deadMonsterFlag) then
        
             if playerControl:getLife() > 0 and missorhitMonster  and not(currentMonster.life == 0)then
                 print("Hit Monster")
@@ -566,11 +563,10 @@ function love.keypressed(key, scancode)
 
         if key == "a" and pressBattleAway == true then pressKeyForDmgEnemy = true missorhit = isHitPlayer() missorhitMonster = isHitMonster() currentCritical = 1 criticalFlag = false dmgLow = false monsterAttack = false damageHitMonster = 0 end
         if key == "a" and deadMonsterFlag == true then state = "move" deadMonsterFlag = false end
-        if key == "e" then pressBattleAway = true
-        
+        if key == "e" then pressBattleAway = true isHit = false isHitM = false turnAtk = true
             activeBattle()
-
         end
+
         if key == "q" then
             pressRunAway = true
             math.randomseed(os.clock())

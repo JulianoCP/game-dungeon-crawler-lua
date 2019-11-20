@@ -43,7 +43,7 @@ function Itens:new()
                     accuracy = 7,
                     type = "sword",
                     sprite = love.graphics.newImage("assets/gui/sword_2.png")
-                }
+                },
             },
 
             armor = {
@@ -64,6 +64,56 @@ function Itens:new()
                     defese = 10,
                     levelEquip = 2,
                     dexterity = -5,
+                    type = "armor",
+                    sprite = love.graphics.newImage("assets/gui/armor_2.png")
+                },
+                
+                natureArmor = {
+                    name = "Nature Armor",
+                    desc = "Poder Natural",
+                    defese = 3,
+                    levelEquip = 1,
+                    dexterity = 3,
+                    type = "armor",
+                    sprite = love.graphics.newImage("assets/gui/armor_2.png")
+                },
+
+                poisonArmor = {
+                    name = "Poison Armor",
+                    desc = "Poison da cobra da sua mae",
+                    defese = 10,
+                    levelEquip = 2,
+                    dexterity = -5,
+                    type = "armor",
+                    sprite = love.graphics.newImage("assets/gui/armor_2.png")
+                },
+
+                iceArmor = {
+                    name = "Ice Armor",
+                    desc = "Gelinho",
+                    defese = 8,
+                    levelEquip = 2,
+                    dexterity = 2,
+                    type = "armor",
+                    sprite = love.graphics.newImage("assets/gui/armor_2.png")
+                },
+
+                scaleArmor = {
+                    name = "Scale Armor",
+                    desc = "O Matador",
+                    defese = 3,
+                    levelEquip = 2,
+                    dexterity = 8,
+                    type = "armor",
+                    sprite = love.graphics.newImage("assets/gui/armor_2.png")
+                },
+
+                abyssalArmor = {
+                    name = "Abyssal Armor",
+                    desc = "Poder Infinito",
+                    defese = 1,
+                    levelEquip = 2,
+                    dexterity = 10,
                     type = "armor",
                     sprite = love.graphics.newImage("assets/gui/armor_2.png")
                 }
@@ -96,7 +146,7 @@ end
 
 function Itens:getRandomArmor(level)
     math.randomseed(os.clock())
-    local name = {'leatherArmor','dragonArmor'}
+    local name = {'leatherArmor','dragonArmor','abyssalArmor','scaleArmor','iceArmor','poisonArmor','natureArmor'}
     local numSort = 0
     local isLevel = true
     while isLevel do
