@@ -412,31 +412,30 @@ function drawMenu()
     end
     
     -- Draw Level and XP
-    drawText("Level: "..playerControl:getLevel(), 3, 1)
-    drawText("XP: "..playerControl:getXP(), 3, 2)
+    drawText("    Level: "..playerControl:getLevel(), 3, 2)
+    drawText("    XP: "..playerControl:getXP(), 3, 3)
 
     -- Inventory GUI
-    drawText("------  INVENTARIO ------" , 3, 4, "center")
     
     love.graphics.setColor(1, 1, 1, 100)
     
     -- Draw Armor if exist
     if (playerControl:getEquipArmorSprite() == nil) then
-        love.graphics.draw(gui["noArmor"], 580, 540 )
+        love.graphics.draw(gui["noArmor"], 590, 540 )
         
     else
-        love.graphics.draw(gui["noArmor"], 580, 540 )
-        love.graphics.draw(playerControl:getEquipArmorSprite(), 580, 540 )
+        love.graphics.draw(gui["noArmor"], 590, 540 )
+        love.graphics.draw(playerControl:getEquipArmorSprite(), 590, 540 )
         
     end
     
     -- Draw Sword if exist
     if (playerControl:getEquipSwordSprite() == nil) then
-        love.graphics.draw(gui["noSword"], 580, 580 )
+        love.graphics.draw(gui["noSword"], 590, 580 )
         
     else
-        love.graphics.draw(gui["noSword"], 580, 580 )
-        love.graphics.draw(playerControl:getEquipSwordSprite(), 580, 580 )
+        love.graphics.draw(gui["noSword"], 590, 580 )
+        love.graphics.draw(playerControl:getEquipSwordSprite(), 590, 580 )
     end
 
     drawText("\n\n"..playerControl:getEquipArmorName() , 3, 4,'center')
@@ -446,7 +445,7 @@ function drawMenu()
     
     local potionQtd = 0
     for i = 1, playerControl:getInventoryPotion() do
-        love.graphics.draw(gui["potion"], 580+potionQtd, 625 )
+        love.graphics.draw(gui["potion"], 590+potionQtd, 622 )
         potionQtd = potionQtd + 35
     end
         

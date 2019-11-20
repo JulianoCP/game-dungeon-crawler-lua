@@ -3,7 +3,7 @@
 ]]
 
 gui = {
-    interface = love.graphics.newImage("assets/gui/gui_interface.png"),
+    interface = love.graphics.newImage("assets/gui/gui_interface_3.png"),
     chest = love.graphics.newImage("assets/gui/dungeonChest.png"),
     monster = love.graphics.newImage("assets/gui/dungeonMonster.png"),
     dungeon = love.graphics.newImage("assets/gui/dungeonWalking.png"),
