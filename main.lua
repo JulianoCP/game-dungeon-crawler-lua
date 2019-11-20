@@ -151,7 +151,7 @@ function drawText(text, x, y, align)
     end
 
     -- Set Col in windowns
-    if myX == 1 then myX = 20 padding = 250
+    if myX == 1 then myX = 28 padding = 250
         elseif myX == 2 then myX = 300 padding = 240
         elseif myX == 3 then myX = 580 padding = 220
     end
@@ -199,7 +199,10 @@ function drawMenu()
     -- Change current state for move
     if state == "move" then
 
-        drawText("                COMANDO:", 1, 1)
+        --drawText("                COMANDO:", 1, 1)
+        love.graphics.setColor(1, 1, 1, 100)
+        love.graphics.draw(gui["command_button"], 60, 410 )
+
         drawText("[D] ou ( → ) - Mover para Direita" , 1, 2)
         drawText("[A] ou ( ← ) - Mover para Esquerda" , 1, 3)
         drawText("[W] ou  ( ↑ ) - Mover para Cima" , 1, 4)
@@ -209,7 +212,9 @@ function drawMenu()
     -- Change current state for chest
     elseif state == "chest" then
         
-        drawText("                COMANDO:", 1, 1)
+        --drawText("                COMANDO:", 1, 1)
+        love.graphics.setColor(1, 1, 1, 100)
+        love.graphics.draw(gui["chest_button"], 60, 410 )
         drawText("ITEM ENCONTRADO" , 1, 2)
 
         if itemChest.type == "sword" then drawText("["..itemChest.name .."]\n[DMG : "..itemChest.damage.."] [CRIT : "..itemChest.critical.."] [ACC : "..itemChest.accuracy.."]" , 1, 3) end
@@ -232,7 +237,9 @@ function drawMenu()
     -- Change current state for battle 
     elseif state == "battle" then
      
-        drawText("BATTLE:", 1, 1, "center")
+        --drawText("BATTLE:", 1, 1, "center")
+        love.graphics.setColor(1, 1, 1, 100)
+        love.graphics.draw(gui["battle_button"], 60, 410 )
 
         if not(deadMonsterFlag) and turnAtk then
 
@@ -350,8 +357,10 @@ function drawMenu()
         love.graphics.setColor(1, 0 , 0, 0.7)
         love.graphics.rectangle("fill", 50, 130, 730, 180 )
         love.graphics.setColor(1, 1 , 1)
+        
         love.graphics.draw(gui["youdied"], 50, 130 )
-        drawText("You Died" , 1, 1)
+        love.graphics.setColor(1, 1, 1, 100)
+        love.graphics.draw(gui["died_button"], 60, 410 )
         drawText("[R] To Restart the game now !" , 1, 2)
         drawText("[Q] To Quit the game now !" , 1, 3)
             
@@ -445,8 +454,8 @@ function drawMenu()
     
     local potionQtd = 0
     for i = 1, playerControl:getInventoryPotion() do
-        love.graphics.draw(gui["potion"], 590+potionQtd, 622 )
-        potionQtd = potionQtd + 35
+        love.graphics.draw(gui["potion"], 586+potionQtd, 621 )
+        potionQtd = potionQtd + 36
     end
         
     end
