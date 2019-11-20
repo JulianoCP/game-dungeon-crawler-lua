@@ -204,11 +204,11 @@ function drawMenu()
         love.graphics.setColor(1, 1, 1, 100)
         love.graphics.draw(gui["command_button"], 60, 410 )
 
-        drawText("[D] ou ( → ) - Mover para Direita" , 1, 2)
-        drawText("[A] ou ( ← ) - Mover para Esquerda" , 1, 3)
-        drawText("[W] ou  ( ↑ ) - Mover para Cima" , 1, 4)
-        drawText("[S] ou  ( ↓ ) - Mover para Baixo" , 1, 5)
-        drawText("[F] - Para usar Potion" , 1, 6)
+        drawText("[D] ou ( → ) - Move Right" , 1, 2)
+        drawText("[A] ou ( ← ) - Move Left" , 1, 3)
+        drawText("[W] ou  ( ↑ ) - Move Up" , 1, 4)
+        drawText("[S] ou  ( ↓ ) - Mover Down" , 1, 5)
+        drawText("[F] - Use Health Potion" , 1, 6)
 
     -- Change current state for chest
     elseif state == "chest" then
@@ -216,7 +216,7 @@ function drawMenu()
         --drawText("                COMANDO:", 1, 1)
         love.graphics.setColor(1, 1, 1, 100)
         love.graphics.draw(gui["chest_button"], 60, 410 )
-        drawText("ITEM ENCONTRADO" , 1, 2)
+        drawText("You Found an Item" , 1, 2)
 
         if itemChest.type == "sword" then drawText("["..itemChest.name .."]\n[DMG : "..itemChest.damage.."] [CRIT : "..itemChest.critical.."] [ACC : "..itemChest.accuracy.."]" , 1, 3) end
         if itemChest.type == "armor" then drawText("["..itemChest.name.."]\n[DEF : "..itemChest.defese.."] [DEX : "..itemChest.dexterity.."]" , 1, 3) end 
@@ -228,11 +228,11 @@ function drawMenu()
         if itemChest.type == "potion" then drawText("[POTION] = ".."[ "..playerControl:getInventoryPotion().." ]" , 1, 6) end
 
         if itemChest.type == "armor" or itemChest.type == "sword" then
-            drawText("[E]   - Você Aceita a Troca" , 1, 8)
-            drawText("[Q]   - Você Rejeita a Troca" , 1, 9)
+            drawText("[E]   - Do You Accepet the Trade" , 1, 8)
+            drawText("[Q]   - You Rejected the Trade" , 1, 9)
         elseif itemChest.type == "potion" then
-            drawText("[E]   - Você Pega o Potion" , 1, 8)
-            drawText("[Q]   - Você Rejeita o Potion" , 1, 9)
+            drawText("[E]   - You Picked the Health Potion" , 1, 8)
+            drawText("[Q]   - You Rejected the Health Potion" , 1, 9)
         end
 
     -- Change current state for battle 
@@ -255,11 +255,11 @@ function drawMenu()
                 drawText(arrayMonster[typeMonster].msg , 1, 3)
                 drawText("Life: "..currentMonster.life , 1, 5)
                 drawText("[A]  - Attack" , 1, 6)
-                drawText("[F]  - Use Potion" , 1, 7 )
+                drawText("[F]  - Use Health Potion" , 1, 7 )
 
-                if missorhit == false then drawText("Miss Attack Player" , 1, 8 ) elseif isHit == true and missorhit == true and criticalFlag == false then drawText("Hit Attack : "..damageHitPlayer , 1, 8 ) end
-                if monsterAttack == true  then drawText("Dano do monstro : "..damageHitMonster , 1, 9 ) elseif isHitM == true  then drawText("Miss Attack Monster" , 1, 9 )  end
-                if isHit == true and criticalFlag and missorhit == true then drawText("Attack Critical : ".. damageHitPlayer , 1, 8 ) end
+                if missorhit == false then drawText("You Missed the Attack" , 1, 8 ) elseif isHit == true and missorhit == true and criticalFlag == false then drawText("You Hitted Attack : "..damageHitPlayer , 1, 8 ) end
+                if monsterAttack == true  then drawText("The Monster Hitted "..damageHitMonster.." on Me" , 1, 9 ) elseif isHitM == true  then drawText("The Monster Missed the Attack" , 1, 9 )  end
+                if isHit == true and criticalFlag and missorhit == true then drawText("Critical Attack : ".. damageHitPlayer.." !!!" , 1, 8 ) end
                 if missorhit == true then isHit = true end               
                 
                 if pressKeyForDmgEnemy == true  then
@@ -339,19 +339,19 @@ function drawMenu()
             drawText("You won the battle" , 1, 2 )
 
             if isLevelUpdate == true then 
-                drawText(" Level UP!! " , 1, 3)
+                drawText("You Leveled UP!! " , 1, 3)
             end
-
-            drawText("[A] - You go will leave the battle " , 1, 4 )
+            drawText("[A] - You won: "..currentMonster.expWin , 1, 4 )
+            drawText("[A] - You will leave the battle " , 1, 5 )
         end
 
         if pressRunAway == true then
             if numberTryToRun >= 128 then 
-                drawText("Can you run away" , 1, 2) 
-                drawText("[V] ou (→)   - To run away" , 1, 4)
+                drawText("You Can Run Away" , 1, 2) 
+                drawText("[V]   - To run away" , 1, 4)
                 elseif numberTryToRun < 128 and numberTryToRun > 0 then
-                    drawText("Could not run away" , 1, 2) 
-                    drawText("[C] ou (→)   - Start the battle" , 1, 4)
+                    drawText("You Could not run away" , 1, 2) 
+                    drawText("[C]   - Start the battle" , 1, 4)
             end
         end
 
@@ -364,8 +364,8 @@ function drawMenu()
         love.graphics.draw(gui["youdied"], 50, 130 )
         love.graphics.setColor(1, 1, 1, 100)
         love.graphics.draw(gui["died_button"], 60, 410 )
-        drawText("[R] To Restart the game now !" , 1, 2)
-        drawText("[Q] To Quit the game now !" , 1, 3)
+        drawText("[R] To Restart the game !" , 1, 2)
+        drawText("[Q] To Quit the game !" , 1, 3)
             
     end
 
