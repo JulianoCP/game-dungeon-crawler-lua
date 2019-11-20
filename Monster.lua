@@ -27,8 +27,8 @@ function Monster:new()
 
             m1  = {
                 
-                name = "Esqueleto do Terror",
-                msg = "Você não esta no tutorial",
+                name = "Akary Elameqn",
+                msg = "bYE ByE Retard !",
                 damage = 15,
                 defese = 5,
                 dexterity = 10,
@@ -40,6 +40,35 @@ function Monster:new()
                 
             },
 
+            m2  = {
+                
+                name = "Karuni Alcany",
+                msg = "Ugh Uga Your Die",
+                damage = 15,
+                defese = 5,
+                dexterity = 10,
+                accuracy = 4,
+                critical = 1,
+                life = 30,
+                expWin = 50,
+                level = 0
+                
+            },
+
+            m3  = {
+                
+                name = "Skelet Power",
+                msg = "Jqweh LIJqmET Pqolraaa!!!!",
+                damage = 15,
+                defese = 5,
+                dexterity = 10,
+                accuracy = 4,
+                critical = 1,
+                life = 30,
+                expWin = 50,
+                level = 0
+                
+            },
 
     }
     setmetatable(monsters, Monster)

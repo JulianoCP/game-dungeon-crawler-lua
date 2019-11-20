@@ -364,8 +364,6 @@ function drawMenu()
         drawText("[R] To Restart the game now !" , 1, 2)
         drawText("[Q] To Quit the game now !" , 1, 3)
             
-    elseif state == "winner" then
-        --A FAZER
     end
 
     -- Draw Color in Stats Column
