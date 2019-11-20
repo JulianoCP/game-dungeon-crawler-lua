@@ -31,7 +31,7 @@ function Itens:new()
                     critical = 1,
                     accuracy = 1,
                     type = "sword",
-                    sprite = love.graphics.newImage("assets/gui/sword_1.png")
+                    sprite = love.graphics.newImage("assets/itens/sword_1.png")
                 },
 
                 poisonSword = {
@@ -42,7 +42,7 @@ function Itens:new()
                     critical = 1,
                     accuracy = 7,
                     type = "sword",
-                    sprite = love.graphics.newImage("assets/gui/sword_2.png")
+                    sprite = love.graphics.newImage("assets/itens/sword_2.png")
                 },
             },
 
@@ -55,7 +55,7 @@ function Itens:new()
                     levelEquip = 1,
                     dexterity = 1,
                     type = "armor",
-                    sprite = love.graphics.newImage("assets/gui/armor_1.png")
+                    sprite = love.graphics.newImage("assets/itens/armor_1.png")
                 },
 
                 dragonArmor = {
@@ -65,7 +65,7 @@ function Itens:new()
                     levelEquip = 2,
                     dexterity = -5,
                     type = "armor",
-                    sprite = love.graphics.newImage("assets/gui/armor_2.png")
+                    sprite = love.graphics.newImage("assets/itens/armor_2.png")
                 },
                 
                 natureArmor = {
@@ -75,7 +75,7 @@ function Itens:new()
                     levelEquip = 1,
                     dexterity = 3,
                     type = "armor",
-                    sprite = love.graphics.newImage("assets/gui/armor_2.png")
+                    sprite = love.graphics.newImage("assets/itens/armor_3.png")
                 },
 
                 poisonArmor = {
@@ -85,7 +85,7 @@ function Itens:new()
                     levelEquip = 2,
                     dexterity = -5,
                     type = "armor",
-                    sprite = love.graphics.newImage("assets/gui/armor_2.png")
+                    sprite = love.graphics.newImage("assets/itens/armor_4.png")
                 },
 
                 iceArmor = {
@@ -95,7 +95,7 @@ function Itens:new()
                     levelEquip = 2,
                     dexterity = 2,
                     type = "armor",
-                    sprite = love.graphics.newImage("assets/gui/armor_2.png")
+                    sprite = love.graphics.newImage("assets/itens/armor_5.png")
                 },
 
                 scaleArmor = {
@@ -105,7 +105,7 @@ function Itens:new()
                     levelEquip = 2,
                     dexterity = 8,
                     type = "armor",
-                    sprite = love.graphics.newImage("assets/gui/armor_2.png")
+                    sprite = love.graphics.newImage("assets/itens/armor_6.png")
                 },
 
                 abyssalArmor = {
@@ -115,7 +115,7 @@ function Itens:new()
                     levelEquip = 2,
                     dexterity = 10,
                     type = "armor",
-                    sprite = love.graphics.newImage("assets/gui/armor_2.png")
+                    sprite = love.graphics.newImage("assets/itens/armor_7.png")
                 }
             }
     }
@@ -150,7 +150,7 @@ function Itens:getRandomArmor(level)
     local numSort = 0
     local isLevel = true
     while isLevel do
-        for i = 0 , 10 do numSort = math.random(2) end
+        for i = 0 , 10 do numSort = math.random(7) end
         if (self.armor[name[numSort]].levelEquip == level) then isLevel = false end
     end
     return self.armor[name[numSort]]
