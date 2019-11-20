@@ -563,11 +563,11 @@ function love.keypressed(key, scancode)
 
         if key == "a" and pressBattleAway == true then pressKeyForDmgEnemy = true missorhit = isHitPlayer() missorhitMonster = isHitMonster() currentCritical = 1 criticalFlag = false dmgLow = false monsterAttack = false damageHitMonster = 0 end
         if key == "a" and deadMonsterFlag == true then state = "move" deadMonsterFlag = false end
-        if key == "e" and pressBattleAway == false then pressBattleAway = true isHit = false isHitM = false turnAtk = true missorhit = nil
+        if key == "e" and pressBattleAway == false and pressRunAway == false then pressBattleAway = true isHit = false isHitM = false turnAtk = true missorhit = nil
             activeBattle()
         end
 
-        if key == "q" then
+        if key == "q" and pressBattleAway == false and pressRunAway == false then
             pressRunAway = true
             math.randomseed(os.clock())
             for i = 0 , 10 do numberTryToRun = math.random(255) end 
