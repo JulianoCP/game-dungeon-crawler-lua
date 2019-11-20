@@ -15,6 +15,7 @@ pressBattleAway = false     -- Verify key for start battle
 deadMonsterFlag = false     -- Verify if the monster dead
 playerLoseLife = false      -- Verify if the player lose life
 monsterAttack = false       -- Verify if the monster attack
+isLevelUpdate = false       -- Verify if the player up level
 pressRunAway = false        -- Verify key for player run away
 criticalFlag = false        -- Verify if the player damage is critical
 currentMonster = {}         -- Verify the current monster
@@ -336,7 +337,12 @@ function drawMenu()
         
         if deadMonsterFlag == true then
             drawText("You won the battle" , 1, 2 )
-            drawText("[A] - You go will leave the battle " , 1, 3 )
+
+            if isLevelUpdate == true then 
+                drawText(" Level UP!! " , 1, 3)
+            end
+
+            drawText("[A] - You go will leave the battle " , 1, 4 )
         end
 
         if pressRunAway == true then
@@ -617,10 +623,13 @@ end
 
 ------- [ Function loot of the monster ] -------
 function lootMonster()
+    local tmp = false
     print("Você Ganhou meus Parabens!")
     print("XP ganho :",currentMonster.expWin)
     if not(currentMonster == nil) then
-        playerControl:setXP(currentMonster.expWin)
+        tmp = playerControl:setXP(currentMonster.expWin)
     end
+
+    isLevelUpdate = tmp
     baseLifePlayer = playerControl:getMaxLife()
 end
