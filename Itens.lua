@@ -44,6 +44,61 @@ function Itens:new()
                     type = "sword",
                     sprite = love.graphics.newImage("assets/itens/sword_2.png")
                 },
+
+                ironSword = {
+                    name = "Sword of Iron",
+                    desc = "Espada De ferro ferrado",
+                    damage = 7,
+                    levelEquip = 1,
+                    critical = 1,
+                    accuracy = 5,
+                    type = "sword",
+                    sprite = love.graphics.newImage("assets/itens/sword_3.png")
+                },
+
+                corruptionSword = {
+                    name = "Blade of Corruption",
+                    desc = "A lamina da Corrupção",
+                    damage = 15,
+                    levelEquip = 1,
+                    critical = 1,
+                    accuracy = 5,
+                    type = "sword",
+                    sprite = love.graphics.newImage("assets/itens/sword_4.png")
+                },
+
+                soulSword = {
+                    name = "Sword of Soul",
+                    desc = "Corta até a alma",
+                    damage = 15,
+                    levelEquip = 1,
+                    critical = 1,
+                    accuracy = 5,
+                    type = "sword",
+                    sprite = love.graphics.newImage("assets/itens/sword_5.png")
+                },
+
+                daggerSword = {
+                    name = "Dagger",
+                    desc = "Adaguinha",
+                    damage = 3,
+                    levelEquip = 1,
+                    critical = 1,
+                    accuracy = 10,
+                    type = "sword",
+                    sprite = love.graphics.newImage("assets/itens/sword_6.png")
+                },
+
+                magicSword = {
+                    name = "Sword Of Magic",
+                    desc = "Não é magia é tecnologia",
+                    damage = 3,
+                    levelEquip = 1,
+                    critical = 1,
+                    accuracy = 10,
+                    type = "sword",
+                    sprite = love.graphics.newImage("assets/itens/sword_6.png")
+                },
             },
 
             armor = {
@@ -138,7 +193,7 @@ function Itens:getRandomSword(level)
     local numSort = 0
     local isLevel = true
     while isLevel do
-        for i = 0 , 10 do numSort = math.random(2) end
+        for i = 0 , 10 do numSort = math.random(table.getn(name)) end
         if (self.sword[name[numSort]].levelEquip == level) then isLevel = false end
     end
     return self.sword[name[numSort]]
@@ -147,10 +202,11 @@ end
 function Itens:getRandomArmor(level)
     math.randomseed(os.clock())
     local name = {'leatherArmor','dragonArmor','abyssalArmor','scaleArmor','iceArmor','poisonArmor','natureArmor'}
+
     local numSort = 0
     local isLevel = true
     while isLevel do
-        for i = 0 , 10 do numSort = math.random(7) end
+        for i = 0 , 10 do numSort = math.random(table.getn(name)) end
         if (self.armor[name[numSort]].levelEquip == level) then isLevel = false end
     end
     return self.armor[name[numSort]]
