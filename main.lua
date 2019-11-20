@@ -241,7 +241,7 @@ function drawMenu()
         love.graphics.setColor(1, 1, 1, 100)
         love.graphics.draw(gui["battle_button"], 60, 410 )
 
-        if not(deadMonsterFlag) and turnAtk == true then
+        if not(deadMonsterFlag) then
 
             if pressRunAway == false and pressBattleAway == false then
                 drawText("[E] ou (←)   - Start the battle" , 1, 3)
@@ -282,7 +282,7 @@ function drawMenu()
                             damageHitPlayer = losslife
                         end
       
-                        if currentMonster.life <= 0 then currentMonster.life = 0  print("Monstro Morreu\n") end
+                        if currentMonster.life <= 0 then currentMonster.life = 0 pressBattleAway = true print("Monstro Morreu\n") end
                     elseif not(missorhit)then
                         print("Miss Player")
                         missorhit = false
@@ -563,7 +563,7 @@ function love.keypressed(key, scancode)
 
         if key == "a" and pressBattleAway == true then pressKeyForDmgEnemy = true missorhit = isHitPlayer() missorhitMonster = isHitMonster() currentCritical = 1 criticalFlag = false dmgLow = false monsterAttack = false damageHitMonster = 0 end
         if key == "a" and deadMonsterFlag == true then state = "move" deadMonsterFlag = false end
-        if key == "e" then pressBattleAway = true isHit = false isHitM = false turnAtk = true
+        if key == "e" and pressBattleAway == false then pressBattleAway = true isHit = false isHitM = false turnAtk = true missorhit = nil
             activeBattle()
         end
 
