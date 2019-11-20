@@ -105,12 +105,12 @@ function Player:getDamageSword()
 end
 
 function Player:getEquipSwordName()
-    if self.equip["sword"] == nil then return "No Equiped" end
+    if self.equip["sword"] == nil then return "Not Equiped" end
     return self.equip["sword"].name
 end
 
 function Player:getEquipArmorName()
-    if self.equip["armor"] == nil then return "No Equiped" end
+    if self.equip["armor"] == nil then return "Not Equiped" end
     return self.equip["armor"].name
 end
 

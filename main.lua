@@ -50,7 +50,7 @@ Mx = 0                      -- Verify position Mx in map
 function love.load()
 
 
-    love.keyboard.setKeyRepeat(true)
+    --love.keyboard.setKeyRepeat(true)
 
     arrayMonster = Monster:new()
 
@@ -221,18 +221,18 @@ function drawMenu()
         if itemChest.type == "sword" then drawText("["..itemChest.name .."]\n[DMG : "..itemChest.damage.."] [CRIT : "..itemChest.critical.."] [ACC : "..itemChest.accuracy.."]" , 1, 3) end
         if itemChest.type == "armor" then drawText("["..itemChest.name.."]\n[DEF : "..itemChest.defese.."] [DEX : "..itemChest.dexterity.."]" , 1, 3) end 
         if itemChest.type == "potion" then drawText("[POTION] + [ 1 ]" , 1, 3) end 
-        drawText("SEU ITEM" , 1, 5)
+        drawText("My Item" , 1, 5)
 
-        if itemChest.type == "sword" and not(playerControl:getEquipSwordName() == "No Equiped") then drawText("["..playerControl:getEquipSwordName().."]\n[DMG : "..playerControl:getDamageSword().."] [CRIT : "..playerControl:getCriticalSword().."] [ACC : "..playerControl:getAccuracySword().."]" , 1, 6) elseif playerControl:getEquipSwordName() == "No Equiped" and itemChest.type == "sword" then drawText("Você não tem arma equipada!",1,6) end
-        if itemChest.type == "armor" and not(playerControl:getEquipArmorName() == "No Equiped") then drawText("["..playerControl:getEquipArmorName().."]\n[DEF : "..playerControl:getDefeseArmor().."] [DEX : "..playerControl:getDexterityArmor().."]" , 1, 6) elseif playerControl:getEquipArmorName() == "No Equiped" and itemChest.type == "armor" then drawText("Você não tem armadura equipada!",1,6) end
+        if itemChest.type == "sword" and not(playerControl:getEquipSwordName() == "Not Equiped") then drawText("["..playerControl:getEquipSwordName().."]\n[DMG : "..playerControl:getDamageSword().."] [CRIT : "..playerControl:getCriticalSword().."] [ACC : "..playerControl:getAccuracySword().."]" , 1, 6) elseif playerControl:getEquipSwordName() == "Not Equiped" and itemChest.type == "sword" then drawText("You dont have sword equipped!",1,6) end
+        if itemChest.type == "armor" and not(playerControl:getEquipArmorName() == "Not Equiped") then drawText("["..playerControl:getEquipArmorName().."]\n[DEF : "..playerControl:getDefeseArmor().."] [DEX : "..playerControl:getDexterityArmor().."]" , 1, 6) elseif playerControl:getEquipArmorName() == "Not Equiped" and itemChest.type == "armor" then drawText("You dont have armor equipped!",1,6) end
         if itemChest.type == "potion" then drawText("[POTION] = ".."[ "..playerControl:getInventoryPotion().." ]" , 1, 6) end
 
         if itemChest.type == "armor" or itemChest.type == "sword" then
-            drawText("[E]   - Do You Accepet the Trade" , 1, 8)
-            drawText("[Q]   - You Rejected the Trade" , 1, 9)
+            drawText("[E]   - Do You Want the Item" , 1, 8)
+            drawText("[Q]   - Do You Rejected the Item" , 1, 9)
         elseif itemChest.type == "potion" then
-            drawText("[E]   - You Picked the Health Potion" , 1, 8)
-            drawText("[Q]   - You Rejected the Health Potion" , 1, 9)
+            drawText("[E]  - You Picked the Health Potion" , 1, 8)
+            drawText("[Q]  - You Descarted the Health Potion" , 1, 9)
         end
 
     -- Change current state for battle 
@@ -318,12 +318,13 @@ function drawMenu()
                     playerControl:setLife(playerControl:getLife()-losslife)
                     print("Você perdeu ["..losslife.."] de Vida ")
                     isHitM = false
+                    turnAtk = true
                     damageHitMonster = losslife
                     monsterAttack = true
                     playerLoseLife = true
                 end
 
-                if playerControl:getLife()<= 0 then playerControl:setLife(0) print("Voce Morreu") end                  
+                if playerControl:getLife()<= 0 then playerControl:setLife(0) print("Voce Morreu") state = "died" end                  
             elseif not(missorhitMonster) then
                 isHitM = true
                 print("Miss Monster")
@@ -332,6 +333,7 @@ function drawMenu()
   
         end
         if playerControl:getLife() <= 0 then
+            
             state = "died"
         end
         
@@ -341,7 +343,7 @@ function drawMenu()
             if isLevelUpdate == true then 
                 drawText("You Leveled UP!! " , 1, 3)
             end
-            drawText("[A] - You won: "..currentMonster.expWin , 1, 4 )
+            drawText("You won: "..currentMonster.expWin.." XP" , 1, 4 )
             drawText("[A] - You will leave the battle " , 1, 5 )
         end
 
@@ -523,12 +525,6 @@ function love.keypressed(key, scancode)
             playerControl:setPy(y)
         end
 
-        -- Collision with the Monsters
-        if mapControl:isCollider(x,y,'m') == true then state = "battle" end
-        if mapControl:isCollider(x,y,'m1') == true then state = "battle" end
-        if mapControl:isCollider(x,y,'m2') == true then state = "battle" end
-        if mapControl:isCollider(x,y,'m3') == true then state = "battle" end
-
         -- Collision with the Chest
         if mapControl:isColliderInside(x,y) == 'c' then
             math.randomseed(os.clock())
@@ -558,20 +554,12 @@ function love.keypressed(key, scancode)
 
     end
 
-    -- State Chest
-    if state == "chest" then
-        if key == "e" then if itemChest.type == "sword" then playerControl:setEquipSword(itemChest) elseif itemChest.type == "armor" then playerControl:setEquipArmor(itemChest) else playerControl:setInventoryPotion(1) end state = "move" end
-        if key == "q" then state = "move" end
-    end
-
     -- State Battle
     if state == "battle" then
 
         if key == "a" and pressBattleAway == true then pressKeyForDmgEnemy = true missorhit = isHitPlayer() missorhitMonster = isHitMonster() currentCritical = 1 criticalFlag = false dmgLow = false monsterAttack = false damageHitMonster = 0 end
-        if key == "a" and deadMonsterFlag == true then state = "move" deadMonsterFlag = false end
-        if key == "e" and pressBattleAway == false and pressRunAway == false then pressBattleAway = true isHit = false isHitM = false turnAtk = true missorhit = nil
-            activeBattle()
-        end
+        if key == "a" and deadMonsterFlag == true and pressBattleAway == false then state = "move" deadMonsterFlag = false end
+        if key == "e" and pressBattleAway == false then activeBattle() pressBattleAway = true isHit = false isHitM = false missorhit = nil end
 
         if key == "q" and pressBattleAway == false and pressRunAway == false then
             pressRunAway = true
@@ -586,6 +574,18 @@ function love.keypressed(key, scancode)
     if state == "died" then
         if key == "q" then love.event.quit() end
         if key == "r" then love.event.quit( "restart" ) end
+    end
+
+    -- Collision with the Monsters
+    if mapControl:isColliderInside(x,y) == 'm' then state = "battle" end
+    if mapControl:isColliderInside(x,y) == 'm1' then state = "battle" end
+    if mapControl:isColliderInside(x,y) == 'm2' then state = "battle" end
+    if mapControl:isColliderInside(x,y) == 'm3' then state = "battle" end
+
+    -- State Chest
+    if state == "chest" then
+        if key == "e" then if itemChest.type == "sword" then playerControl:setEquipSword(itemChest) elseif itemChest.type == "armor" then playerControl:setEquipArmor(itemChest) else playerControl:setInventoryPotion(1) end state = "move" end
+        if key == "q" then state = "move" end
     end
 
 end
