@@ -39,7 +39,8 @@ end
 
 function Map:isCollider(x,y,name)
 
-  if self.props["mapData"][y][x] == name then return true
+  if x < 2 or y < 2 or x > table.getn(self.props["mapData"][1])-1 or y > table.getn(self.props["mapData"])-1 then return false 
+    elseif self.props["mapData"][y][x] == name then return true
     elseif self.props["mapData"][y + 1][x] == name then return true
     elseif self.props["mapData"][y - 1][x] == name then return true
     elseif self.props["mapData"][y][x + 1] == name then return true
