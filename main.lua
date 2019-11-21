@@ -24,10 +24,12 @@ arrayMonster = nil          -- List of monsters
 mapControl = nil            -- Controller the map
 itemChest = nil             -- Controller the chest
 missorhit = nil             -- Verify if is hit or miss
+utility = false             -- Variavel Utility
 turnAtk = true              -- Verify who's the turn
 isHitM = false              -- Verify if is possible the hit in monster
 isHit = false               -- Verify if is possible the hit in plyer
 
+a = Itens:new()
 ------- [ Base Control ] -------
 damageHitMonster = 0        -- Verify damage of hit monster
 damageHitPlayer = 0         -- Verify damage of hit player
@@ -253,39 +255,34 @@ function drawMenu()
                 
                 drawText("["..arrayMonster[typeMonster].name.."]" , 1, 2)
                 drawText(arrayMonster[typeMonster].msg , 1, 3)
-                drawText("Life: "..currentMonster.life , 1, 5)
+                drawText("Monster Life: "..currentMonster.life , 1, 5)
                 drawText("[A]  - Attack" , 1, 6)
                 drawText("[F]  - Use Health Potion" , 1, 7 )
 
                 if missorhit == false then drawText("You Missed the Attack" , 1, 8 ) elseif isHit == true and missorhit == true and criticalFlag == false then drawText("You Hitted Attack : "..damageHitPlayer , 1, 8 ) end
                 if monsterAttack == true  then drawText("The Monster Hitted "..damageHitMonster.." on Me" , 1, 9 ) elseif isHitM == true  then drawText("The Monster Missed the Attack" , 1, 9 )  end
-                if isHit == true and criticalFlag and missorhit == true then drawText("Critical Attack : ".. damageHitPlayer.." !!!" , 1, 8 ) end
+                if isHit == true and criticalFlag and missorhit == true then changeColortText = true drawText("Critical Attack : ".. damageHitPlayer.." !!!" , 1, 8 ) changeColortText = false end
                 if missorhit == true then isHit = true end               
                 
                 if pressKeyForDmgEnemy == true  then
                     
                     if currentMonster.life > 0 and missorhit then
-                        print("Hit Player")
                         if math.random(maxCritical) <= playerControl:getCritical()+playerControl:getCriticalSword() then
                             currentCritical = 2
                             criticalFlag = true
-                            print("Você fez um Ataque Critico")
                         end
                         pressKeyForDmgEnemy = false
                         if ((playerControl:getDamage()+playerControl:getDamageSword()) * currentCritical) <= currentMonster.defese then
                             missorhit = false
                             isHit = false
-                            print("Seu Dano é Menor que a Defesa do Monstro")
                         else
                             local losslife = ( ((playerControl:getDamage()+playerControl:getDamageSword()) * currentCritical) - currentMonster.defese)
                             currentMonster.life = currentMonster.life - losslife
-                            print("Monstro Perdeu ["..losslife.."] de Vida")
                             damageHitPlayer = losslife
                         end
       
-                        if currentMonster.life <= 0 then currentMonster.life = 0 pressBattleAway = true print("Monstro Morreu\n") end
+                        if currentMonster.life <= 0 then currentMonster.life = 0 pressBattleAway = true end
                     elseif not(missorhit)then
-                        print("Miss Player")
                         missorhit = false
                         isHit = false
                     end
@@ -305,18 +302,14 @@ function drawMenu()
         if turnAtk == false and not(deadMonsterFlag) then
        
             if playerControl:getLife() > 0 and missorhitMonster  and not(currentMonster.life == 0)then
-                print("Hit Monster")
                 if math.random(maxCritical) <= currentMonster.critical then
                     currentCritical = 2
-                    print("Ataque Critico do Monstro ")
                 end
                 if (currentMonster.damage*currentCritical) <= playerControl:getDefese()+playerControl:getDefeseArmor() then
-                    print("O Dano do Monstro é Menor que a sua Defesa")
                     isHitM = true
                 else 
                     local losslife = ((currentMonster.damage*currentCritical)-(playerControl:getDefese()+playerControl:getDefeseArmor()) ) 
                     playerControl:setLife(playerControl:getLife()-losslife)
-                    print("Você perdeu ["..losslife.."] de Vida ")
                     isHitM = false
                     turnAtk = true
                     damageHitMonster = losslife
@@ -324,16 +317,14 @@ function drawMenu()
                     playerLoseLife = true
                 end
 
-                if playerControl:getLife()<= 0 then playerControl:setLife(0) print("Voce Morreu") state = "died" end                  
+                if playerControl:getLife()<= 0 then playerControl:setLife(0) state = "died" end                  
             elseif not(missorhitMonster) then
                 isHitM = true
-                print("Miss Monster")
             end
             turnAtk = true  
   
         end
         if playerControl:getLife() <= 0 then
-            
             state = "died"
         end
         
@@ -341,10 +332,12 @@ function drawMenu()
             drawText("You won the battle" , 1, 2 )
 
             if isLevelUpdate == true then 
-                drawText("You Leveled UP!! " , 1, 3)
+                changeColortText = true
+                drawText("You Leveled UP!! " , 1, 5)
+                changeColortText = false
             end
-            drawText("You won: "..currentMonster.expWin.." XP" , 1, 4 )
-            drawText("[A] - You will leave the battle " , 1, 5 )
+            drawText("You won: "..currentMonster.expWin.." XP" , 1, 3 )
+            drawText("[A] - You will leave the battle " , 1, 4 )
         end
 
         if pressRunAway == true then
@@ -514,10 +507,10 @@ function love.keypressed(key, scancode)
     -- Movement Arrows and buttons
     if state == "move" then
 
-        if key == "right" or key == "d" then x = x+1  playerControl:setSprite("spriteRight") end
-        if key == "left" or key == "a" then x = x-1 playerControl:setSprite("spriteLeft") end
-        if key == "up" or key == "w" then y = y - 1 playerControl:setSprite("spriteUp")  end
-        if key == "down" or key == "s" then  y = y + 1 playerControl:setSprite("spriteDown") end
+        if key == "right" or key == "d" and not (mapControl:isColliderInside(x + 1,y) == 'x' or mapControl:isColliderInside(x,y) == 'x1') then x = x+1  playerControl:setSprite("spriteRight") end
+        if key == "left" or key == "a" and not (mapControl:isColliderInside(x - 1,y) == 'x' or mapControl:isColliderInside(x,y) == 'x1') then x = x-1 playerControl:setSprite("spriteLeft") end
+        if key == "up" or key == "w" and not (mapControl:isColliderInside(x,y - 1) == 'x' or mapControl:isColliderInside(x,y) == 'x1') then y = y - 1 playerControl:setSprite("spriteUp")  end
+        if key == "down" or key == "s" and not (mapControl:isColliderInside(x,y + 1) == 'x' or mapControl:isColliderInside(x,y) == 'x1') then  y = y + 1 playerControl:setSprite("spriteDown") end
 
         -- Collision with the Walls
         if  not (mapControl:isColliderInside(x,y) == 'x' or mapControl:isColliderInside(x,y) == 'x1') then
@@ -528,11 +521,9 @@ function love.keypressed(key, scancode)
         -- Collision with the Chest
         if mapControl:isColliderInside(x,y) == 'c' then
             math.randomseed(os.clock())
-            local a = Itens:new()
             local numSort = 0
-
-            for i = 0 , 10 do numSort = math.random(100) end
-
+            numSort = math.random(100)
+            
             if numSort >= 0 and numSort < 43 then numSort = 1
                 elseif numSort >= 43 and numSort < 86 then numSort = 2
                 elseif numSort >= 86 and numSort <= 100 then numSort = 3
@@ -550,6 +541,8 @@ function love.keypressed(key, scancode)
             playerControl:setPx(2)
             playerControl:setPy(2)
             clearFog()
+            state = "move"
+            itemChest = nil
         end
 
     end
@@ -576,11 +569,11 @@ function love.keypressed(key, scancode)
         if key == "r" then love.event.quit( "restart" ) end
     end
 
-    -- Collision with the Monsters
-    if mapControl:isColliderInside(x,y) == 'm' then state = "battle" end
-    if mapControl:isColliderInside(x,y) == 'm1' then state = "battle" end
-    if mapControl:isColliderInside(x,y) == 'm2' then state = "battle" end
-    if mapControl:isColliderInside(x,y) == 'm3' then state = "battle" end
+    if mapControl:isCollider(x,y,'m') then state = "battle"
+        elseif mapControl:isCollider(x,y,'m1') then state = "battle"
+        elseif mapControl:isCollider(x,y,'m2') then state = "battle"
+        elseif mapControl:isCollider(x,y,'m3') then state = "battle" 
+    end
 
     -- State Chest
     if state == "chest" then
@@ -597,7 +590,6 @@ function activeBattle()
             My,Mx,typeMonster = mapControl:getMonsterTile(playerControl:getPy(),playerControl:getPx(),i)
         end
     end
-
     currentMonster = copy1(arrayMonster[typeMonster])
 end
 
@@ -624,12 +616,9 @@ end
 ------- [ Function loot of the monster ] -------
 function lootMonster()
     local tmp = false
-    print("Você Ganhou meus Parabens!")
-    print("XP ganho :",currentMonster.expWin)
     if not(currentMonster == nil) then
         tmp = playerControl:setXP(currentMonster.expWin)
     end
-
     isLevelUpdate = tmp
     baseLifePlayer = playerControl:getMaxLife()
 end

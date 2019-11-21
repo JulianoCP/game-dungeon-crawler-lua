@@ -37,12 +37,27 @@ function Map:isColliderInside(x,y)
   return self.props["mapData"][y][x]
 end
 
+function Map:isCollider(x,y,name)
+
+  if self.props["mapData"][y][x] == name then return true
+    elseif self.props["mapData"][y + 1][x] == name then return true
+    elseif self.props["mapData"][y - 1][x] == name then return true
+    elseif self.props["mapData"][y][x + 1] == name then return true
+    elseif self.props["mapData"][y][x - 1] == name then return true
+    else return false 
+  end
+end
+
 -- Returns which position the player collided with monster
 function Map:getMonsterTile(x,y,name)
 
-  if self.props["mapData"][y][x] == name then return y , x ,name
-  else return false end
-  
+  if self.props["mapData"][y][x] == name then return x,y,name
+    elseif self.props["mapData"][y + 1][x] == name then return y + 1,x,name
+    elseif self.props["mapData"][y - 1][x] == name then return y - 1,x,name
+    elseif self.props["mapData"][y][x + 1] == name then return y,x + 1,name
+    elseif self.props["mapData"][y][x - 1] == name then return y,x - 1,name
+    else return false 
+  end 
 end
 
 return Map

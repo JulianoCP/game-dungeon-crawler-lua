@@ -193,7 +193,6 @@ function Itens:getRandomSword(level)
     local numSort = 0
     local isLevel = true
     while isLevel do
-        --for i = 0 , 10 do numSort = math.random(table.getn(name)) end
         numSort = math.random(table.getn(name))
         if (self.sword[name[numSort]].levelEquip <= level) then isLevel = false end
     end
@@ -207,7 +206,6 @@ function Itens:getRandomArmor(level)
     local numSort = 0
     local isLevel = true
     while isLevel do
-        --for i = 0 , 10 do numSort = math.random(table.getn(name)) end
         numSort = math.random(table.getn(name))
         if (self.armor[name[numSort]].levelEquip <= level) then isLevel = false end
     end

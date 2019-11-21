@@ -61,7 +61,6 @@ function Player:setXP(value)
         self.status["accuracy"] = self.status["accuracy"] + 2
         self.status["maxLife"] = self.status["maxLife"] + 10
         self.status["life"] = self.status["maxLife"]
-        print("Você subiu de nivel e seus Stats foram aprimorados")
         return true
     end
     return false
