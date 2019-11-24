@@ -28,8 +28,9 @@ utility = false             -- Variavel Utility
 turnAtk = true              -- Verify who's the turn
 isHitM = false              -- Verify if is possible the hit in monster
 isHit = false               -- Verify if is possible the hit in plyer
+isMenu = true               -- Verify Menu exist
+button_menu = true          -- Blink Effect Button
 
-a = Itens:new()
 ------- [ Base Control ] -------
 damageHitMonster = 0        -- Verify damage of hit monster
 damageHitPlayer = 0         -- Verify damage of hit player
@@ -47,6 +48,7 @@ typeMonster = nil           -- Verify type of monster
 arrayMaps = {}              -- List maps
 My = 0                      -- Verify position My in map
 Mx = 0                      -- Verify position Mx in map
+allItens = Itens:new()      -- List all Itens
 
 ------- [ Function Init in lua ] -------
 function love.load()
@@ -456,20 +458,6 @@ function drawMenu()
         
     end
 
-------- [ Function draw(loop) in the window ] -------
-function love.draw()
-
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.draw(gui["dungeon"], 420, 10 )
-    love.graphics.draw(gui["interface"], 0, 0 )
-
-    drawMap(mapControl:getMap()) -- Load current Map
-    drawPlayer() -- Draw Player
-    drawScene() -- Draw Scene
-    drawMenu() -- Draw Menu
-
-end
-
 ------- [ Function draw interface in the window ] -------
 function drawScene()
     if state == "chest" then -- Select chest
@@ -477,6 +465,32 @@ function drawScene()
     elseif state == "battle" then -- Select battle
         love.graphics.draw(gui["monster"], 420,10 )
     end
+end
+
+------- [ Function draw(loop) in the window ] -------
+function love.draw()
+
+    --[[Menu]] 
+    if isMenu then 
+        love.graphics.draw(gui["menu"], 0, 0 )
+        love.timer.sleep( 1 )
+        if button_menu then
+            love.graphics.draw(gui["button_menu"], 15, 300 )
+            button_menu = false
+        else
+            button_menu = true
+        end
+    else
+        love.graphics.setColor(1, 1, 1)
+        love.graphics.draw(gui["dungeon"], 420, 10 )
+        love.graphics.draw(gui["interface"], 0, 0 )
+    
+        drawMap(mapControl:getMap()) -- Load current Map
+        drawPlayer() -- Draw Player
+        drawScene() -- Draw Scene
+        drawMenu() -- Draw Menu
+    end
+
 end
 
 ------- [ Function reset the fog map ] -------
@@ -494,6 +508,9 @@ function love.keypressed(key, scancode)
     -- Player coordinates
     local x = playerControl:getPy()
     local y = playerControl:getPx()
+    
+    -- Menu 
+    if key == 'return' then isMenu = false end
 
     -- Use Potion
     if key == 'f' then
@@ -529,7 +546,7 @@ function love.keypressed(key, scancode)
                 elseif numSort >= 86 and numSort <= 100 then numSort = 3
             end
             
-            if numSort == 1 then itemChest = a:getRandomSword(mapControl:getMapLevel()) elseif numSort == 2 then itemChest = a:getRandomArmor(mapControl:getMapLevel()) else itemChest = a:getPotion() end
+            if numSort == 1 then itemChest = allItens:getRandomSword(mapControl:getMapLevel()) elseif numSort == 2 then itemChest = allItens:getRandomArmor(mapControl:getMapLevel()) else itemChest = allItens:getPotion() end
             mapControl:getMap()[y][x] = 'f'
             state = "chest"
         end
