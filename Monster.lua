@@ -14,12 +14,12 @@ function Monster:new()
                 
                 name = "Ghost of Dead",
                 msg = "Booooooooooooooooooohhhhhhhhhhh",
-                damage = 10,
-                defese = 10,
-                dexterity = 10,
+                damage = 8,
+                defese = 3,
+                dexterity = 2,
                 accuracy = 3,
                 critical = 1,
-                life = 60,
+                life = 50,
                 expWin = 50,
                 level = 0
                 
@@ -29,12 +29,12 @@ function Monster:new()
                 
                 name = "Akary Elameqn",
                 msg = "bYE ByE Retard !",
-                damage = 15,
-                defese = 5,
-                dexterity = 10,
-                accuracy = 4,
+                damage = 6,
+                defese = 2,
+                dexterity = 1,
+                accuracy = 2,
                 critical = 1,
-                life = 30,
+                life = 50,
                 expWin = 50,
                 level = 0
                 
@@ -44,12 +44,12 @@ function Monster:new()
                 
                 name = "Karuni Alcany",
                 msg = "Ugh Uga Your Die",
-                damage = 15,
-                defese = 5,
-                dexterity = 10,
-                accuracy = 4,
+                damage = 5,
+                defese = 1,
+                dexterity = 2,
+                accuracy = 3,
                 critical = 1,
-                life = 30,
+                life = 70,
                 expWin = 50,
                 level = 0
                 
@@ -64,7 +64,7 @@ function Monster:new()
                 dexterity = 10,
                 accuracy = 4,
                 critical = 1,
-                life = 30,
+                life = 80,
                 expWin = 50,
                 level = 0
                 

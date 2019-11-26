@@ -24,8 +24,8 @@ function Player:new(Px, Py, currentSprite)
         status = {
             damage = 1,
             defese = 1,
-            dexterity = 10,
-            accuracy = 20,
+            dexterity = 1,
+            accuracy = 2,
             maxLife = 100,
             critical = 1,
             life = 100,

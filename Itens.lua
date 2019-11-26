@@ -26,10 +26,10 @@ function Itens:new()
                 fireSword = {
                     name = "Sword of Fire",
                     desc = "espada de fuego",
-                    damage = 20,
+                    damage = 7,
                     levelEquip = 2,
                     critical = 1,
-                    accuracy = 1,
+                    accuracy = 3,
                     type = "sword",
                     sprite = love.graphics.newImage("assets/itens/sword_1.png")
                 },
@@ -37,7 +37,7 @@ function Itens:new()
                 poisonSword = {
                     name = "Sword of Poison",
                     desc = "espada de venenu",
-                    damage = 10,
+                    damage = 5,
                     levelEquip = 1,
                     critical = 1,
                     accuracy = 7,
@@ -59,8 +59,8 @@ function Itens:new()
                 corruptionSword = {
                     name = "Blade of Corruption",
                     desc = "A lamina da Corrupção",
-                    damage = 15,
-                    levelEquip = 1,
+                    damage = 9,
+                    levelEquip = 2,
                     critical = 1,
                     accuracy = 5,
                     type = "sword",
@@ -70,10 +70,10 @@ function Itens:new()
                 soulSword = {
                     name = "Sword of Soul",
                     desc = "Corta até a alma",
-                    damage = 15,
+                    damage = 6,
                     levelEquip = 1,
                     critical = 1,
-                    accuracy = 5,
+                    accuracy = 6,
                     type = "sword",
                     sprite = love.graphics.newImage("assets/itens/sword_5.png")
                 },
@@ -92,8 +92,8 @@ function Itens:new()
                 magicSword = {
                     name = "Sword Of Magic",
                     desc = "Não é magia é tecnologia",
-                    damage = 3,
-                    levelEquip = 1,
+                    damage = 10,
+                    levelEquip = 2,
                     critical = 1,
                     accuracy = 10,
                     type = "sword",
@@ -108,7 +108,7 @@ function Itens:new()
                     desc = "armadura de cabra",
                     defese = 3,
                     levelEquip = 1,
-                    dexterity = 1,
+                    dexterity = 2,
                     type = "armor",
                     sprite = love.graphics.newImage("assets/itens/armor_1.png")
                 },
@@ -116,9 +116,9 @@ function Itens:new()
                 dragonArmor = {
                     name = "Dragon Armor",
                     desc = "Escama do dragão da sua mae",
-                    defese = 10,
+                    defese = 7,
                     levelEquip = 1,
-                    dexterity = -5,
+                    dexterity = -1,
                     type = "armor",
                     sprite = love.graphics.newImage("assets/itens/armor_2.png")
                 },
@@ -126,9 +126,9 @@ function Itens:new()
                 natureArmor = {
                     name = "Nature Armor",
                     desc = "Poder Natural",
-                    defese = 3,
+                    defese = 4,
                     levelEquip = 1,
-                    dexterity = 3,
+                    dexterity = 2,
                     type = "armor",
                     sprite = love.graphics.newImage("assets/itens/armor_3.png")
                 },
@@ -136,9 +136,9 @@ function Itens:new()
                 poisonArmor = {
                     name = "Poison Armor",
                     desc = "Poison da cobra da sua mae",
-                    defese = 10,
+                    defese = 2,
                     levelEquip = 1,
-                    dexterity = -5,
+                    dexterity = 5,
                     type = "armor",
                     sprite = love.graphics.newImage("assets/itens/armor_4.png")
                 },
@@ -146,9 +146,9 @@ function Itens:new()
                 iceArmor = {
                     name = "Ice Armor",
                     desc = "Gelinho",
-                    defese = 8,
-                    levelEquip = 1,
-                    dexterity = 2,
+                    defese = 7,
+                    levelEquip = 2,
+                    dexterity = 1,
                     type = "armor",
                     sprite = love.graphics.newImage("assets/itens/armor_5.png")
                 },
@@ -156,7 +156,7 @@ function Itens:new()
                 scaleArmor = {
                     name = "Scale Armor",
                     desc = "O Matador",
-                    defese = 3,
+                    defese = 2,
                     levelEquip = 1,
                     dexterity = 8,
                     type = "armor",
