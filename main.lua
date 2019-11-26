@@ -344,10 +344,10 @@ function drawMenu()
         end
 
         if pressRunAway == true then
-            if numberTryToRun >= 128 then 
+            if numberTryToRun <= 30 then 
                 drawText("You Can Run Away" , 1, 2) 
                 drawText("[V]   - To run away" , 1, 4)
-                elseif numberTryToRun < 128 and numberTryToRun > 0 then
+                elseif numberTryToRun > 30 and numberTryToRun > 0 then
                     drawText("You Could not run away" , 1, 2) 
                     drawText("[C]   - Start the battle" , 1, 4)
             end
@@ -474,7 +474,7 @@ function love.draw()
     --[[Menu]] 
     if isMenu then 
         love.graphics.draw(gui["menu"], 0, 0 )
-        love.timer.sleep( 1 )
+        love.timer.sleep( 0.5 )
         if button_menu then
             love.graphics.draw(gui["button_menu"], 15, 300 )
             button_menu = false
@@ -522,8 +522,24 @@ function love.keypressed(key, scancode)
         end
     end 
 
+    -- State Battle
+    if state == "battle" then
+
+        if key == "a" and pressBattleAway == true then pressKeyForDmgEnemy = true missorhit = isHitPlayer() missorhitMonster = isHitMonster() currentCritical = 1 criticalFlag = false dmgLow = false monsterAttack = false damageHitMonster = 0 end
+        if key == "a" and deadMonsterFlag == true and pressBattleAway == false then state = "move" deadMonsterFlag = false end
+        if key == "e" and pressBattleAway == false then activeBattle() pressBattleAway = true isHit = false isHitM = false missorhit = nil end
+
+        if key == "q" and pressBattleAway == false and pressRunAway == false then
+            pressRunAway = true
+            math.randomseed(os.clock())
+            numberTryToRun = math.random(255)
+        end
+        if key == "v" and pressRunAway == true and numberTryToRun <= 30 then pressRunAway = false state = "move" numberTryToRun = 0 tryToRun() end
+        if key == "c" and pressRunAway == true and numberTryToRun > 30 then pressRunAway = false pressBattleAway = true  numberTryToRun = 0 activeBattle() end
+    end
+
     -- Movement Arrows and buttons
-    if state == "move" then
+    if state == "move" and isMenu == false then
 
         if key == "right" or key == "d" and not (mapControl:isColliderInside(x + 1,y) == 'x' or mapControl:isColliderInside(x,y) == 'x1') then x = x+1  playerControl:setSprite("spriteRight") end
         if key == "left" or key == "a" and not (mapControl:isColliderInside(x - 1,y) == 'x' or mapControl:isColliderInside(x,y) == 'x1') then x = x-1 playerControl:setSprite("spriteLeft") end
@@ -565,22 +581,6 @@ function love.keypressed(key, scancode)
 
     end
 
-    -- State Battle
-    if state == "battle" then
-
-        if key == "a" and pressBattleAway == true then pressKeyForDmgEnemy = true missorhit = isHitPlayer() missorhitMonster = isHitMonster() currentCritical = 1 criticalFlag = false dmgLow = false monsterAttack = false damageHitMonster = 0 end
-        if key == "a" and deadMonsterFlag == true and pressBattleAway == false then state = "move" deadMonsterFlag = false end
-        if key == "e" and pressBattleAway == false then activeBattle() pressBattleAway = true isHit = false isHitM = false missorhit = nil end
-
-        if key == "q" and pressBattleAway == false and pressRunAway == false then
-            pressRunAway = true
-            math.randomseed(os.clock())
-            for i = 0 , 10 do numberTryToRun = math.random(255) end 
-        end
-        if key == "v" and pressRunAway == true and numberTryToRun >= 128 then pressRunAway = false state = "move"  numberTryToRun = 0 end
-        if key == "c" and pressRunAway == true and numberTryToRun < 128 then pressRunAway = false pressBattleAway = true  numberTryToRun = 0 activeBattle() end
-    end
-
     -- State Died
     if state == "died" then
         if key == "q" then love.event.quit() end
@@ -609,6 +609,15 @@ function activeBattle()
         end
     end
     currentMonster = copy1(arrayMonster[typeMonster])
+end
+
+function tryToRun()
+    for key,i in pairs(arrayMonsterName) do
+        if not (mapControl:getMonsterTile(playerControl:getPy(),playerControl:getPx(),i) == false) then
+            My,Mx,typeMonster = mapControl:getMonsterTile(playerControl:getPy(),playerControl:getPx(),i)
+        end
+    end
+    mapControl:getMap()[My][Mx] = 'f'
 end
 
 ------- [ Function copy the objects ] -------
