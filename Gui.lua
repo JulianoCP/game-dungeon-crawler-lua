@@ -16,6 +16,8 @@ gui = {
     chest_button = love.graphics.newImage("assets/gui/chest_button.png"),
     command_button = love.graphics.newImage("assets/gui/command_button.png"),
     died_button = love.graphics.newImage("assets/gui/died_button.png"),
+    menu = love.graphics.newImage("assets/gui/logo_dg.png"),
+    button_menu = love.graphics.newImage("assets/gui/press_button.png"),
 }
 
 return gui
