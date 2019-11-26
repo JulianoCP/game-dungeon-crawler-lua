@@ -29,7 +29,6 @@ turnAtk = true              -- Verify who's the turn
 isHitM = false              -- Verify if is possible the hit in monster
 isHit = false               -- Verify if is possible the hit in plyer
 
-a = Itens:new()
 ------- [ Base Control ] -------
 damageHitMonster = 0        -- Verify damage of hit monster
 damageHitPlayer = 0         -- Verify damage of hit player
@@ -50,10 +49,11 @@ Mx = 0                      -- Verify position Mx in map
 
 ------- [ Function Init in lua ] -------
 function love.load()
-
-
+    
+    
     --love.keyboard.setKeyRepeat(true)
-
+    
+    a = Itens:new()
     arrayMonster = Monster:new()
 
     local maps = nil
