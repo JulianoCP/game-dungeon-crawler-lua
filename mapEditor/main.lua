@@ -3,7 +3,7 @@ map = {}
 filename = ''
 writeFileName = 0
 functionMap = 'edit'
-mapList = require('DungeonCrawler/MapLoad')
+mapList = require('game-dungeonCrawler-lua/MapLoad')
 
 
 function fullMap()
@@ -187,7 +187,7 @@ function love.draw()
     --    love.graphics.rectangle("fill", 450, (i*17), 40, 16 )
    -- end
    
-    mapList = require('DungeonCrawler/MapLoad')
+    mapList = require('game-dungeonCrawler-lua/MapLoad')
 
     love.graphics.setColor(1, 1, 1)
 
@@ -281,7 +281,7 @@ function love.keypressed(key, scancode)
      -- Abrir Mapa
      if key == "f1" then
         if writeFileName == 1 and not(filename == '')then
-            map = require("DungeonCrawler/maps/"..filename)
+            map = require("game-dungeonCrawler-lua/maps/"..filename)
             writeFileName = 0
             functionMap = 'edit'
         else
@@ -368,7 +368,7 @@ function save(m)
     print("SAVE - MAP")
     if filename == '' then filename = "data" end
 
-    local file = io.open("DungeonCrawler/maps/"..filename..".lua", "w+")
+    local file = io.open("game-dungeonCrawler-lua/maps/"..filename..".lua", "w+")
     io.output(file)
     io.write("    return {\n")
     for i = 1, table.getn(m) do
@@ -394,7 +394,7 @@ end
 
 function saveMap()
     
-    local file2 = io.open("DungeonCrawler/MapLoad.lua", "w")
+    local file2 = io.open("game-dungeonCrawler-lua/MapLoad.lua", "w")
     io.output(file2)
     local isExist = 0
     io.write("names = {\n")
@@ -409,9 +409,9 @@ function saveMap()
 end
 
 function delMap(num)
-    os.remove ("DungeonCrawler/maps/"..mapList[num]..".lua")
+    os.remove ("game-dungeonCrawler-lua/maps/"..mapList[num]..".lua")
     table.remove (mapList, num)
-    local file2 = io.open("DungeonCrawler/MapLoad.lua", "w")
+    local file2 = io.open("game-dungeonCrawler-lua/MapLoad.lua", "w")
     io.output(file2)
     io.write("names = {\n")
     for i = 1 , table.getn(mapList) do
